@@ -1,0 +1,17 @@
+# Identify Failed Move Requests
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$wave = ""
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+Get-MBMMigrationList -Global
+Get-MBMWaveMember -Wave $Wave -Global
+
+#####
+
+$failedStats = Get-MBMWaveMoveRequest -wave $wave | where-object status -eq failed | Get-MoveRequestStatistics
+$failedStats | Format-List Identity, StatusDetail, Message
+
+# Reason: Transient Errors
+
+$failedStats.foreach({ Resume-MoveRequest -Identity $_.identity.ObjectGuid.guid -SuspendWhenReadyToComplete })

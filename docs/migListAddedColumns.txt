@@ -1,0 +1,11 @@
+AO
+AssistantWave
+=IF(ISBLANK(@O:O),"",XLOOKUP(@O:O,A:A,R:R))
+
+AP
+AssistantMigrated
+=IF(ISBLANK(@O:O),"",XLOOKUP(@O:O,A:A,AA:AA))
+
+AQ
+WrongAssistantWave
+=IF(ISBLANK(@O:O),"", (IF(@R:R=XLOOKUP(@O:O,A:A,R:R),"No","Yes")))

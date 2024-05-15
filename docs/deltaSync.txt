@@ -1,0 +1,19 @@
+# Delta Sync
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$OPDomainAndUser = ""
+$OPConnectionURI = ""
+$wave = ""
+
+$OPCred = Get-Credential -UserName $OPDomainAndUser -Message 'OPExchangeAccess'
+
+$session = New-PSSession -ConnectionUri $OPConnectionURI -ConfigurationName Microsoft.Exchange -credential $opcred
+Import-PSSession $session -prefix OP
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+Sync-MBMWaveMoveRequest -Wave $wave -MultiThread 3
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+Sync-MBMWaveMoveRequest -Wave $wave -MultiThread 3

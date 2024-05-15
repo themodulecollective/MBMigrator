@@ -1,0 +1,16 @@
+SELECT
+      [WhenListChangedUTC]
+      ,[Change]
+      ,[Alias]
+      ,[Name]
+      ,[DisplayName]
+      ,[PrimarySmtpAddress]
+      ,[ExchangeGuid]
+      ,[AssignedWave]
+      ,[WaveAssignmentSource]
+      ,[RecipientTypeDetails]
+      ,[TargetAddress]
+      ,[OrganizationalUnit]
+      ,[WhenCreatedUTC]
+
+  FROM [dbo].[viewMostRecentMailboxMigrationListChanges]

@@ -1,0 +1,111 @@
+#Process to setup Wave
+
+## update WavePlanning data
+
+- Copy the latest WavePlanning.xlsx file to the Migration Server InputFiles folder
+- Update the MBM Database by running the following:
+
+```Powershell
+Update-MBMWavePlanning -InputFolderPath '[InputFiles folder where WavePlanning.xlsx was copied]' -InformationAction continue
+```
+
+# Export the latest iteration of the Mailbox Migration List and Upload to Teams
+# Remove previous versions of the following reports before exporting
+Export-MBMReport -Report MigrationList -OutputFolderPath e:\MBMigration\Reports
+
+# Get the MigrationList in memory in your session
+Get-MBMMigrationList -Global
+
+# Set your wave
+$Wave = 0.2
+
+# Get the Wave Members in memory in your session
+Get-MBMWaveMember -Wave $Wave -Global
+
+# Up until Teams for Enterprise
+#add migration wave members to [] AzureAD-OneDriveProvisioning
+Get-MBMWaveMember -wave $wave | 
+	foreach-object {Get-MgUser -UserId $_.UserPrincipalName } | 
+	foreach-object {New-MgGroupMember -GroupId [] -DirectoryObjectId $_.Id}
+
+# Until MSL groups are updated with complete licensing
+# Before doing this validate members are already licensed (we don't want to add a completely new license, just make sure that the right licensing components are applied)
+#add migration wave members to [], AzureAD-Licensing-ForEXOMigration
+Get-MBMWaveMember -wave $wave | 
+	foreach-object {Get-MgUser -UserId $_.UserPrincipalName } | 
+	foreach-object {New-MgGroupMember -GroupId [] -DirectoryObjectId $_.Id}
+
+#add migration wave members to [], AzureAD-CA-IntunePilot-Direct
+Get-MBMWaveMember -wave $wave | 
+	foreach-object {Get-MgUser -UserId $_.UserPrincipalName } | 
+	foreach-object {New-MgGroupMember -GroupId [] -DirectoryObjectId $_.Id}
+
+#add migration wave members to [], AzureAD-Licensing-TeamsAudioConference
+Get-MBMWaveMember -wave $wave | 
+	foreach-object {Get-MgUser -UserId $_.UserPrincipalName } | 
+	foreach-object {New-MgGroupMember -GroupId [] -DirectoryObjectId $_.Id}
+
+
+# setup your move request parameters
+$nWMRParams = @{
+    ExchangeCredential = $MBMConfiguration.OnPremCredential
+    Endpoint = $MBMConfiguration.Endpoint
+    TargetDeliveryDomain = $MBMConfiguration.TargetDeliveryDomain
+    InformationAction = 'Continue'
+	IncludeArchive = $true
+    Wave = $Wave
+}
+
+# Create the move requests
+New-MBMWaveMoveRequest @nWMRParams
+
+## Re-Attempt Any Failed Move Requests for the wave
+
+```Powershell
+# This re-attempts move request creation only for any that are missing
+New-MBMWaveMoveRequest @nWMRParams -Missing
+
+# Variations:
+# Sometimes it helps to use the Alias instead of ExchangeGUID
+New-MBMWaveMoveRequest @nWMRParams -Missing -UseAlias
+# Sometimes you need to include the Archive.  This can work if there is an archive, or if the -PrimaryOnly switch is failing for other reasons related to the archive attributes (you'll see this in the error output from Exchange Online)
+New-MBMWaveMoveRequest @nWMRParams -Missing -IncludeArchive
+```
+
+## One off adjust move requests
+Get-MBMWavewrongMoveRequest -Wave $Wave | Set-MoveRequest -BatchName $wave
+
+# Complete a Migration Wave
+
+## Change the UPNs if needed
+Get-MBMWaveMember -Wave $wave | Where-Object {$_.UserPrincipalName -ne $_.PrimarySmtpAddress} | foreach-Object {Set-OPMailbox -identity $_.PrimarySmtpAddress -UserPrincipalName $_.PrimarySMTPAddress -WhatIf}
+
+##  Initiate the move request completion
+Get-MBMMigrationList -Global
+Get-MBMWaveMember -Wave $Wave -Global
+Complete-MBMWave -Wave $Wave
+
+## In another shell monitor
+Connect-ExchangeOnline
+Get-MBMWaveRequestReport -Wave $Wave -Repeat -RepeatSeconds 30
+
+## In another shell monitor
+Connect-ExchangeOnline
+Get-MBMWaveRequestStatisticsReport -Wave $wave -Repeat -RepeatSeconds 90 -Operation Progress,ProgressDetail
+
+## in another shell start the post-migration configuration
+Connect-ExchangeOnline
+$QuotaAdjustments = @{
+            IssueWarningQuotaInGB = @{
+                '4.97' = '9.5'
+                '.97' = '.97'
+            }
+            ProhibitSendQuotaInGB = @{
+                '5' = '10'
+				'6' = '10'
+                '1' = '1'
+            }
+        }
+$PSDefaultParameterValues = @{'Set-MBMMigratedMailboxQuota:Adjustments'=$QuotaAdjustments}
+Invoke-MBMWavePostMigrationProcess -Wave $wave -Operation RetentionPolicy,MailboxQuota -SleepSeconds 60 -Verbose -InformationAction continue
+

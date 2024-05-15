@@ -1,0 +1,38 @@
+# Initiate Sync
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$OPDomainAndUser = ""
+$OPConnectionURI = ""
+$wave = ""
+
+$OPCred = Get-Credential -UserName $OPDomainAndUser -Message 'OPExchangeAccess'
+
+$session = New-PSSession -ConnectionUri $OPConnectionURI -ConfigurationName Microsoft.Exchange -credential $opcred
+Import-PSSession $session -prefix OP
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+$nWMRParams = @{
+
+    ExchangeCredential   = $OPCred
+
+    Endpoint             = $MBMConfiguration.Endpoint
+
+    TargetDeliveryDomain = $MBMConfiguration.TargetDeliveryDomain
+
+    InformationAction    = 'Continue'
+
+    Wave                 = $Wave
+
+}
+
+# Compare $wave user count to waveplanning sheet count
+Get-MBMWaveMember -Wave $Wave | Measure-Object
+
+######
+
+New-MBMWaveMoveRequest @nWMRParams

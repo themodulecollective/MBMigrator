@@ -1,0 +1,2 @@
+$mailboxes = get-mailbox -Filter 'SKUAssigned -eq $false -and RecipientTypeDetails -eq "UserMailbox"' -ResultSize unlimited
+$mailboxes.foreach( { Get-AzureADUser -ObjectId $_.ExternalDirectoryObjectID }).where( { $_.AccountEnabled -eq $true })

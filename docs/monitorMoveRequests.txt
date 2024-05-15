@@ -1,0 +1,27 @@
+# Monitor Waves
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$OPDomainAndUser = ""
+$OPConnectionURI = ""
+$wave = ""
+
+$OPCred = Get-Credential -UserName $OPDomainAndUser -Message 'OPExchangeAccess'
+
+$session = New-PSSession -ConnectionUri $OPConnectionURI -ConfigurationName Microsoft.Exchange -credential $opcred
+Import-PSSession $session -prefix OP
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+#######
+
+get-wavemoverequests -wave $wave | Group-Object status
+
+Get-MBMWaveMissingMoveRequest -Wave $wave | Measure-Object
+
+Get-MBMWaveWrongMoveRequest -Wave $wave | Measure-Object
+
+Get-MBMWaveNonMemberMoveRequest -Wave $wave | Measure-Object

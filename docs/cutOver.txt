@@ -1,0 +1,31 @@
+# Cut Over
+
+# All Windows
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$wave = ""
+$reportsPath = ""
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+Get-MBMWaveMoveRequest -Wave $wave -Global
+
+# Small Window
+Invoke-MBMWavePostMigrationProcess -wave $wave -operation RetentionPolicy -sleepseconds 30
+
+# Small Window
+Get-MBMWaveRequestStatisticsReport -Wave $wave -Operation Progress, ProgressDetail -Repeat 30
+
+# Big Window
+$completionJobs = Complete-MBMWave -Wave $wave -MultiThread 3
+
+# After Do reaches total number of move requests, end Do and run next command
+Do { $completionJobs.warning.count; start-sleep -seconds 10 } until ($false)
+get-mbmwaverequestreport -wave $wave -repeat -repeatseconds 30
+
+# Post Migration Report Export
+Export-MBMWaveMRSReport -Wave $wave -OutputFolderPath $reportsPath -InformationAction Continue

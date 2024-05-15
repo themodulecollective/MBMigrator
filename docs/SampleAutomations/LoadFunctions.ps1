@@ -1,0 +1,5 @@
+﻿. "E:\MBMigration\functions\Compare-ComplexObject.ps1"
+. "E:\MBMigration\functions\Get-CustomColumnMap.ps1"
+. "E:\MBMigration\functions\Get-MaxLengthOfAllAttributes.ps1"
+. "E:\MBMigration\functions\Update-CustomData.ps1"
+. "E:\MBMigration\functions\Update-CustomDatabaseSchema.ps1"

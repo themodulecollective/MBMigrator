@@ -1,0 +1,35 @@
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$OPDomainAndUser = ""
+$OPConnectionURI = ""
+$wave = ""
+$reportsPath = ""
+
+$OPCred = Get-Credential -UserName $OPDomainAndUser -Message 'OPExchangeAccess'
+
+$session = New-PSSession -ConnectionUri $OPConnectionURI -ConfigurationName Microsoft.Exchange -credential $opcred
+Import-PSSession $session -prefix OP
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+Set-Location $reportsPath
+$MRSReports = Get-ChildItem | Where-Object Name -like *xml*
+$guids = @(foreach ($f in $MRSReports) {
+		$split1 = $f.name.split('.')
+		if ($null -ne $split1) {
+			$split2 = $split1.split('_')
+		}
+		$split2[3]
+	})
+$waveMembers = Get-Variable ('Wave' + $Wave.Replace('.', '_')) | Select-Object -ExpandProperty Value
+$missingMRSReports = $waveMembers | Where-Object { $_.exchangeguid -notin $guids }
+foreach ($r in $missingMRSReports) {
+	$s = Get-MoveRequestStatistics -Identity $R.ExchangeGUID -IncludeReport -DiagnosticInfo ShowTimeSlots
+	$filename = $('Wave' + $Wave.Replace('.', '_')) + '_' + $s.Alias + '_' + $s.ExchangeGUID.guid + '.xml'
+	$filepath = Join-Path -Path $reportsPath -ChildPath $filename
+	$s | Export-Clixml -Path $filepath -Encoding UTF8
+}

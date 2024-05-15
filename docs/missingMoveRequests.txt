@@ -1,0 +1,42 @@
+# Move Request Creation Error (Missing Requests)
+. .\SetupShell.ps1
+$UserPrincipalName = ""
+$OPDomainAndUser = ""
+$OPConnectionURI = ""
+$wave = ""
+
+$OPCred = Get-Credential -UserName $OPDomainAndUser -Message 'OPExchangeAccess'
+
+$session = New-PSSession -ConnectionUri $OPConnectionURI -ConfigurationName Microsoft.Exchange -credential $opcred
+Import-PSSession $session -prefix OP
+
+Connect-ExchangeOnline -ShowBanner -ShowProgress $true -UserPrincipalName $UserPrincipalName
+
+Get-MBMMigrationList -Global
+
+Get-MBMWaveMember -Wave $Wave -Global
+
+$nWMRParams = @{
+
+    ExchangeCredential   = $OPCred
+
+    Endpoint             = $MBMConfiguration.Endpoint
+
+    TargetDeliveryDomain = $MBMConfiguration.TargetDeliveryDomain
+
+    InformationAction    = 'Continue'
+
+    Wave                 = $Wave
+
+}
+
+######
+
+New-MBMWaveMoveRequest @nWMRParams -Missing
+
+# Variations:
+New-MBMWaveMoveRequest @nWMRParams -Missing -UseAlias
+
+New-MBMWaveMoveRequest @nWMRParams -Missing -IncludeArchive
+
+New-MBMWaveMoveRequest @nWMRParams -Missing -UseAlias -IncludeArchive

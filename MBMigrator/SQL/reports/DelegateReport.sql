@@ -1,0 +1,17 @@
+SELECT
+   [TrusteeAlias]
+  , [TrusteePrimarySMTPAddress]
+  , [TrusteeRecipientTypeDetails]
+  , [TargetAlias]
+  , [TargetPrimarySMTPAddress]
+  , [TargetRecipientTypeDetails]
+  , [PermissionType]
+  , [FolderAccessRights]
+  , [TargetFolderType]
+  , [TrusteeIdentity]
+  , [TrusteeExchangeGUID]
+  , [TargetExchangeGUID]
+  , [TrusteeDistinguishedName]
+  , [TargetDistinguishedName]
+FROM
+    [dbo].[viewPermissionsReport]
