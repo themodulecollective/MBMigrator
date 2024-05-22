@@ -23,41 +23,56 @@ function Export-ExchangeRecipient
         #
         [parameter(Mandatory)]
         [ValidateSet(
-            'ArbitrationMailbox',
-            'CASMailbox',
-            'Contact',
-            'DistributionGroup',
-            'DistributionGroupAcceptMessagesOnlyFrom',
-            'DistributionGroupBypassModeration',
-            'DistributionGroupGrantSendOnBehalfTo',
-            'DistributionGroupManagedBy',
-            'DistributionGroupMember',
-            'DistributionGroupModeratedBy',
-            'DistributionGroupRejectMessagesFrom',
             'Mailbox',
-            'MailboxFolderStatistics',
             'MailboxStatistics',
-            'MailPublicFolder',
+            'MailboxFolderStatistics',
+            'CASMailbox',
+            'RemoteMailbox',
             'MailUser',
-            'MobileDevice',
-            'MobileDeviceStatistics',
+            'Recipient',
+            'ResourceCalendarProcessing',
+            'ArbitrationMailbox',
             'PublicFolder',
             'PublicFolderMailbox',
             'PublicFolderStatistics',
-            'Recipient',
-            'RemoteMailbox',
-            'ResourceCalendarProcessing',
+            'MailPublicFolder',
+            'Contact',
+            'DistributionGroup',
+            'DistributionGroupMember',
+            'DistributionGroupManagedBy',
+            'DistributionGroupModeratedBy',            
+            'DistributionGroupAcceptMessagesOnlyFrom',
+            'DistributionGroupBypassModeration',
+            'DistributionGroupGrantSendOnBehalfTo',           
+            'DistributionGroupRejectMessagesFrom',
+            'MobileDevice',
+            'MobileDeviceStatistics',
             'UnifiedGroup',
             'UnifiedGroupMember'
         )]
         [string[]]$Operation #Specify the types of recipients or recipient data to include in the export.  For DistributionGroupMember and UnifiedGroupMember you must include DistributionGroup or UnifiedGroup respectively in order to successfully export membership.
         ,
-        #
         [parameter()]
         [switch]$CompressOutput
     )
 
+    $DGDependentOperations = @(
+        'DistributionGroupMember',
+        'DistributionGroupManagedBy',
+        'DistributionGroupModeratedBy',
+        'DistributionGroupAcceptMessagesOnlyFrom',
+        'DistributionGroupBypassModeration',
+        'DistributionGroupGrantSendOnBehalfTo',
+        'DistributionGroupRejectMessagesFrom'
+    )
 
+    foreach ($o in $DGDependentOperations)
+    {
+        If ( $o -in $Operation -and 'DistributionGroup' -notin $Operation)
+        {
+            throw("You must include the DistributionGroup operation when including the $o Operation")
+        }
+    }
     #Write-Verbose -Verbose -Message 'Export-ExchangeRecipient Version x.x'
 
     $ErrorActionPreference = 'Continue'
@@ -211,25 +226,31 @@ function Export-ExchangeRecipient
         }
         'DistributionGroupMember'
         {
+            $thisOp = 'DistributionGroup Member'
+            $thisRole = 'MemberOf'
+
             $getDGMemberParams = @{
                 Identity   = ''
                 ResultSize = 'Unlimited'
             }
+
             $AMParams.Name = $_
             $OpCount++
             Write-Progress -Activity 'Exporting Exchange Recipients' -CurrentOperation $AMParams.Name -Status "Operation $OpCount of $OpTotalCount" -Id 0
             $dgCount = 0
             $dgTotalCount = $ExchangeRecipients.DistributionGroup.Count
             $AMParams.Value = @(
+
                 foreach ($dg in $ExchangeRecipients.DistributionGroup)
                 {
                     $dgCount++
-                    Write-Progress -Activity 'Exporting Distribution Group Membership' -CurrentOperation $dg.DisplayName -Status "Group $dgCount of $dgTotalCount" -Id 1 -ParentId 0
+                    Write-Progress -Activity "Exporting $thisOp" -CurrentOperation $dg.DisplayName -Status "Group $dgCount of $dgTotalCount" -Id 1 -ParentId 0
                     $getDGMemberParams.Identity = $dg.guid.guid
                     Get-DistributionGroupMember @getDGMemberParams |
-                    Select-Object -Property DisplayName, Alias, PrimarySMTPAddress, RecipientTypeDetails, GUID, ExchangeGUID, ExternalDirectoryObjectID, @{name = 'MemberOfGUID'; e = { $dg.guid.guid } }, @{n = 'MemberOfPrimarySMTPAddress'; e = { $dg.PrimarySMTPAddress } }, @{n = 'MemberOfDisplayName'; e = { $dg.DisplayName } }
+                    Select-Object -Property DisplayName, Alias, PrimarySMTPAddress, RecipientTypeDetails, GUID, ExchangeGUID, ExternalDirectoryObjectID, @{name = 'TargetGroupGUID'; e = { $dg.guid.guid } }, @{name = 'TargetGroupExternalDirectoryObjectID'; e = { $dg.ExternalDirectoryObjectID } }, @{n = 'TargetGroupPrimarySMTPAddress'; e = { $dg.PrimarySMTPAddress } }, @{n = 'TargetGroupDisplayName'; e = { $dg.DisplayName } }, @{n='Role'; e= {$thisRole}}
                 }
-                Write-Progress -Id 1 -Completed -Activity 'Exporting Distribution Group Membership'
+                Write-Progress -Id 1 -Completed -Activity "Exporting $thisOp"
+
             )
             $ExchangeRecipients | Add-Member @AMParams
         }
@@ -440,10 +461,9 @@ function Export-ExchangeRecipient
         }
     }
 
-
     $DateString = Get-Date -Format yyyyMMddHHmmss
 
-    $OutputFileName = $($ExchangeRecipients.OrganizationConfig.guid.guid.split('-')[0]) + 'ExchangeRecipientsAsOf' + $DateString
+    $OutputFileName = $($ExchangeRecipients.OrganizationConfig.Name.split('.')[0]) + 'ExchangeRecipientsAsOf' + $DateString
     $OutputFilePath = Join-Path $OutputFolderPath $($OutputFileName + '.xml')
 
     $ExchangeRecipients | Export-Clixml -Path $OutputFilePath -Encoding utf8
@@ -457,5 +477,4 @@ function Export-ExchangeRecipient
         Remove-Item -Path $OutputFilePath -Confirm:$false
 
     }
-
 }
