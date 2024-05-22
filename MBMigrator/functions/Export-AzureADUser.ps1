@@ -19,6 +19,7 @@
     param(
         # Folder path for the XML or Zip export
         [parameter(Mandatory)]
+        [ValidateScript( { Test-Path -type Container -Path $_ })]
         [string]$OutputFolderPath
         ,
         # Include custom attribute to the exported user attributes

@@ -1,6 +1,8 @@
 Param(
     [datetime]$Start
     ,
+    [parameter(Mandatory)]
+    [ValidateScript( { Test-Path -type Container -Path $_ })]
     [string]$OutputFolderPath
 )
 

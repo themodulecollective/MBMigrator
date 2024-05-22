@@ -14,7 +14,8 @@ function Export-ExchangeRetentionPolicy
     param(
         # Folder path for the XML or Zip export
         [parameter(Mandatory)]
-        [string]$OutputFolderPath
+        [ValidateScript( { Test-Path -type Container -Path $_ })]
+        [string]$OutputFolderPath      
         ,
         # Specify a delimiter, 1 character in length.  Default is '|'.
         [parameter()]

@@ -12,7 +12,8 @@ function Export-AzureADUserLicensing {
     [cmdletbinding()]
     param(
         # Folder path for the XML or Zip export
-        [parameter()]
+        [parameter(Mandatory)]
+        [ValidateScript( { Test-Path -type Container -Path $_ })]
         [string]$OutputFolderPath
         ,
         [parameter(Mandatory)]

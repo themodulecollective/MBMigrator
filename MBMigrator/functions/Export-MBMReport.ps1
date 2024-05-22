@@ -37,8 +37,7 @@ function Export-MBMReport {
         [hashtable]$ReportParams
         ,
         #
-        [parameter(ParameterSetName = 'compoundReport',Mandatory)]
-        [parameter(ParameterSetName = 'basicReport')]
+        [parameter(Mandatory)]
         [validatescript({ Test-Path -Path $_ -PathType Container })]
         [string]$OutputFolderPath
     )

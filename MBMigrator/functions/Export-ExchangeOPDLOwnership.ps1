@@ -5,6 +5,7 @@ param(
     ##,
     ##[string]$ExchangeServerFQDN
     [parameter(Mandatory)]
+    [ValidateScript( { Test-Path -type Container -Path $_ })]
     [string]$OutputFolderPath
     ,
     [string]$RecipientFilter

@@ -6,6 +6,8 @@ param(
     ,
     [string]$QuestBaseOU = '*OU=Quest Corp Stub,OU=CorpSys,DC=clientdomain,DC=clientdomain,DC=com'
     ,
+    [parameter(Mandatory)]
+    [ValidateScript( { Test-Path -type Container -Path $_ })]
     [string]$OutputFolderPath = 'd:\ExchangeReports'
 )
 
