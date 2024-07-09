@@ -38,9 +38,6 @@
         # Compress the XML file into a Zip file
         [parameter()]
         [switch]$CompressOutput
-        ,
-        [parameter()]
-        [string]$Server
     )
 
 
@@ -64,13 +61,7 @@
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $gADUserParams = @{}
-    switch (-not [string]::IsNullOrWhiteSpace($Server))
-    {
-        $true #$Server has a value
-        {
-            $gADUserParams.Add('Server',$($Server + ":3268"))
-        }
-    }
+    $gADUserParams.Add('Server',$($Domain + ":3268"))
 
     $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams -Server $Domain  #| Sort-Object -Property $Properties -Descending
 
