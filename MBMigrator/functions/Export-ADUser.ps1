@@ -22,7 +22,7 @@
         [ValidateScript( { Test-Path -type Container -Path $_ })]
         [string]$OutputFolderPath
         ,
-        # Users Domain. Used when naming export file
+        # Users Domain. Used when naming export file and as the "server" parameter for Get-ADUser
         [parameter(Mandatory)]
         [string]$Domain
         ,
@@ -38,6 +38,9 @@
         # Compress the XML file into a Zip file
         [parameter()]
         [switch]$CompressOutput
+        ,
+        [parameter()]
+        [string]$Server
     )
 
 
@@ -60,7 +63,16 @@
     $OutputFileName = $Domain + 'ADUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $ADUsers = Get-ADUser -Properties $Properties -filter * #| Sort-Object -Property $Properties -Descending
+    $gADUserParams = @{}
+    switch (-not [string]::IsNullOrWhiteSpace($Server))
+    {
+        $true #$Server has a value
+        {
+            $gADUserParams.Add('Server',$($Server + ":3268"))
+        }
+    }
+
+    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams -Server $Domain  #| Sort-Object -Property $Properties -Descending
 
     $ADUsers | Export-Clixml -Path $outputFilePath
 
