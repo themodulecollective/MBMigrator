@@ -79,6 +79,7 @@ function Update-MBMActiveDirectoryData
                 'EmployeeType'
                 'HomePhone'
                 'Pager'
+                'Mobile'
                 'FacsimileTelephoneNumber'
                 'TelephoneNumber'
                 'Street'
