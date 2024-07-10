@@ -27,6 +27,8 @@ function Update-MBMActiveDirectoryData
         #
         [switch]$Truncate
         ,
+        [switch]$AutoCreate
+        ,
         [switch]$Test
     )
 
@@ -52,10 +54,9 @@ function Update-MBMActiveDirectoryData
                 Table = 'stagingADUser'
             }
             if ($Truncate)
-            {
-                $dTParams.Truncate = $true
-                $dTParams.AutoCreate = $true
-            }
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
             #$property = @(@(Get-MBMColumnMap -tabletype stagingADUser).Name)
 
             $property = @(
@@ -97,7 +98,7 @@ function Update-MBMActiveDirectoryData
                 'mS-DS-ConsistencyGUID'
                 'msExchMailboxGUID'
                 'msExchMasterAccountSID'
-                'msExchangeUsageLocation'
+                'msExchUsageLocation'
                 'ObjectGUID'
                 'PhysicalDeliveryOfficeName'
                 'ProxyAddresses'

@@ -45,11 +45,11 @@
         Import-Module ActiveDirectory -ErrorAction Stop
     }
 
-    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'countryCode','Company', 'Department','Division','Description','businesscategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'physicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'employeeType','Manager','Enabled','LastLogonDate') | Sort-Object)
+    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'CountryCode','Company', 'Department','Division','Description','BusinessCategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'PhysicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'EmployeeType','Manager','Enabled','LastLogonDate') | Sort-Object)
 
     switch ($Exchange) {
         $true {
-            $Properties = @(@($Properties;@('msExchMasterAccountSid', 'mailnickname', 'msExchMailboxGuid');@($((1..15).foreach({"ExtensionAttribute$_"}));$((16..45).foreach({"msExchExtensionAttribute$_"}));$((1..5).foreach({"msExchExtensionCustomAttribute$_"})))) | Sort-Object)
+            $Properties = @(@($Properties;@('msExchUsageLocation','msExchMasterAccountSid', 'MailNickName', 'msExchMailboxGuid');@($((1..15).foreach({"ExtensionAttribute$_"}));$((16..45).foreach({"msExchExtensionAttribute$_"}));$((1..5).foreach({"msExchExtensionCustomAttribute$_"})))) | Sort-Object)
         }
     }
 
