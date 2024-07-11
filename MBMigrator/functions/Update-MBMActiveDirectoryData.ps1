@@ -128,7 +128,7 @@ function Update-MBMActiveDirectoryData
             )
 
             $ColumnMap = [ordered]@{}
-            @($property;$customProperty).foreach({ $ColumnMap.$_ = $_ })
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
             $dTParams.ColumnMap = $ColumnMap
             $property = @($property.where({ $_ -notin $excludeProperty }))
 
@@ -254,7 +254,7 @@ function Update-MBMActiveDirectoryData
             )
 
             $ColumnMap = [ordered]@{}
-            @($property;$customProperty).foreach({ $ColumnMap.$_ = $_ })
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
             $dTParams.ColumnMap = $ColumnMap
             $property = @($property.where({ $_ -notin $excludeProperty }))
 
