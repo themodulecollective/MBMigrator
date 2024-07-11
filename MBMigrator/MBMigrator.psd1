@@ -78,6 +78,7 @@
         'Complete-MBMWave'
         'Convert-CSExportXMLToCSV'
         'Export-ADUser'
+        'Export-ADComputer'
         'Export-AzureADLicensing'
         'Export-AzureADUserLicensing'
         'Export-AzureADUser'

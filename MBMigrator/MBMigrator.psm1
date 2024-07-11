@@ -28,6 +28,7 @@ $Script:ModuleFiles = @(
   # Load Functions
   $(Join-Path -Path $functions -ChildPath Complete-MBMWave.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ADUser.ps1)
+  $(Join-Path -Path $functions -ChildPath Export-ADComputer.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADUser.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADUserLicensing.ps1)
