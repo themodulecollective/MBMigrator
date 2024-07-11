@@ -167,7 +167,7 @@ function Update-MBMActiveDirectoryData
         {
             #Update AD Computer Data
             $ADComputers = @($SourceData)
-            Write-Information -MessageData 'Processing Active Directory User Data'
+            Write-Information -MessageData 'Processing Active Directory Computer Data'
             $dTParams = @{
                 Table = 'stagingADComputer'
             }
@@ -242,7 +242,6 @@ function Update-MBMActiveDirectoryData
                'TrustedToAuthForDelegation'
                'UseDESKeyOnly'
                'userAccountControl'
-               'UserPrincipalName'
                'uSNChanged'
                'uSNCreated'
                'whenChanged'
@@ -253,16 +252,13 @@ function Update-MBMActiveDirectoryData
                 'UserCertificate'
                 'KerberosEncryptionType'
                 'PrincipalsAllowedToDelegateToAccount'
+                'UserPrincipalName'
                 'ServiceAccount'
-                'SID'
-                'SIDHistory'
                 'servicePrincipalName'
                 'ServicePrincipalNames'
             )
             $customProperty = @(
                 @{n = 'MemberOf'; e = { $_.MemberOf -join ';' } },
-                @{n = 'msExchMailboxGUID'; e = { $([guid]$_.msExchMailboxGuid).guid } },
-                @{n = 'msExchMasterAccountSID'; e = { $_.msExchMasterAccountSID.Value } },
                 @{n = 'SID'; e = { $_.SID.Value } },
                 @{n = 'SIDHistory'; e={$_.SIDHistory.Value -join ';'}}
                 @{n = 'ObjectGUID'; e = { $_.ObjectGUID.guid } },
