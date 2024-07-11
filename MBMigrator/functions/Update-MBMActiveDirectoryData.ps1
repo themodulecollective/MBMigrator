@@ -62,7 +62,6 @@ function Update-MBMActiveDirectoryData
             $property = @(
                 'AccountExpires'
                 'AltRecipient'
-                'BusinessCategory'
                 'Company'
                 'City'
                 'C'
@@ -109,20 +108,9 @@ function Update-MBMActiveDirectoryData
                 'Enabled'
                 $((1..15).foreach({"ExtensionAttribute$_"}))
                 $((16..45).foreach({"msExchExtensionAttribute$_"}))
-                $((1..5).foreach({"msExchExtensionCustomAttribute$_"}))
                 'LastLogonDate'
             )
-            $excludeProperty = @(
-                'businesscategory'
-                'ProxyAddresses'
-                'mS-DS-ConsistencyGUID'
-                'msExchMailboxGUID'
-                'msExchMasterAccountSID'
-                'SID'
-                'ObjectGUID'
-                'DomainName'
-                $((1..5).foreach({"msExchExtensionCustomAttribute$_"}))
-            )
+            $excludeProperty = @()
             $customProperty = @(
                 @{n = 'businesscategory'; e = { $_.businesscategory -join ';' } },
                 @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } },
@@ -140,7 +128,7 @@ function Update-MBMActiveDirectoryData
             )
 
             $ColumnMap = [ordered]@{}
-            $property.foreach({ $ColumnMap.$_ = $_ })
+            @($property;$customProperty).foreach({ $ColumnMap.$_ = $_ })
             $dTParams.ColumnMap = $ColumnMap
             $property = @($property.where({ $_ -notin $excludeProperty }))
 
@@ -266,7 +254,7 @@ function Update-MBMActiveDirectoryData
             )
 
             $ColumnMap = [ordered]@{}
-            $property.foreach({ $ColumnMap.$_ = $_ })
+            @($property;$customProperty).foreach({ $ColumnMap.$_ = $_ })
             $dTParams.ColumnMap = $ColumnMap
             $property = @($property.where({ $_ -notin $excludeProperty }))
 
