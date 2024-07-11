@@ -47,7 +47,7 @@ function Update-MBMActiveDirectoryData
     {
         'ADUser'
         {
-            #Update Mailbox Data
+            #Update AD User Data
             $ADUsers = @($SourceData)
             Write-Information -MessageData 'Processing Active Directory User Data'
             $dTParams = @{
@@ -159,6 +159,138 @@ function Update-MBMActiveDirectoryData
                 $false
                 {
                     $sAdUsers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+
+        }
+        'ADComputer'
+        {
+            #Update AD Computer Data
+            $ADComputers = @($SourceData)
+            Write-Information -MessageData 'Processing Active Directory User Data'
+            $dTParams = @{
+                Table = 'stagingADComputer'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
+            #$property = @(@(Get-MBMColumnMap -tabletype stagingADUser).Name)
+
+            $property = @(
+               'AccountExpirationDate'
+               'AccountExpires'
+               'AccountLockoutTime'
+               'AccountNotDelegated'
+               'AllowReversiblePasswordEncryption'
+               'CannotChangePassword'
+               'CanonicalName'
+               'CN'
+               'codePage'
+               'countryCode'
+               'Created'
+               'createTimeStamp'
+               'Deleted'
+               'Description'
+               'DisplayName'
+               'DistinguishedName'
+               'DNSHostName'
+               'DoesNotRequirePreAuth'
+               'Enabled'
+               'HomedirRequired'
+               'HomePage'
+               'instanceType'
+               'IPv4Address'
+               'IPv6Address'
+               'isCriticalSystemObject'
+               'isDeleted'
+               'LastBadPasswordAttempt'
+               'LastKnownParent'
+               'LastLogonDate'
+               'lastLogonTimestamp'
+               'localPolicyFlags'
+               'Location'
+               'LockedOut'
+               'ManagedBy'
+               'MemberOf'
+               'MNSLogonAccount'
+               'Modified'
+               'modifyTimeStamp'
+               'msDS-KeyCredentialLink'
+               'msDS-SupportedEncryptionTypes'
+               'msDS-User-Account-Control-Computed'
+               'Name'
+               'nTSecurityDescriptor'
+               'ObjectCategory'
+               'ObjectClass'
+               'ObjectGUID'
+               'objectSid'
+               'OperatingSystem'
+               'OperatingSystemHotfix'
+               'OperatingSystemServicePack'
+               'OperatingSystemVersion'
+               'PasswordExpired'
+               'PasswordLastSet'
+               'PasswordNeverExpires'
+               'PasswordNotRequired'
+               'PrimaryGroup'
+               'primaryGroupID'
+               'ProtectedFromAccidentalDeletion'
+               'pwdLastSet'
+               'SamAccountName'
+               'sAMAccountType'
+               'sDRightsEffective'
+               'TrustedForDelegation'
+               'TrustedToAuthForDelegation'
+               'UseDESKeyOnly'
+               'userAccountControl'
+               'UserPrincipalName'
+               'uSNChanged'
+               'uSNCreated'
+               'whenChanged'
+               'whenCreated' 
+            )
+            $excludeProperty = @(
+                'Certificates'
+                'UserCertificate'
+                'KerberosEncryptionType'
+                'PrincipalsAllowedToDelegateToAccount'
+                'ServiceAccount'
+                'SID'
+                'SIDHistory'
+                'servicePrincipalName'
+                'ServicePrincipalNames'
+            )
+            $customProperty = @(
+                @{n = 'MemberOf'; e = { $_.MemberOf -join ';' } },
+                @{n = 'msExchMailboxGUID'; e = { $([guid]$_.msExchMailboxGuid).guid } },
+                @{n = 'msExchMasterAccountSID'; e = { $_.msExchMasterAccountSID.Value } },
+                @{n = 'SID'; e = { $_.SID.Value } },
+                @{n = 'SIDHistory'; e={$_.SIDHistory.Value -join ';'}}
+                @{n = 'ObjectGUID'; e = { $_.ObjectGUID.guid } },
+                @{n = 'DomainName'; e = { $_.DistinguishedName.split(',').where( { $_ -like 'DC=*' }).foreach( { $_.split('=')[1] }) | Select-Object -First 1 } }
+            )
+
+            $ColumnMap = [ordered]@{}
+            $property.foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sADComputers = $ADComputers | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sADComputers
+                        Table = Get-DbaDbTable @dbiParams -Table stagingADUser
+                    }
+                }
+                $false
+                {
+                    $sADComputers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
                 }
             }
 

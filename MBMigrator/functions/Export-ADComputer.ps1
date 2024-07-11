@@ -48,7 +48,7 @@
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
-    $OutputFileName = $Domain + 'ADComputers' + 'AsOf' + $DateString
+    $OutputFileName = $Domain + '-ADComputers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $gADComputerParams = @{}

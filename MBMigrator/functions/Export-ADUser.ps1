@@ -57,7 +57,7 @@
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
-    $OutputFileName = $Domain + 'ADUsers' + 'AsOf' + $DateString
+    $OutputFileName = $Domain + '-ADUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $gADUserParams = @{}
