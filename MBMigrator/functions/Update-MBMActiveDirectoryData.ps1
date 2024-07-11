@@ -16,7 +16,7 @@ function Update-MBMActiveDirectoryData
     param(
         #
         [parameter(Mandatory)]
-        [validateset('ADUser')]
+        [validateset('ADUser','ADComputer')]
         $Operation
         ,
         #
