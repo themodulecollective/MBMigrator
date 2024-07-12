@@ -92,18 +92,11 @@ function Update-MBMActiveDirectoryData
                 'Surname'
                 'DistinguishedName'
                 'CanonicalName'
-                'DomainName'
                 'Mail'
                 'MailNickName'
-                'mS-DS-ConsistencyGUID'
-                'msExchMailboxGUID'
-                'msExchMasterAccountSID'
                 'msExchUsageLocation'
-                'ObjectGUID'
                 'PhysicalDeliveryOfficeName'
-                'ProxyAddresses'
                 'SamAccountName'
-                'SID'
                 'UserPrincipalName'
                 'Enabled'
                 $((1..15).foreach({"ExtensionAttribute$_"}))
@@ -112,7 +105,7 @@ function Update-MBMActiveDirectoryData
             )
             $excludeProperty = @()
             $customProperty = @(
-                @{n = 'businesscategory'; e = { $_.businesscategory -join ';' } },
+                @{n = 'BusinessCategory'; e = { $_.businesscategory -join ';' } },
                 @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } },
                 @{n = 'mS-DS-ConsistencyGUID'; e = { $([guid]$_.'mS-DS-ConsistencyGUID').guid } },
                 @{n = 'msExchMailboxGUID'; e = { $([guid]$_.msExchMailboxGuid).guid } },
