@@ -79,6 +79,7 @@
         'Convert-CSExportXMLToCSV'
         'Export-ADUser'
         'Export-ADComputer'
+        'Export-ADGroup'
         'Export-AzureADLicensing'
         'Export-AzureADUserLicensing'
         'Export-AzureADUser'

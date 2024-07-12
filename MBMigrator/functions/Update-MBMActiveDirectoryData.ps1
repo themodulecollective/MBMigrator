@@ -16,7 +16,7 @@ function Update-MBMActiveDirectoryData
     param(
         #
         [parameter(Mandatory)]
-        [validateset('ADUser','ADComputer')]
+        [validateset('ADUser','ADComputer','ADGroup')]
         $Operation
         ,
         #
@@ -267,6 +267,102 @@ function Update-MBMActiveDirectoryData
                 $false
                 {
                     $sADComputers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+
+        }
+        'ADGroup'
+        {
+            #Update AD Group Data
+            $ADGroups = @($SourceData)
+            Write-Information -MessageData 'Processing Active Directory Group Data'
+            $dTParams = @{
+                Table = 'stagingADGroup'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
+            #$property = @(@(Get-MBMColumnMap -tabletype stagingADUser).Name)
+
+            $property = @(
+                'CanonicalName'
+                'CN'
+                'Created'
+                'CreateTimeStamp'
+                'Description'
+                'DisplayName'
+                'DistinguishedName'
+                'GroupCategory'
+                'GroupScope'
+                'GroupType'
+                'HomePage'
+                'InstanceType'
+                'Modified'       
+                'ModifyTimeStamp'
+                'Name'
+                'ObjectCategory'
+                'ObjectClass'
+                'ProtectedFromAccidentalDeletion'
+                'SamAccountName'
+                'sAMAccountType'
+                'sDRightsEffective'
+                'WhenChanged'
+                'WhenCreated'
+                'Mail'
+                'MailNickName'
+                'LegacyExchangeDN'
+                'reportToOriginator'
+                'msExchBypassAudit'
+                'msExchGroupDepartRestriction'
+                'msExchGroupJoinRestriction'
+                'msExchLocalizationFlags'
+                'msExchMailboxAuditEnable'
+                'msExchMailboxAuditLogAgeLimit'
+                'msExchMDBRulesQuota'
+                'msExchModerationFlags'
+                'msExchProvisioningFlags'
+                'msExchRoleGroupType'
+                'msExchTransportRecipientSettingsFlags'
+                'msExchRecipientDisplayType'
+                'msExchGroupExternalMemberCount'
+                'msExchGroupMemberCount'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+                @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } }   
+                @{n = 'ManagedBy'; e = { $_.ManagedBy -join ';' } }
+                @{n = 'Members'; e = { $_.Members -join ';' } }             
+                @{n = 'MemberOf'; e = { $_.MemberOf -join ';' } }
+                @{n = 'SID'; e = { $_.SID.Value } }
+                @{n = 'SIDHistory'; e={$_.SIDHistory.Value -join ';'}}
+                @{n = 'ObjectGUID'; e = { $_.ObjectGUID.guid } }
+                @{n = 'ShowInAddressBook'; e = { $_.ShowInAddressBook -join ';' } }
+                @{n = 'msExchCoManagedByLink'; e = { $_.msExchCoManagedByLink -join ';' } }                
+                @{n = 'DomainName'; e = { $_.DistinguishedName.split(',').where( { $_ -like 'DC=*' }).foreach( { $_.split('=')[1] }) | Select-Object -First 1 } }
+            )
+
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sADGroups = $ADGroups | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sADGroups
+                        Table = Get-DbaDbTable @dbiParams -Table stagingADGroup
+                    }
+                }
+                $false
+                {
+                    $sADGroups | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
                 }
             }
 
