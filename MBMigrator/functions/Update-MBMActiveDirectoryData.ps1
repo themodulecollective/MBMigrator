@@ -178,7 +178,6 @@ function Update-MBMActiveDirectoryData
                'countryCode'
                'Created'
                'createTimeStamp'
-               'Deleted'
                'Description'
                'DisplayName'
                'DistinguishedName'
