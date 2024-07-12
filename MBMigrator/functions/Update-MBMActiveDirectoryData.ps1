@@ -262,7 +262,7 @@ function Update-MBMActiveDirectoryData
                     @{
                         Map = $ColumnMap
                         Data = $sADComputers
-                        Table = Get-DbaDbTable @dbiParams -Table stagingADUser
+                        Table = Get-DbaDbTable @dbiParams -Table stagingADComputer
                     }
                 }
                 $false
