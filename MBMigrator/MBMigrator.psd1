@@ -82,7 +82,7 @@
         'Export-ADGroup'
         'Export-AzureADLicensing'
         'Export-AzureADUserLicensing'
-        'Export-AzureADUser'
+        'Export-EntraIDUser'
         'Export-ExchangeConfiguration'
         'Export-ExchangeRecipient'
         'Export-ExchangeOPDLOwnership'

@@ -30,7 +30,7 @@ $Script:ModuleFiles = @(
   $(Join-Path -Path $functions -ChildPath Export-ADUser.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ADGroup.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ADComputer.ps1)
-  $(Join-Path -Path $functions -ChildPath Export-AzureADUser.ps1)
+  $(Join-Path -Path $functions -ChildPath Export-EntraIDUser.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADUserLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeConfiguration.ps1)

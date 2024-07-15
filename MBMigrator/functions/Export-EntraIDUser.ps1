@@ -1,4 +1,4 @@
-﻿function Export-AzureADUser {
+﻿function Export-EntraIDUser {
     <#
     .SYNOPSIS
         Get all Active Directory user and export them to a XML file
