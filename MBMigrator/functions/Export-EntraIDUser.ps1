@@ -36,7 +36,7 @@
     $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID
 
     $Properties = @(
-     @{n='TenantDomain';e={$TenantDomain}}
+
      'accountEnabled'
      'assignedLicenses'
      'businessPhones'
@@ -79,7 +79,7 @@
     $OutputFileName = $TenantDomain + '-EntraIDUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $Users = get-oguser -Property $Properties
+    $Users = get-oguser -Property $Properties | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}})
 
     $Users | Export-Clixml -Path $outputFilePath
 
