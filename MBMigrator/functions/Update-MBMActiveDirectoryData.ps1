@@ -16,7 +16,7 @@ function Update-MBMActiveDirectoryData
     param(
         #
         [parameter(Mandatory)]
-        [validateset('ADUser','ADComputer','ADGroup')]
+        [validateset('ADUser','ADComputer','ADGroup','EntraIDUser')]
         $Operation
         ,
         #
@@ -345,6 +345,82 @@ function Update-MBMActiveDirectoryData
                 $false
                 {
                     $sADGroups | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+
+        }
+        'EntraIDUser'
+        {
+            #Update EntraID User Data
+            $EntraIDUsers = @($SourceData)
+            Write-Information -MessageData 'Processing EntraID User Data'
+            $dTParams = @{
+                Table = 'stagingEntraIDUser'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
+
+            $property = @(
+                'accountEnabled'
+                'businessPhones'
+                'city'
+                'companyName'
+                'country'
+                'department'
+                'displayName'
+                'employeeId'
+                'givenName'
+                'id'
+                'jobTitle'
+                'lastPasswordChangeDateTime'
+                'licenseAssignmentStates'
+                'mail'
+                'mailNickname'
+                'mobilePhone'
+                'officeLocation'
+                'manager'
+                'onPremisesDistinguishedName'
+                'onPremisesDomainName'
+                'onPremisesExtensionAttributes'
+                'onPremisesImmutableId'
+                'onPremisesLastSyncDateTime'
+                'onPremisesSamAccountName'
+                'onPremisesSecurityIdentifier'
+                'onPremisesSyncEnabled'
+                'onPremisesUserPrincipalName'
+                'preferredLanguage'
+                'surname'
+                'usageLocation'
+                'userPrincipalName'
+                'userType'
+            )
+            $excludeProperty = @()
+            $customProperty = @(
+                @{n = 'assignedLicenses'; e = { $_.assignedLicenses.skuid -join ';' } },
+            )
+
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sEntraIDUsers = $EntraIDUsers | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sEntraIDUsers
+                        Table = Get-DbaDbTable @dbiParams -Table stagingEntraIDUser
+                    }
+                }
+                $false
+                {
+                    $sEntraIDUsers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
                 }
             }
 

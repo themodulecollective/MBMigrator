@@ -29,10 +29,43 @@
         # Compress the XML file into a Zip file
         [parameter()]
         [switch]$CompressOutput
+
     )
 
     $Properties = @(
-     'accountEnabled','assignedLicenses','businessPhones','city','companyName','country','department','displayName','employeeId','givenName','id','jobTitle','lastPasswordChangeDateTime','licenseAssignmentStates','mail','mailNickname','mobilePhone','officeLocation','onPremisesDistinguishedName','onPremisesDomainName','onPremisesExtensionAttributes','onPremisesImmutableId','onPremisesLastSyncDateTime','onPremisesSamAccountName','onPremisesSecurityIdentifier','onPremisesSyncEnabled','onPremisesUserPrincipalName','preferredLanguage','surname','usageLocation','userPrincipalName','userType'
+     'accountEnabled'
+     'assignedLicenses'
+     'businessPhones'
+     'city'
+     'companyName'
+     'country'
+     'department'
+     'displayName'
+     'employeeId'
+     'givenName'
+     'id'
+     'jobTitle'
+     'lastPasswordChangeDateTime'
+     'licenseAssignmentStates'
+     'mail'
+     'mailNickname'
+     'mobilePhone'
+     'officeLocation'
+     'manager'
+     'onPremisesDistinguishedName'
+     'onPremisesDomainName'
+     'onPremisesExtensionAttributes'
+     'onPremisesImmutableId'
+     'onPremisesLastSyncDateTime'
+     'onPremisesSamAccountName'
+     'onPremisesSecurityIdentifier'
+     'onPremisesSyncEnabled'
+     'onPremisesUserPrincipalName'
+     'preferredLanguage'
+     'surname'
+     'usageLocation'
+     'userPrincipalName'
+     'userType'
     )
 
     $Properties = @(@($Properties;$CustomProperty) | Sort-Object -Unique)
@@ -41,7 +74,7 @@
 
     $Tenant = (Get-MGContext).TenantID
 
-    $OutputFileName = $Tenant + 'Users' + 'AsOf' + $DateString
+    $OutputFileName = $Tenant + '-EntraIDUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $Users = get-oguser -Property $Properties
