@@ -363,6 +363,7 @@ function Update-MBMActiveDirectoryData
             {$dTParams.AutoCreate = $true}
 
             $property = @(
+                'TenantDomain'
                 'accountEnabled'
                 'businessPhones'
                 'city'
