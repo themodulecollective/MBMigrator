@@ -48,13 +48,21 @@ function Update-MBMRecipientData
         {
             #Update Mailbox Data
             Write-Information -MessageData 'Processing Exchange Mailbox Data'
+
             $dTParams = @{
                 Table = 'stagingMailbox'
             }
+
             if ($Truncate)
             { $dTParams.Truncate = $true }
+
             if ($AutoCreate)
             { $dTParams.AutoCreate = $true }
+
+            $property = @(@(Get-MBMColumnMap -tabletype stagingMailbox).Name)
+            $ColumnMap = @{}
+            $property.foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
 
             $excludeProperty = @(
                 'EmailAddresses'
@@ -121,10 +129,6 @@ function Update-MBMRecipientData
             $Data = $MailBoxes |
             Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
             
-            $ColumnMap = [ordered]@{}
-            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
-            $dTParams.ColumnMap = $ColumnMap
-            $property = @($property.where({ $_ -notin $excludeProperty }))
         }
         'MailboxStatistics'
         {

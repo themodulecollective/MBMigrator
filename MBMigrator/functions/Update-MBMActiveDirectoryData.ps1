@@ -376,7 +376,6 @@ function Update-MBMActiveDirectoryData
                 'id'
                 'jobTitle'
                 'lastPasswordChangeDateTime'
-                'licenseAssignmentStates'
                 'mail'
                 'mailNickname'
                 'mobilePhone'
@@ -397,7 +396,9 @@ function Update-MBMActiveDirectoryData
                 'userPrincipalName'
                 'userType'
             )
-            $excludeProperty = @()
+            $excludeProperty = @(
+                'licenseAssignmentStates'
+            )
             $customProperty = @(
                 @{n = 'assignedLicenses'; e = { $_.assignedLicenses.skuid -join ';' } }
             )
