@@ -32,7 +32,11 @@
 
     )
 
+    #$TenantID = (Get-MGContext).TenantID
+    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID
+
     $Properties = @(
+     @{n='TenantDomain';e={$TenantDomain}}
      'accountEnabled'
      'assignedLicenses'
      'businessPhones'
@@ -72,9 +76,7 @@
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
-    $Tenant = (Get-MGContext).TenantID
-
-    $OutputFileName = $Tenant + '-EntraIDUsers' + 'AsOf' + $DateString
+    $OutputFileName = $TenantDomain + '-EntraIDUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $Users = get-oguser -Property $Properties
