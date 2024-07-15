@@ -24,6 +24,8 @@ function Update-MBMRecipientData
         ,
         [switch]$Truncate
         ,
+        [switch]$AutoCreate
+        ,
         [switch]$Test
     )
 
@@ -51,6 +53,8 @@ function Update-MBMRecipientData
             }
             if ($Truncate)
             { $dTParams.Truncate = $true }
+            if ($AutoCreate)
+            { $dTParams.AutoCreate = $true }
             $property = @(@(Get-MBMColumnMap -tabletype stagingMailbox).Name)
             $ColumnMap = @{}
             $property.foreach({ $ColumnMap.$_ = $_ })
