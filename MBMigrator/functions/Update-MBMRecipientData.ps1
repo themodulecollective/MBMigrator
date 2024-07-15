@@ -55,10 +55,7 @@ function Update-MBMRecipientData
             { $dTParams.Truncate = $true }
             if ($AutoCreate)
             { $dTParams.AutoCreate = $true }
-            $property = @(@(Get-MBMColumnMap -tabletype stagingMailbox).Name)
-            $ColumnMap = @{}
-            $property.foreach({ $ColumnMap.$_ = $_ })
-            $dTParams.ColumnMap = $ColumnMap
+
             $excludeProperty = @(
                 'EmailAddresses'
                 ,'ArchiveGuid'
@@ -123,6 +120,11 @@ function Update-MBMRecipientData
             $Mailboxes = @($SourceData.Mailbox; $SourceData.RemoteMailbox)
             $Data = $MailBoxes |
             Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+            
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
         }
         'MailboxStatistics'
         {
