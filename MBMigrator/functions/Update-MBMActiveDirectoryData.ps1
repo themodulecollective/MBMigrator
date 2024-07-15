@@ -398,7 +398,7 @@ function Update-MBMActiveDirectoryData
             )
             $excludeProperty = @()
             $customProperty = @(
-                @{n = 'assignedLicenses'; e = { $_.assignedLicenses.skuid -join ';' } },
+                @{n = 'assignedLicenses'; e = { $_.assignedLicenses.skuid -join ';' } }
             )
 
             $ColumnMap = [ordered]@{}
