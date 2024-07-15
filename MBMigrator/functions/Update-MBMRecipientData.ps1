@@ -38,7 +38,7 @@ function Update-MBMRecipientData
 
     $SourceData = @(Import-Clixml -Path $FilePath)
 
-    $SourceOrganization = $Configuration.OrgMap.$($SourceData.OrganizationConfig.GUID.guid)
+    $SourceOrganization = $SourceData.OrganizationConfig.Name
 
     switch ($Operation)
     {
