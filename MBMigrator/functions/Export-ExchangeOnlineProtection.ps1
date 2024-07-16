@@ -752,7 +752,7 @@ function Export-ExchangeOnlineProtection
                 }    
             }
         ) 
-        $OPObjects | ConvertTo-Json -Depth 5 | Out-File -FilePath $JSONOutputFilePath -Encoding utf8
+        $OPObjects | ConvertTo-Json -Depth 5 -AsArray | Out-File -FilePath $JSONOutputFilePath -Encoding utf8
         $OPObjects | Select-Object -Property $property | Export-Excel @exportExcelParams
     }
 }
