@@ -84,6 +84,7 @@
         'Export-AzureADUserLicensing'
         'Export-EntraIDUser'
         'Export-ExchangeConfiguration'
+        'Export-ExchangeOnlineProtection'
         'Export-ExchangeRecipient'
         'Export-ExchangeOPDLOwnership'
         'Export-ComplianceRetentionPolicy'

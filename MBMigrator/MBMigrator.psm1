@@ -34,6 +34,7 @@ $Script:ModuleFiles = @(
   $(Join-Path -Path $functions -ChildPath Export-AzureADLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-AzureADUserLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeConfiguration.ps1)
+  $(Join-Path -Path $functions -ChildPath Export-ExchangeOnlineProtection.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeRecipient.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeOPDLOwnership.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ComplianceRetentionPolicy.ps1)
