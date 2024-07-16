@@ -634,9 +634,10 @@ function Export-ExchangeOnlineProtection
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
     $OutputFileName = 'ExchangeOnlineProtectionPolicies' + 'AsOf' + $DateString
-    $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
+    $ExcelOutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
+    $JSONOutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.json')
     $exportExcelParams = @{
-        Path = $OutputFilePath
+        Path = $ExcelOutputFilePath
         TableStyle = 'Medium11'
         WorksheetName = $null
         TableName = $null
@@ -651,7 +652,7 @@ function Export-ExchangeOnlineProtection
         $exportExcelParams.TableName = $key
         $property = $OnlineProtectionObjectTypes.$key
 
-        @(
+        $OPObjects = @(
             switch ($key)
             {
                 'PhishPolicyProperties' { 
@@ -750,6 +751,8 @@ function Export-ExchangeOnlineProtection
 
                 }    
             }
-        ) | Select-Object -Property $property | Export-Excel @exportExcelParams
+        ) 
+        $OPObjects | ConvertTo-Json | Out-File -FilePath $JSONOutputFilePath -Encoding utf8
+        $OPObjects | Select-Object -Property $property | Export-Excel @exportExcelParams
     }
 }
