@@ -2,12 +2,12 @@ function Export-ExchangeRetentionPolicy
 {
     <#
     .SYNOPSIS
-        Get all existing Compliance Retention Policies (and Rules) from a Tenant and export to an Excel file
+        Get all Legacy Exchange Retention Policies and Tags from a Tenant and export to an Excel file
     .DESCRIPTION
-        Export all Active Directory user to an XML file. Optional Zip export using $compressoutput switch param. Can specify additional properties to be included in the user export using CustomProperty param.
+        Get all Legacy Exchange Retention Policies (MRM) and Tags from a Tenant and export to an Excel file
     .EXAMPLE
-        Export-ComplianceRetentionPolicy -OutputFolderPath "C:\Users\UserName\Documents"
-        All Compliance Retention Policies in the connected tenant will be exported to a date stamped file with a name like RetentionPoliciesAsOfyyyyMMddhhmmss.xlsx
+        Export-ExchangeRetentionPolicy -OutputFolderPath "C:\Users\UserName\Documents"
+        All Legacy Exchange Retention Policies (MRM) in the connected tenant will be exported to a date stamped file with a name like RetentionPoliciesAsOfyyyyMMddhhmmss.xlsx
     #>
 
     [cmdletbinding()]
