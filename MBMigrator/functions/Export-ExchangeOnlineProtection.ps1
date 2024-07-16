@@ -644,7 +644,7 @@ function Export-ExchangeOnlineProtection
         AutoSize = $true
         FreezeTopRow = $true
     }
-
+    $jsonObjects = @(
     foreach ($key in $OnlineProtectionObjectTypes.Keys)
     {
 
@@ -752,7 +752,7 @@ function Export-ExchangeOnlineProtection
                 }    
             }
         ) 
-        $OPObjects.foreach({ConvertTo-Json -InputObject $_ -Depth 5 -AsArray}) | Out-File -FilePath $JSONOutputFilePath -Encoding utf8
         $OPObjects | Select-Object -Property $property | Export-Excel @exportExcelParams
-    }
+        $OPObjects
+    }) | ConvertTo-Json -Depth 4 | Out-File -FilePath $JSONOutputFilePath
 }
