@@ -20,7 +20,7 @@ function Update-MBMRecipientData
         #
         [parameter(Mandatory)]
         [validatescript({ Test-Path -Path $_ -PathType Leaf -Filter *.xml })]
-        $FilePath
+        [string]$FilePath
         ,
         [switch]$Truncate
         ,
