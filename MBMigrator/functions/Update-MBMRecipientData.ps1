@@ -42,6 +42,12 @@ function Update-MBMRecipientData
 
     $SourceOrganization = $SourceData.OrganizationConfig.Name
 
+    $dTParams = @{}
+    if ($Truncate)
+    { $dTParams.Truncate = $true }
+    if ($AutoCreate)
+    { $dTParams.AutoCreate = $true }
+
     switch ($Operation)
     {
         'Mailbox'
@@ -49,15 +55,7 @@ function Update-MBMRecipientData
             #Update Mailbox Data
             Write-Information -MessageData 'Processing Exchange Mailbox Data'
 
-            $dTParams = @{
-                Table = 'stagingMailbox'
-            }
-
-            if ($Truncate)
-            { $dTParams.Truncate = $true }
-
-            if ($AutoCreate)
-            { $dTParams.AutoCreate = $true }
+            $dTParams.Table = 'stagingMailbox'
 
             $property = @(@(Get-MBMColumnMap -tabletype stagingMailbox).Name)
             $ColumnMap = @{}
@@ -132,13 +130,9 @@ function Update-MBMRecipientData
         }
         'MailboxStatistics'
         {
-            #Update Mailbox Data
+            #Update Mailbox Statistics Data
             Write-Information -MessageData 'Processing Exchange Mailbox Statistics Data'
-            $dTParams = @{
-                Table = 'stagingMailboxStats'
-            }
-            if ($Truncate)
-            { $dTParams.Truncate = $true }
+            $dTParams.Table = 'stagingMailboxStats'
             $property = @(@(Get-MBMColumnMap -tabletype stagingMailboxStats).Name)
             $ColumnMap = @{}
             $property.foreach({ $ColumnMap.$_ = $_ })
@@ -172,11 +166,7 @@ function Update-MBMRecipientData
         {
             #Update Recipient Data
             Write-Information -MessageData 'Processing Exchange Recipient Data'
-            $dTParams = @{
-                Table = 'stagingRecipient'
-            }
-            if ($Truncate)
-            { $dTParams.Truncate = $true }
+            $dTParams.Table = 'stagingRecipient'
             $property = @(@(Get-MBMColumnMap -tabletype stagingRecipient).Name)
             $ColumnMap = @{}
             $property.foreach({ $ColumnMap.$_ = $_ })
