@@ -49,7 +49,7 @@ function Export-AzureADLicensing {
             $OutputFileName = $Tenant + 'GroupLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
             $OGLR = Get-OGGroupLicenseReport -All -IncludeDisplayName
-            $OGLRJ = $OGLR | Group-Join -Property GroupDisplayName,skuDisplayName,ServicePlanIsEnabled -JoinProperty ServicePlanDisplayName,ServicePlanName,ServicePlanID -JoinDelimiter ';'
+            $OGLRJ = $OGLR | Group-Join -Property GroupDisplayName,skuDisplayName,ServicePlanIsEnabled -JoinProperty ServicePlanDisplayName,ServicePlanName,ServicePlanID -JoinDelimeter ';'
             $OGLRJ | Export-Excel -Path $OutputFilePath -TableName GroupLicensing -TableStyle Medium1
         }
     }
