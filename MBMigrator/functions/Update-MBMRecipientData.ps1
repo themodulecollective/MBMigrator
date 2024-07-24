@@ -97,7 +97,7 @@ function Update-MBMRecipientData
                 @{n = 'SourceOrganization'; e = { $SourceOrganization } }
                 @{n = 'ExchangeGuid'; e = { $_.ExchangeGuid.guid } }
                 @{n = 'ExchangeObjectId'; e = { $_.ExchangeObjectId.guid } }
-                @{n = 'ExternalDirectoryObjectID'; e = { $_.ExternalDirectoryObjectID.guid } }
+                @{n = 'ExternalDirectoryObjectID'; e = { $_.ExternalDirectoryObjectID.tostring() } } # something changed here with serialization/deserialization and it's not coming in as GUID.  This will still work if that changes back to GUID in future.  
                 @{n = 'Guid'; e = { $_.Guid.guid } }
                 @{n = 'ArchiveGuid'; e = { $_.ArchiveGuid.guid } }
                 @{n = 'EmailAddresses'; e = { $_.EmailAddresses -join ';' } },
@@ -152,7 +152,7 @@ function Update-MBMRecipientData
                 @{n = 'SourceOrganization'; e = { $SourceOrganization } }
                 @{n = 'MailboxGuid'; e = { $_.MailboxGuid.guid } }
                 @{n = 'OwnerADGuid'; e = { $_.OwnerADGuid.guid } }
-                @{n = 'ExternalDirectoryOrganizationID'; e = { $_.ExsternalDirectoryOrganizationID.guid } }
+                @{n = 'ExternalDirectoryObjectID'; e = { $_.ExternalDirectoryObjectID.tostring() } } # something changed here with serialization/deserialization and it's not coming in as GUID.  This will still work if that changes back to GUID in future.  
                 @{n = 'TotalItemSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.TotalItemSize) } }
                 @{n = 'TotalDeletedItemSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.TotalDeletedItemSize) } }
                 @{n = 'MessageTableTotalSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.MessageTableTotalSize) } }
@@ -191,7 +191,7 @@ function Update-MBMRecipientData
                 @{n = 'SourceOrganization'; e = { $SourceOrganization } }
                 @{n = 'ExchangeGuid'; e = { $_.ExchangeGuid.guid } }
                 @{n = 'ExchangeObjectId'; e = { $_.ExchangeObjectId.guid } }
-                @{n = 'ExternalDirectoryObjectID'; e = { $_.ExternalDirectoryObjectID.guid } }
+                @{n = 'ExternalDirectoryObjectID'; e = { $_.ExternalDirectoryObjectID.tostring() } } # something changed here with serialization/deserialization and it's not coming in as GUID.  This will still work if that changes back to GUID in future.  
                 @{n = 'Guid'; e = { $_.Guid.guid } }
                 @{n = 'ArchiveGuid'; e = { $_.ArchiveGuid.guid } }
                 @{n = 'EmailAddresses'; e = { $_.EmailAddresses -join ';' } },
