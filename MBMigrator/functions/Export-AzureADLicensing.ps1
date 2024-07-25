@@ -24,7 +24,7 @@ function Export-AzureADLicensing {
         [string]$OutputFolderPath
         ,
         [parameter(Mandatory)]
-        [ValidateSet('UserLicensing','GroupLicensing')]
+        [ValidateSet('AllUserLicensing','MemberUserLicensing','GuestUserLicensing','GroupLicensing')]
         [string[]]$Operation
     )
 
@@ -34,12 +34,23 @@ function Export-AzureADLicensing {
 
     switch ($Operation)
     {
-        'UserLicensing'
+        {$_ -in @('AllUserLicensing', 'MemberUserLicensing','GuestUserLicensing')}
         {
             $OutputFileName = $Tenant + 'UserLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
-            $OGUsers = get-oguser -All
-            $OGUsersSkus = $OGUsers.ForEach({$UPN = $_.UserPrincipalName; Get-OGUserSku -UserPrincipalName $UPN -IncludeDisplayName | where-object -FilterScript {$_.skuDisplayName -eq 'Microsoft 365 E3'} | Select-Object -Property *,@{n='UserPrincipalName';e={$UPN}}})
+            $OGUsers = get-oguser -All -Property UserType
+
+            switch ($Operation)
+            {
+                'AllUserLicensing'
+                {$UsersToProcess = $OGUsers}
+                'MemberUserLicensing'
+                {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Member'})}
+                'GuestUserLicensing'
+                {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Guest'})}
+            }
+
+            $OGUsersSkus = $UsersToProcess.ForEach({$UPN = $_.UserPrincipalName; Get-OGUserSku -UserPrincipalName $UPN -IncludeDisplayName | where-object -FilterScript {$_.skuDisplayName -eq 'Microsoft 365 E3'} | Select-Object -Property *,@{n='UserPrincipalName';e={$UPN}}})
             $OGUsersSkus |
                 Select-Object UserPrincipalName,skuId,skuDisplayName,ServicePlanNames,ServicePlanDisplayNames |
                 Export-Excel -Path $OutputFilePath -TableName UserLicensing -TableStyle Medium1
