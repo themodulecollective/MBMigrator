@@ -45,12 +45,12 @@ function Export-AzureADLicensing {
                 'AllUserLicensing'
                 {$UsersToProcess = $OGUsers}
                 'MemberUserLicensing'
-                {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Member' -and $_.UserPrincpalName -notlike '*#EXT#@*'})}
+                {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Member' -and $_.UserPrincipalName -notlike '*#EXT#@*'})}
                 'GuestUserLicensing'
                 {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Guest' -or $_.UserPrincipalName -like '*#EXT#@*'})}
             }
 
-            $OGUsersSkus = $UsersToProcess.ForEach({$UPN = $_.UserPrincipalName; Get-OGUserSku -UserPrincipalName $UPN -IncludeDisplayName | where-object -FilterScript {$_.skuDisplayName -eq 'Microsoft 365 E3'} | Select-Object -Property *,@{n='UserPrincipalName';e={$UPN}}})
+            $OGUsersSkus = $UsersToProcess.ForEach({$UPN = $_.UserPrincipalName; Get-OGUserSku -UserPrincipalName $UPN -IncludeDisplayName -PassthruUserPrincipalName | where-object -FilterScript {$_.skuDisplayName -eq 'Microsoft 365 E3'}})
             $OGUsersSkus |
                 Select-Object UserPrincipalName,skuId,skuDisplayName,ServicePlanNames,ServicePlanDisplayNames |
                 Export-Excel -Path $OutputFilePath -TableName UserLicensing -TableStyle Medium1
