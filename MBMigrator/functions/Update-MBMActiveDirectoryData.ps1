@@ -16,7 +16,7 @@ function Update-MBMActiveDirectoryData
     param(
         #
         [parameter(Mandatory)]
-        [validateset('ADUser','ADComputer','ADGroup','EntraIDUser')]
+        [validateset('ADUser','ADComputer','ADGroup','EntraIDUser','EntraIDGroup')]
         $Operation
         ,
         #
@@ -113,6 +113,7 @@ function Update-MBMActiveDirectoryData
                 @{n = 'SID'; e = { $_.SID.value } },
                 @{n = 'ObjectGUID'; e = { $_.ObjectGUID.guid } },
                 @{n = 'DomainName'; e = { $_.DistinguishedName.split(',').where( { $_ -like 'DC=*' }).foreach( { $_.split('=')[1] }) | Select-Object -First 1 } }
+                @{n = 'ImmutableID'; e={Get-ImmutableIDFromGUID -Guid $_.'mS-DS-ConsistencyGUID'}}
                 @{n = 'msExchExtensionCustomAttribute2'; e = { $_.msExchExtensionCustomAttribute2 -join ';' } }
                 @{n = 'msExchExtensionCustomAttribute1'; e = { $_.msExchExtensionCustomAttribute1 -join ';' } }
                 @{n = 'msExchExtensionCustomAttribute3'; e = { $_.msExchExtensionCustomAttribute3 -join ';' } }
@@ -220,7 +221,7 @@ function Update-MBMActiveDirectoryData
                'uSNChanged'
                'uSNCreated'
                'whenChanged'
-               'whenCreated' 
+               'whenCreated'
             )
             $excludeProperty = @(
                 'Certificates'
@@ -291,7 +292,7 @@ function Update-MBMActiveDirectoryData
                 'GroupType'
                 'HomePage'
                 'InstanceType'
-                'Modified'       
+                'Modified'
                 'ModifyTimeStamp'
                 'Name'
                 'ObjectCategory'
@@ -313,15 +314,15 @@ function Update-MBMActiveDirectoryData
             $excludeProperty = @(
             )
             $customProperty = @(
-                @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } }   
+                @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } }
                 @{n = 'ManagedBy'; e = { $_.ManagedBy -join ';' } }
-                @{n = 'Members'; e = { $_.Members -join ';' } }             
+                @{n = 'Members'; e = { $_.Members -join ';' } }
                 @{n = 'MemberOf'; e = { $_.MemberOf -join ';' } }
                 @{n = 'SID'; e = { $_.SID.Value } }
                 @{n = 'SIDHistory'; e={$_.SIDHistory.Value -join ';'}}
                 @{n = 'ObjectGUID'; e = { $_.ObjectGUID.guid } }
                 @{n = 'ShowInAddressBook'; e = { $_.ShowInAddressBook -join ';' } }
-                @{n = 'msExchCoManagedByLink'; e = { $_.msExchCoManagedByLink -join ';' } }                
+                @{n = 'msExchCoManagedByLink'; e = { $_.msExchCoManagedByLink -join ';' } }
                 @{n = 'DomainName'; e = { $_.DistinguishedName.split(',').where( { $_ -like 'DC=*' }).foreach( { $_.split('=')[1] }) | Select-Object -First 1 } }
             )
 
@@ -418,6 +419,88 @@ function Update-MBMActiveDirectoryData
                         Map = $ColumnMap
                         Data = $sEntraIDUsers
                         Table = Get-DbaDbTable @dbiParams -Table stagingEntraIDUser
+                    }
+                }
+                $false
+                {
+                    $sEntraIDUsers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+
+        }
+        'EntraIDGroup'
+        {
+            #Update EntraID Group Data
+            $EntraIDGroups = @($SourceData)
+            Write-Information -MessageData 'Processing EntraID Group Data'
+            $dTParams = @{
+                Table = 'stagingEntraIDGroup'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
+
+            $property = @(
+                'classification',
+                'createdByAppId',
+                'createdDateTime',
+                'deletedDateTime',
+                'description',
+                'displayName',
+                'expirationDateTime',
+                'groupTypes',
+                'id',
+                'infoCatalogs',
+                'isAssignableToRole',
+                'isManagementRestricted',
+                'mail',
+                'mailEnabled',
+                'mailNickname',
+                'membershipRule',
+                'membershipRuleProcessingState',
+                'onPremisesDomainName',
+                'onPremisesLastSyncDateTime',
+                'onPremisesNetBiosName',
+                'onPremisesProvisioningErrors',
+                'onPremisesSamAccountName',
+                'onPremisesSecurityIdentifier',
+                'onPremisesSyncEnabled',
+                'organizationId',
+                'preferredDataLocation',
+                'preferredLanguage',
+                'renewedDateTime',
+                'resourceBehaviorOptions',
+                'resourceProvisioningOptions',
+                'securityEnabled',
+                'securityIdentifier',
+                'theme',
+                'visibility',
+                'writebackConfiguration'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+                @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } }
+                @{n = 'resourceBehaviorOptions'; e = { $_.resourceBehaviorOptions -join ';' } }
+                @{n = 'resourceProvisioningOptions'; e = { $_.resourceProvisioningOptions -join ';' } }
+            )
+
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sEntraIDGroups = $EntraIDGroups | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sEntraIDGroups
+                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
                     }
                 }
                 $false
