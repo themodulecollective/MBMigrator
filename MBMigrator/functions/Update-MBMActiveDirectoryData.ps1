@@ -470,8 +470,6 @@ function Update-MBMActiveDirectoryData
                 'preferredDataLocation',
                 'preferredLanguage',
                 'renewedDateTime',
-                'resourceBehaviorOptions',
-                'resourceProvisioningOptions',
                 'securityEnabled',
                 'securityIdentifier',
                 'theme',
