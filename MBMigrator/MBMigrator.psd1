@@ -83,6 +83,7 @@
         'Export-AzureADLicensing'
         'Export-AzureADUserLicensing'
         'Export-EntraIDUser'
+        'Export-EntraIDGroup'
         'Export-ExchangeConfiguration'
         'Export-ExchangeOnlineProtection'
         'Export-ExchangeRecipient'
