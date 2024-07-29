@@ -505,7 +505,7 @@ function Update-MBMActiveDirectoryData
                 }
                 $false
                 {
-                    $sEntraIDUsers | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                    $sEntraIDGroups | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
                 }
             }
 
