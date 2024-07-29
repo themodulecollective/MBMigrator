@@ -28,6 +28,7 @@
 
     #$TenantID = (Get-MGContext).TenantID
     $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID
+    $TenantID = (Get-MGContext).TenantID
 
     $Properties = @(
         'classification', 'createdByAppId', 'createdDateTime', 'deletedDateTime', 'description', 'displayName', 'expirationDateTime',
@@ -44,12 +45,12 @@
     $OutputFileName = $TenantDomain + '-EntraIDGroups' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $Groups = Get-OGGroup -Property $Properties | 
+    $Groups = Get-OGGroup -Property $Properties |
         Select-Object -ExcludeProperty GroupTypes -Property @(
             $Properties;
-            @{n='TenantDomain';e={$TenantDomain}}, @{n='TenantID'; e={$TenantID}}, 
+            @{n='TenantDomain';e={$TenantDomain}}, @{n='TenantID'; e={$TenantID}},
             @{n='groupType';e={$_.groupTypes -join '|'}})
-        
+
 
     $Groups | Export-Clixml -Path $outputFilePath
 
