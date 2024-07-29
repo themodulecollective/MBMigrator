@@ -449,7 +449,7 @@ function Update-MBMActiveDirectoryData
                 'description',
                 'displayName',
                 'expirationDateTime',
-                'groupTypes',
+                'groupType',
                 'id',
                 'infoCatalogs',
                 'isAssignableToRole',
@@ -477,9 +477,10 @@ function Update-MBMActiveDirectoryData
                 'writebackConfiguration'
             )
             $excludeProperty = @(
+                'groupTypes'
             )
             $customProperty = @(
-                @{n = 'ProxyAddresses'; e = { $_.ProxyAddresses -join ';' } }
+                @{n = 'proxyAddresses'; e = { $_.ProxyAddresses -join ';' } }
                 @{n = 'resourceBehaviorOptions'; e = { $_.resourceBehaviorOptions -join ';' } }
                 @{n = 'resourceProvisioningOptions'; e = { $_.resourceProvisioningOptions -join ';' } }
             )
