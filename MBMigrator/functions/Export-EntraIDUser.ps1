@@ -1,18 +1,13 @@
 ﻿function Export-EntraIDUser {
     <#
     .SYNOPSIS
-        Get all Active Directory user and export them to a XML file
+        Get all EntraID user and export them to a XML file
     .DESCRIPTION
-        Export all Active Directory user to an XML file. Optional Zip export using $compressoutput switch param. Can specify additional properties to be included in the user export using CustomProperty param.
+        Export all EntraID user to an XML file. Optional Zip export using $compressoutput switch param. Can specify additional properties to be included in the user export using CustomProperty param.
     .EXAMPLE
-        Export-ADUser -OutputFolderPath "C:\Users\UserName\Documents" -Domain contoso
-        All users in the domain Contoso will be exported Documents in the file 20221014021841contosoUsers.xml
+        Export-EntraIDUser -OutputFolderPath "C:\Users\UserName\Documents" 
+        All users in the currently connected tenant (Graph) will be exported Documents in the file TenantDomain-EntraIDUsersAsOfDateString.xml
 
-        Export-ADUser -OutputFolderPath "C:\Users\UserName\Documents" -Domain contoso -Exchange:$true
-        All users in the domain Contoso will be exported Documents in the file 20221014021841contosoUsers.xml. The user attributes will include some exchange attributes. ex. msExchMailboxGuid and mailnickname
-
-        Export-ADUser -OutputFolderPath "C:\Users\UserName\Documents" -Domain contoso -CustomProperty CustomAttribute17
-        All users in the domain Contoso will be exported Documents in the file 20221014021841contosoUsers.xml and CustomAttribute17 will be included in the User attributes
     #>
 
     [cmdletbinding()]
