@@ -44,8 +44,8 @@
     $OutputFileName = $TenantDomain + '-EntraIDGroups' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $Groups = Get-OGGroup -ExcludeProperty GroupTypes -Property $Properties | 
-        Select-Object -Property @(
+    $Groups = Get-OGGroup -Property $Properties | 
+        Select-Object -ExcludeProperty GroupTypes -Property @(
             $Properties;
             @{n='TenantDomain';e={$TenantDomain}}, @{n='TenantID'; e={$TenantID}}, 
             @{n='groupType';e={$_.groupTypes -join '|'}})
