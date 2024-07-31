@@ -12,7 +12,7 @@
     RootModule           = '.\MBMigrator.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '0.0.0.30'
+    ModuleVersion        = '0.0.0.40'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')
@@ -27,7 +27,7 @@
     CompanyName          = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright            = '2022'
+    Copyright            = '2024'
 
     # Description of the functionality provided by this module
     Description          = 'a PowerShell Module for managing Mailbox Migrations to Exchange Online using Move Requests'
@@ -80,8 +80,8 @@
         'Export-ADUser'
         'Export-ADComputer'
         'Export-ADGroup'
-        'Export-AzureADLicensing'
-        'Export-AzureADUserLicensing'
+        'Export-EntraIDLicensing'
+        'Export-EntraIDUserLicensing'
         'Export-EntraIDUser'
         'Export-EntraIDGroup'
         'Export-ExchangeConfiguration'

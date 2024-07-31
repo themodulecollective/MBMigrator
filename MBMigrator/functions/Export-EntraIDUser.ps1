@@ -5,7 +5,7 @@
     .DESCRIPTION
         Export all EntraID user to an XML file. Optional Zip export using $compressoutput switch param. Can specify additional properties to be included in the user export using CustomProperty param.
     .EXAMPLE
-        Export-EntraIDUser -OutputFolderPath "C:\Users\UserName\Documents" 
+        Export-EntraIDUser -OutputFolderPath "C:\Users\UserName\Documents"
         All users in the currently connected tenant (Graph) will be exported Documents in the file TenantDomain-EntraIDUsersAsOfDateString.xml
 
     #>
@@ -28,7 +28,7 @@
     )
 
     #$TenantID = (Get-MGContext).TenantID
-    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID
+    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID.split('.')[0]
 
     $Properties = @(
 

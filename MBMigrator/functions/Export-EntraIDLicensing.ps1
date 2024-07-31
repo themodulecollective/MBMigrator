@@ -1,4 +1,4 @@
-function Export-AzureADLicensing {
+function Export-EntraIDLicensing {
     <#
     .SYNOPSIS
         Get and export all Active Directory user and group licensing and export to an excel file
@@ -36,7 +36,7 @@ function Export-AzureADLicensing {
     {
         {$_ -in @('AllUserLicensing', 'MemberUserLicensing','GuestUserLicensing')}
         {
-            $OutputFileName = $Tenant + 'UserLicensing' + 'AsOf' + $DateString
+            $OutputFileName = $Tenant + '-EntraIDUserLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
             $OGUsers = get-oguser -All -Property UserType
 
@@ -50,14 +50,16 @@ function Export-AzureADLicensing {
                 {$UsersToProcess = $OGUsers.where({$_.UserType -eq 'Guest' -or $_.UserPrincipalName -like '*#EXT#@*'})}
             }
 
-            $OGUsersSkus = $UsersToProcess.ForEach({$UPN = $_.UserPrincipalName; Get-OGUserSku -UserPrincipalName $UPN -IncludeDisplayName -PassthruUserPrincipalName | where-object -FilterScript {$_.skuDisplayName -eq 'Microsoft 365 E3'}})
+            $OGUsersSkus = $UsersToProcess.ForEach({
+                Get-OGUserSku -UserPrincipalName $_.UserPrincipalName -IncludeDisplayName -PassthruUserPrincipalName
+            }) # | where-object -FilterScript {$_.skuDisplayName -like '*Microsoft 365*'}})
             $OGUsersSkus |
                 Select-Object UserPrincipalName,skuId,skuDisplayName,ServicePlanNames,ServicePlanDisplayNames |
                 Export-Excel -Path $OutputFilePath -TableName UserLicensing -TableStyle Medium1
         }
         'GroupLicensing'
         {
-            $OutputFileName = $Tenant + 'GroupLicensing' + 'AsOf' + $DateString
+            $OutputFileName = $Tenant + '-EntraIDGroupLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
             $OGLR = Get-OGGroupLicenseReport -All -IncludeDisplayName
             $OGLRJ = $OGLR | Group-Join -Property GroupDisplayName,skuDisplayName,ServicePlanIsEnabled -JoinProperty ServicePlanDisplayName,ServicePlanName,ServicePlanID -JoinDelimeter ';'

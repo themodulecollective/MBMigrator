@@ -27,7 +27,7 @@
     )
 
     #$TenantID = (Get-MGContext).TenantID
-    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID
+    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID.split('.')[0]
     $TenantID = (Get-MGContext).TenantID
 
     $Properties = @(
