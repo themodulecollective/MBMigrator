@@ -82,6 +82,7 @@
         'Export-ADGroup'
         'Export-EntraIDLicensing'
         'Export-EntraIDUserLicensing'
+        'Export-EntraIDUserDrive'
         'Export-EntraIDUser'
         'Export-EntraIDGroup'
         'Export-ExchangeConfiguration'
