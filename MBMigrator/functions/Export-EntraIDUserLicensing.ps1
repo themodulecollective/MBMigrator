@@ -81,9 +81,17 @@ function Export-EntraIDUserLicensing {
         }
         $false
         {
-            $OutputFileName = $TenantDomain + '-UserLicensing' + 'AsOf' + $DateString
+            $OutputFileName = $TenantDomain + '-EntraIDUserLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
-            $Results | Export-Excel -path $OutputFilePath
+            $ExportExcelParams = @{
+                path = $OutputFilePath
+                Autosize = $true
+                WorksheetName = 'UserLicensing'
+                TableName = 'UserLicensing'
+                TableStyle = 'Medium5'
+                FreezeTopRow = $true
+            }
+            $Results | Export-Excel -path @ExportExcelParams
         }
     }
 
