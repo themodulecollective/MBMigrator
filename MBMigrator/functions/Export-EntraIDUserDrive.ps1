@@ -44,7 +44,7 @@
                 Get-OGUserDrive -UserPrincipalName $_.UserPrincipalName -PassthruUserPrincipalName -ErrorAction Stop
             }
             catch {
-                switch ($SuppressErrors)
+                switch ($SuppressErrors -eq $true)
                 {
                     $true
                     {}
