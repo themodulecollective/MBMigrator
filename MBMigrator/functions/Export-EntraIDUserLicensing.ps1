@@ -91,7 +91,7 @@ function Export-EntraIDUserLicensing {
                 TableStyle = 'Medium5'
                 FreezeTopRow = $true
             }
-            $Results | Export-Excel -path @ExportExcelParams
+            $Results | Export-Excel @ExportExcelParams
         }
     }
 
