@@ -20,6 +20,8 @@
         # Compress the XML file into a Zip file
         [parameter()]
         [switch]$CompressOutput
+        ,
+        [switch]$SuppressErrors #Licensed Users do not always have a OneDrive. Speed up operation by supressing all errors.
 
     )
 
@@ -42,7 +44,13 @@
                 Get-OGUserDrive -UserPrincipalName $_.UserPrincipalName -PassthruUserPrincipalName -ErrorAction Stop
             }
             catch {
-                Write-Warning -Message $_.ToString()
+                switch ($SuppressErrors)
+                {
+                    $true
+                    {}
+                    $false
+                    {Write-Warning -Message $_.ToString()}
+                }
             }
         })
     )
