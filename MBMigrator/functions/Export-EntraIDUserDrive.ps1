@@ -41,7 +41,8 @@
     $UserDrives = @(
         $LicensedUsers.foreach({
             try {
-                Get-OGUserDrive -UserPrincipalName $_.UserPrincipalName -PassthruUserPrincipalName -ErrorAction Stop
+                Get-OGUserDrive -UserPrincipalName $_.UserPrincipalName -PassthruUserPrincipalName -ErrorAction Stop |
+                    Select-Object -Property *,@{n='UserID';e={$_.ID}}
             }
             catch {
                 switch ($SuppressErrors -eq $true)
