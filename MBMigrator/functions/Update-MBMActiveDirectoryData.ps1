@@ -474,7 +474,10 @@ function Update-MBMActiveDirectoryData
                 'securityIdentifier',
                 'theme',
                 'visibility',
-                'writebackConfiguration'
+                'writebackConfiguration',
+                'TenantDomain',
+                'TenantID'
+
             )
             $excludeProperty = @(
                 'groupTypes'
