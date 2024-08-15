@@ -1,5 +1,4 @@
 
-#NOTE: this function is being deprecated - functionality is moving to other more specific functions like Update-MBMPermissionData, Update-MBMRecipientData, Update-MBMWavePlanning, etc.
 function Update-MBMActiveDirectoryData
 {
     <#
