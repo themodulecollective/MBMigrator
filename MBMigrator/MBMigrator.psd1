@@ -129,6 +129,7 @@
         'Sync-MBMWaveMoveRequest'
         'Update-MBMRecipientData'
         'Update-MBMPermissionData'
+        'Update-MBMFromExcelFile'
         'Get-MBMConfiguration'
         'Get-MBMColumnMap'
         'Set-MBMConfiguration'

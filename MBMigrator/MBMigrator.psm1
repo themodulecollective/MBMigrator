@@ -85,6 +85,7 @@ $Script:ModuleFiles = @(
   $(Join-Path -Path $functions -ChildPath New-MBMReverseMoveRequest.ps1)
   $(Join-Path -Path $functions -ChildPath Export-MBMWaveMRSReport.ps1)
   $(Join-Path -Path $functions -ChildPath Update-MBMActiveDirectoryData.ps1)
+  $(Join-Path -Path $functions -ChildPath Update-MBMFromExcelFile.ps1)
   $(Join-Path -Path $functions -ChildPath Update-MBMDelegateAnalysis.ps1)
   $(Join-Path -Path $functions -ChildPath Start-ExchangeThreadJob.ps1)
   # Finalize / Run any Module Functions defined above
