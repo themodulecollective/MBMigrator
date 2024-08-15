@@ -15,7 +15,7 @@ function Export-ExchangeOnlineProtection
         # Folder path for the XLSX file exprt
         [parameter(Mandatory)]
         [ValidateScript( { Test-Path -type Container -Path $_ })]
-        [string]$OutputFolderPath      
+        [string]$OutputFolderPath
         ,
         # Specify a delimiter, 1 character in length.  Default is '|'.
         [parameter()]
@@ -76,7 +76,7 @@ function Export-ExchangeOnlineProtection
         @{n='TargetedUserActionRecipients';e={$_.TargetedUserActionRecipients -join $Delimiter}},
         'TargetedUserProtectionAction'
         'TargetedUserQuarantineTag'
-        @{n='TargetedUsersToProtect';e={$_.TargetedUsersToProtect -join $Delimiter}},   
+        @{n='TargetedUsersToProtect';e={$_.TargetedUsersToProtect -join $Delimiter}},
         'WhenChangedUTC'
         'WhenCreatedUTC'
     );
@@ -140,7 +140,7 @@ function Export-ExchangeOnlineProtection
         'IntraOrgFilterState',
         'IsDefault',
         'IsValid',
-        @{n='LanguageBlockList';e={$_.LanguageBlockList -join $Delimiter}}, 
+        @{n='LanguageBlockList';e={$_.LanguageBlockList -join $Delimiter}},
         'MarkAsSpamBulkMail',
         'MarkAsSpamEmbedTagsInHtml',
         'MarkAsSpamEmptyMessages',
@@ -222,7 +222,7 @@ function Export-ExchangeOnlineProtection
         'IsValid',
         'Name',
         'NotifyOutboundSpam',
-        @{n='NotifyOutboundSpamRecipients';e={$_.NotifyOutboundSpamRecipients -join $Delimiter}}, 
+        @{n='NotifyOutboundSpamRecipients';e={$_.NotifyOutboundSpamRecipients -join $Delimiter}},
         'ObjectCategory',
         'ObjectState',
         'OrganizationalUnitRoot',
@@ -280,7 +280,7 @@ function Export-ExchangeOnlineProtection
         'ExchangeVersion',
         'ExternalSenderAdminAddress',
         'FileTypeAction',
-        @{n='FileTypes';e={$_.FileTypes -join $Delimiter}},        
+        @{n='FileTypes';e={$_.FileTypes -join $Delimiter}},
         @{n='Guid';e={$_.Guid.guid}},
         'Id',
         'Identity',
@@ -513,8 +513,8 @@ function Export-ExchangeOnlineProtection
         @{n='Guid';e={$_.Guid.guid}},
         'Id',
         'Identity',
-        @{n='IPAllowList';e={$_.IPAllowList -join $Delimiter}},        
-        @{n='IPBlockList';e={$_.IPBlockList -join $Delimiter}},   
+        @{n='IPAllowList';e={$_.IPAllowList -join $Delimiter}},
+        @{n='IPBlockList';e={$_.IPBlockList -join $Delimiter}},
         'IsDefault',
         'IsValid',
         'Name',
@@ -552,18 +552,18 @@ function Export-ExchangeOnlineProtection
 
     'InboundConnectorProperties' = @(
         'AdminDisplayName',
-        @{n='AssociatedAcceptedDomains';e={$_.AssociatedAcceptedDomains -join $Delimiter}},        
-        @{n='ClientHostNames';e={$_.ClientHostNames -join $Delimiter}},        
+        @{n='AssociatedAcceptedDomains';e={$_.AssociatedAcceptedDomains -join $Delimiter}},
+        @{n='ClientHostNames';e={$_.ClientHostNames -join $Delimiter}},
         'CloudServicesMailEnabled',
         'Comment',
         'ConnectorSource',
         'ConnectorType',
         'DistinguishedName',
-        @{n='EFSkipIPs';e={$_.EFSkipIPs -join $Delimiter}},        
+        @{n='EFSkipIPs';e={$_.EFSkipIPs -join $Delimiter}},
         'EFSkipLastIP',
         @{n='EFSkipMailGateway';e={$_.EFSkipMailGateway -join $Delimiter}},
         'EFTestMode',
-        @{n='EFUsers';e={$_.EFUsers -join $Delimiter}},        
+        @{n='EFUsers';e={$_.EFUsers -join $Delimiter}},
         'Enabled',
         @{n='ExchangeObjectId';e={$_.ExchangeObjectId.guid}},
         'ExchangeVersion',
@@ -582,12 +582,12 @@ function Export-ExchangeOnlineProtection
         'RequireTls',
         'RestrictDomainsToCertificate',
         'RestrictDomainsToIPAddresses',
-        @{n='ScanAndDropRecipients';e={$_.ScanAndDropRecipients -join $Delimiter}},        
-        @{n='SenderDomains';e={$_.SenderDomains -join $Delimiter}},        
-        @{n='SenderIPAddresses';e={$_.SenderIPAddresses -join $Delimiter}},        
+        @{n='ScanAndDropRecipients';e={$_.ScanAndDropRecipients -join $Delimiter}},
+        @{n='SenderDomains';e={$_.SenderDomains -join $Delimiter}},
+        @{n='SenderIPAddresses';e={$_.SenderIPAddresses -join $Delimiter}},
         'TlsSenderCertificateName',
         'TreatMessagesAsInternal',
-        @{n='TrustedOrganizations';e={$_.TrustedOrganizations -join $Delimiter}},        
+        @{n='TrustedOrganizations';e={$_.TrustedOrganizations -join $Delimiter}},
         'WhenChangedUTC',
         'WhenCreatedUTC'
     );
@@ -617,10 +617,10 @@ function Export-ExchangeOnlineProtection
         'OrganizationalUnitRoot',
         'OrganizationId',
         'OriginatingServer',
-        @{n='RecipientDomains';e={$_.RecipientDomains -join $Delimiter}},        
+        @{n='RecipientDomains';e={$_.RecipientDomains -join $Delimiter}},
         'RouteAllMessagesViaOnPremises',
         'SenderRewritingEnabled',
-        @{n='SmartHosts';e={$_.SmartHosts -join $Delimiter}},        
+        @{n='SmartHosts';e={$_.SmartHosts -join $Delimiter}},
         'TestMode',
         'TlsDomain',
         'TlsSettings',
@@ -655,7 +655,7 @@ function Export-ExchangeOnlineProtection
         $OPObjects = @(
             switch ($key)
             {
-                'PhishPolicyProperties' { 
+                'PhishPolicyProperties' {
 
                     Get-AntiPhishPolicy
 
@@ -663,60 +663,60 @@ function Export-ExchangeOnlineProtection
                 'PhishRuleProperties' {
 
                     Get-AntiPhishRule
-                    
+
                 }
-                'InboundFilterPolicyProperties' { 
+                'InboundFilterPolicyProperties' {
 
                     Get-HostedContentFilterPolicy
 
                 }
-                'InboundFilterRuleProperties' { 
+                'InboundFilterRuleProperties' {
 
                     Get-HostedContentFilterRule
 
                 }
-                'OutboundSpamFilterPolicyProperties' { 
-                    
+                'OutboundSpamFilterPolicyProperties' {
+
                     Get-HostedOutboundSpamFilterPolicy
-                    
+
                 }
-                'OutboundFilterRuleProperties' { 
-                    
+                'OutboundFilterRuleProperties' {
+
                     Get-HostedOutboundSpamFilterRule
-                    
+
                 }
-                'MalwareFilterPolicyProperties' { 
-                    
+                'MalwareFilterPolicyProperties' {
+
                     Get-MalwareFilterPolicy
-                    
+
                 }
-                'MalwareFilterRuleProperties' { 
-                    
+                'MalwareFilterRuleProperties' {
+
                     Get-MalwareFilterRule
-                    
+
                 }
-                'SafeAttachmentPolicyProperties' { 
-                    
+                'SafeAttachmentPolicyProperties' {
+
                     Get-SafeAttachmentPolicy
-                    
+
                 }
-                'SafeAttachmentRuleProperties' { 
-                    
+                'SafeAttachmentRuleProperties' {
+
                     Get-SafeAttachmentRule
-                    
+
                 }
-                'SafeLinksPolicyProperties' { 
-                    
+                'SafeLinksPolicyProperties' {
+
                     Get-SafeLinksPolicy
-                    
+
                 }
-                'SafeLinksRuleProperties' { 
-                    
+                'SafeLinksRuleProperties' {
+
                     Get-SafeLinksRule
-                    
+
                 }
-                'AllowBlockListItemProperties' { 
-                    
+                'AllowBlockListItemProperties' {
+
                     Get-TenantAllowBlockListItems -ListType FileHash
                     Get-TenantAllowBlockListItems -ListType Url
                     Get-TenantAllowBlockListItems -ListType Sender
@@ -725,33 +725,33 @@ function Export-ExchangeOnlineProtection
                     Get-TenantAllowBlockListItems -ListType IP
 
                 }
-                'DKIMSigningConfigEntryProperties' { 
-                    
+                'DKIMSigningConfigEntryProperties' {
+
                     Get-DkimSigningConfig
-                    
+
                 }
-                'HostedConnectionFilterPolicyProperties' { 
-                    
+                'HostedConnectionFilterPolicyProperties' {
+
                     Get-HostedConnectionFilterPolicy
-                    
+
                 }
-                'QuarantinePolicyProperties' { 
-                    
+                'QuarantinePolicyProperties' {
+
                     Get-QuarantinePolicy
-                    
+
                 }
-                'InboundConnectorProperties' { 
-                    
+                'InboundConnectorProperties' {
+
                     Get-InboundConnector
-                    
+
                 }
-                'OutboundConnectorProperties' { 
+                'OutboundConnectorProperties' {
 
                     Get-OutboundConnector
 
-                }    
+                }
             }
-        ) 
+        )
         $OPObjects | Select-Object -Property $property | Export-Excel @exportExcelParams
         $OPObjects
     }) | ConvertTo-Json -Depth 4 | Out-File -FilePath $JSONOutputFilePath
