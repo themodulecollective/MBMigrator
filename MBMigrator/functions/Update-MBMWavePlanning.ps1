@@ -14,6 +14,10 @@ function Update-MBMWavePlanning {
         #
         [parameter(Mandatory)]
         $InputFolderPath
+        ,
+        [parameter(Mandatory)]
+        [validateset('WavePlan', 'WaveAssignments', 'WaveExceptions', 'SpecialHandling')]
+        [string[]]$Operation
     )
 
     Import-Module ImportExcel
@@ -32,7 +36,7 @@ function Update-MBMWavePlanning {
             throw("Provided Folder Path $InputFolderPath does not contain file WavePlanning.xlsx")
         }
         $true {
-            foreach ($s in @('WavePlan', 'WaveAssignments', 'WaveExceptions', 'SpecialHandling')) {
+            foreach ($s in $Operation) {
 
                 Write-Information -MessageData "Processing $s"
 
