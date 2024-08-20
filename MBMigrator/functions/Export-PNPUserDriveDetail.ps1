@@ -20,9 +20,6 @@
         # Compress the XML file into a Zip file
         [parameter()]
         [switch]$CompressOutput
-        ,
-        [switch]$SuppressErrors #Licensed Users do not always have a OneDrive. Speed up operation by supressing all errors.
-
     )
 
     #$TenantID = (Get-MGContext).TenantID
@@ -31,7 +28,7 @@
     $GetPNPTenantSiteParams = @{
         Filter = "Url -like '-my.sharepoint.com/personal/'"
         IncludeOneDriveSites = $true
-        Detaild = $true
+        Detailed = $true
     }
 
     $UserDrivesRaw = Get-PnPTenantSite @GetPNPTenantSiteParams
@@ -40,7 +37,6 @@
         $UserDrivesRaw | Select-object -Property *,
             @{n='UsageInGB';e={[MATH]::Round($_.StorageUsageCurrent * 1MB / 1GB,2)}},
             @{n='QuotaInGB';e={[MATH]::Round($_.StorageQuata * 1MB / 1GB,2)}}
-
     )
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
