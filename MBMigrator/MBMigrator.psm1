@@ -35,6 +35,7 @@ $Script:ModuleFiles = @(
   $(Join-Path -Path $functions -ChildPath Export-EntraIDLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-EntraIDUserLicensing.ps1)
   $(Join-Path -Path $functions -ChildPath Export-EntraIDUserDrive.ps1)
+  $(Join-Path -Path $functions -ChildPath Export-PNPUserDriveDetail.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeConfiguration.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeOnlineProtection.ps1)
   $(Join-Path -Path $functions -ChildPath Export-ExchangeRecipient.ps1)

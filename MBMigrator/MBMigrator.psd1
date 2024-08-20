@@ -83,6 +83,7 @@
         'Export-EntraIDLicensing'
         'Export-EntraIDUserLicensing'
         'Export-EntraIDUserDrive'
+        'Export-PNPUserDriveDetail'
         'Export-EntraIDUser'
         'Export-EntraIDGroup'
         'Export-ExchangeConfiguration'
