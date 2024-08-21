@@ -15,7 +15,7 @@ function Update-MBMFromExcelFile
     param(
         #
         [parameter(Mandatory)]
-        [validateset('UserDrive')]
+        [validateset('UserDrive','UserDriveDetail')]
         $Operation
         ,
         #
@@ -70,6 +70,56 @@ function Update-MBMFromExcelFile
                 'lastModifiedBy'
                 'owner'
                 'quota'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+            )
+
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sUserDrives = $UserDrives | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sUserDrives
+                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
+                    }
+                }
+                $false
+                {
+                    $sUserDrives | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+
+        }
+        'UserDriveDetail'
+        {
+            #Update Graph User Drive Data
+            $UserDrives = @($SourceData)
+            Write-Information -MessageData 'Processing User Drive Detail Data'
+            $dTParams = @{
+                Table = 'stagingUserDriveDetail'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
+
+            $property = @(
+                'Owner'
+                'Title'
+                'LastContentModifiedDate'
+                'Url'
+                'UsageInGB'
+                'QuotaInGB'
             )
             $excludeProperty = @(
             )
