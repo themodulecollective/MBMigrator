@@ -48,6 +48,8 @@ function Update-MBMFromExcelFile
     if ($AutoCreate)
     {$dTParams.AutoCreate = $true}
 
+    $c2dtparams = @{}
+
     switch ($Operation)
     {
         'UserDrive'
@@ -92,6 +94,7 @@ function Update-MBMFromExcelFile
         'IntuneDevice'
         {
             $dTParams.Table = 'stagingIntuneDevice'
+            $c2dtparams.raw = $true
             $Property = @(
                 'TenantDomain',
                 'AzureAdDeviceId',
@@ -151,6 +154,7 @@ function Update-MBMFromExcelFile
             )
             $customProperty = @(
             )
+
         }
     }
 
@@ -171,7 +175,7 @@ function Update-MBMFromExcelFile
         }
         $false
         {
-            $sUpdates | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+            $sUpdates | ConvertTo-DbaDataTable @c2dtparams | Write-DbaDataTable @dbiParams @dTParams
         }
     }
 }
