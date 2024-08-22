@@ -63,7 +63,7 @@
     $gADUserParams = @{}
     $gADUserParams.Add('Server',$($Domain + ":3268"))
 
-    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams -Server $Domain  #| Sort-Object -Property $Properties -Descending
+    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams  #| Sort-Object -Property $Properties -Descending
 
     $ADUsers | Export-Clixml -Path $outputFilePath
 
