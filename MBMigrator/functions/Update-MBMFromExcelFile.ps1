@@ -39,23 +39,20 @@ function Update-MBMFromExcelFile
         Database    = $Configuration.Database
     }
 
-    $SourceData = @(Import-Excel -Path $FilePath)
+    $Updates = @(Import-Excel -Path $FilePath)
+    Write-Information -MessageData "Processing $Operation Data"
+
+    $dTParams = @{}
+    if ($Truncate)
+    {$dTParams.Truncate = $true}
+    if ($AutoCreate)
+    {$dTParams.AutoCreate = $true}
 
     switch ($Operation)
     {
         'UserDrive'
         {
-            #Update Graph User Drive Data
-            $UserDrives = @($SourceData)
-            Write-Information -MessageData 'Processing User Drive Data'
-            $dTParams = @{
-                Table = 'stagingUserDrive'
-            }
-            if ($Truncate)
-            {$dTParams.Truncate = $true}
-            if ($AutoCreate)
-            {$dTParams.AutoCreate = $true}
-
+            $dTParams.Table = 'stagingUserDrive'
             $property = @(
                 'UserID'
                 'UserPrincipalName'
@@ -75,44 +72,10 @@ function Update-MBMFromExcelFile
             )
             $customProperty = @(
             )
-
-            $ColumnMap = [ordered]@{}
-            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
-            $dTParams.ColumnMap = $ColumnMap
-            $property = @($property.where({ $_ -notin $excludeProperty }))
-
-            $sUserDrives = $UserDrives | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
-
-            switch ($test)
-            {
-                $true
-                {
-                    @{
-                        Map = $ColumnMap
-                        Data = $sUserDrives
-                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
-                    }
-                }
-                $false
-                {
-                    $sUserDrives | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
-                }
-            }
-
         }
         'UserDriveDetail'
         {
-            #Update Graph User Drive Data
-            $UserDrives = @($SourceData)
-            Write-Information -MessageData 'Processing User Drive Detail Data'
-            $dTParams = @{
-                Table = 'stagingUserDriveDetail'
-            }
-            if ($Truncate)
-            {$dTParams.Truncate = $true}
-            if ($AutoCreate)
-            {$dTParams.AutoCreate = $true}
-
+            $dTParams.Table = 'stagingUserDriveDetail'
             $property = @(
                 'Owner'
                 'Title'
@@ -125,44 +88,10 @@ function Update-MBMFromExcelFile
             )
             $customProperty = @(
             )
-
-            $ColumnMap = [ordered]@{}
-            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
-            $dTParams.ColumnMap = $ColumnMap
-            $property = @($property.where({ $_ -notin $excludeProperty }))
-
-            $sUserDrives = $UserDrives | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
-
-            switch ($test)
-            {
-                $true
-                {
-                    @{
-                        Map = $ColumnMap
-                        Data = $sUserDrives
-                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
-                    }
-                }
-                $false
-                {
-                    $sUserDrives | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
-                }
-            }
-
         }
         'IntuneDevice'
         {
-            #Update Intune Device Data
-            $Updates = @($SourceData)
-            Write-Information -MessageData "Processing $Operation Data"
-            $dTParams = @{
-                Table = 'stagingIntuneDevice'
-            }
-            if ($Truncate)
-            {$dTParams.Truncate = $true}
-            if ($AutoCreate)
-            {$dTParams.AutoCreate = $true}
-
+            $dTParams.Table = 'stagingIntuneDevice'
             $Property = @(
                 'TenantDomain',
                 'AzureAdDeviceId',
@@ -224,29 +153,27 @@ function Update-MBMFromExcelFile
             )
             $customProperty = @(
             )
+        }
+    }
 
-            $ColumnMap = [ordered]@{}
-            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
-            $dTParams.ColumnMap = $ColumnMap
-            $property = @($property.where({ $_ -notin $excludeProperty }))
-
-            $sUpdates = $Updates | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
-
-            switch ($test)
-            {
-                $true
-                {
-                    @{
-                        Map = $ColumnMap
-                        Data = $sUpdates
-                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
-                    }
-                }
-                $false
-                {
-                    $sUpdates | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
-                }
+    $ColumnMap = [ordered]@{}
+    @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+    $dTParams.ColumnMap = $ColumnMap
+    $property = @($property.where({ $_ -notin $excludeProperty }))
+    $sUpdates = $Updates | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+    switch ($test)
+    {
+        $true
+        {
+            @{
+                Map = $ColumnMap
+                Data = $sUpdates
+                Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
             }
+        }
+        $false
+        {
+            $sUpdates | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
         }
     }
 }
