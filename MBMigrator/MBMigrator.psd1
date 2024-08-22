@@ -86,6 +86,7 @@
         'Export-PNPUserDriveDetail'
         'Export-EntraIDUser'
         'Export-EntraIDGroup'
+        'Export-IntuneDevice'
         'Export-ExchangeConfiguration'
         'Export-ExchangeOnlineProtection'
         'Export-ExchangeRecipient'
