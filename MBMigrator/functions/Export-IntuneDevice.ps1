@@ -101,7 +101,7 @@
         FreezeTopRow = $true
     }
 
-    $Devices = @(Get-MgDeviceManagementManagedDevice | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}}))
+    $Devices = @(Get-MgDeviceManagementManagedDevice -All | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}}))
 
     $Devices | Export-Excel @ExportExcelParams
 
