@@ -15,7 +15,7 @@ function Update-MBMFromExcelFile
     param(
         #
         [parameter(Mandatory)]
-        [validateset('UserDrive','UserDriveDetail')]
+        [validateset('UserDrive','UserDriveDetail','IntuneDevice')]
         $Operation
         ,
         #
@@ -150,6 +150,103 @@ function Update-MBMFromExcelFile
             }
 
         }
+        'IntuneDevice'
+        {
+            #Update Intune Device Data
+            $Updates = @($SourceData)
+            Write-Information -MessageData "Processing $Operation Data"
+            $dTParams = @{
+                Table = 'stagingIntuneDevice'
+            }
+            if ($Truncate)
+            {$dTParams.Truncate = $true}
+            if ($AutoCreate)
+            {$dTParams.AutoCreate = $true}
 
+            $Property = @(
+                'TenantDomain',
+                'AzureAdDeviceId',
+                'ActivationLockBypassCode',
+                'AndroidSecurityPatchLevel',
+                'AzureAdRegistered',
+                'ComplianceGracePeriodExpirationDateTime',
+                'ComplianceState',
+                'DeviceCategoryDisplayName',
+                'DeviceEnrollmentType',
+                'DeviceName',
+                'DeviceRegistrationState',
+                'EasActivated',
+                'EasActivationDateTime',
+                'EasDeviceId',
+                'EmailAddress',
+                'EnrolledDateTime',
+                'EnrollmentProfileName',
+                'EthernetMacAddress',
+                'ExchangeAccessState',
+                'ExchangeAccessStateReason',
+                'ExchangeLastSuccessfulSyncDateTime',
+                'FreeStorageSpaceInBytes',
+                'Iccid',
+                'Id',
+                'Imei',
+                'IsEncrypted',
+                'IsSupervised',
+                'JailBroken',
+                'LastSyncDateTime',
+                'LogCollectionRequests',
+                'ManagedDeviceName',
+                'ManagedDeviceOwnerType',
+                'ManagementAgent',
+                'ManagementCertificateExpirationDate',
+                'Manufacturer',
+                'Meid',
+                'Model',
+                'Notes',
+                'OperatingSystem',
+                'OSVersion',
+                'PartnerReportedThreatState',
+                'PhoneNumber',
+                'PhysicalMemoryInBytes',
+                'RemoteAssistanceSessionErrorDetails',
+                'RemoteAssistanceSessionUrl',
+                'RequireUserEnrollmentApproval',
+                'SerialNumber',
+                'SubscriberCarrier',
+                'TotalStorageSpaceInBytes',
+                'Udid',
+                'UserDisplayName',
+                'UserId',
+                'UserPrincipalName',
+                'Users',
+                'WiFiMacAddress'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+            )
+
+            $ColumnMap = [ordered]@{}
+            @($property;$customProperty.foreach({$_.n})).foreach({ $ColumnMap.$_ = $_ })
+            $dTParams.ColumnMap = $ColumnMap
+            $property = @($property.where({ $_ -notin $excludeProperty }))
+
+            $sUpdates = $Updates | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
+
+            switch ($test)
+            {
+                $true
+                {
+                    @{
+                        Map = $ColumnMap
+                        Data = $sUpdates
+                        Table = Get-DbaDbTable @dbiParams -Table $dTParams.Table
+                    }
+                }
+                $false
+                {
+                    $sUpdates | ConvertTo-DbaDataTable | Write-DbaDataTable @dbiParams @dTParams
+                }
+            }
+        }
     }
 }
