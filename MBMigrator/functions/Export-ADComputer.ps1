@@ -38,12 +38,12 @@
     }
 
     $Properties = @(@(
-        'AccountExpirationDate','AccountExpires','AccountLockoutTime','AccountNotDelegated','AllowReversiblePasswordEncryption','CannotChangePassword','CanonicalName','Certificates','CN','codePage','countryCode','Created','createTimeStamp','Deleted','Description','DisplayName','DistinguishedName','DNSHostName','DoesNotRequirePreAuth','Enabled','HomedirRequired','HomePage','instanceType','IPv4Address','IPv6Address','isCriticalSystemObject','isDeleted','KerberosEncryptionType','LastBadPasswordAttempt','LastKnownParent','LastLogonDate','lastLogonTimestamp','localPolicyFlags','Location','LockedOut','ManagedBy','MemberOf','MNSLogonAccount','Modified','modifyTimeStamp','msDS-KeyCredentialLink','msDS-SupportedEncryptionTypes','msDS-User-Account-Control-Computed','Name','nTSecurityDescriptor','ObjectCategory','ObjectClass','ObjectGUID','objectSid','OperatingSystem','OperatingSystemHotfix','OperatingSystemServicePack','OperatingSystemVersion','PasswordExpired','PasswordLastSet','PasswordNeverExpires','PasswordNotRequired','PrimaryGroup','primaryGroupID','PrincipalsAllowedToDelegateToAccount','ProtectedFromAccidentalDeletion','pwdLastSet','SamAccountName','sAMAccountType','sDRightsEffective','ServiceAccount','servicePrincipalName','ServicePrincipalNames','SID','SIDHistory','TrustedForDelegation','TrustedToAuthForDelegation','UseDESKeyOnly','userAccountControl','userCertificate','UserPrincipalName','uSNChanged','uSNCreated','whenChanged','whenCreated' 
+        'AccountExpirationDate','AccountExpires','AccountLockoutTime','AccountNotDelegated','AllowReversiblePasswordEncryption','CannotChangePassword','CanonicalName','Certificates','CN','codePage','countryCode','Created','createTimeStamp','Deleted','Description','DisplayName','DistinguishedName','DNSHostName','DoesNotRequirePreAuth','Enabled','HomedirRequired','HomePage','instanceType','IPv4Address','IPv6Address','isCriticalSystemObject','isDeleted','KerberosEncryptionType','LastBadPasswordAttempt','LastKnownParent','LastLogonDate','lastLogonTimestamp','localPolicyFlags','Location','LockedOut','ManagedBy','MemberOf','MNSLogonAccount','Modified','modifyTimeStamp','msDS-KeyCredentialLink','msDS-SupportedEncryptionTypes','msDS-User-Account-Control-Computed','Name','nTSecurityDescriptor','ObjectCategory','ObjectClass','ObjectGUID','objectSid','OperatingSystem','OperatingSystemHotfix','OperatingSystemServicePack','OperatingSystemVersion','PasswordExpired','PasswordLastSet','PasswordNeverExpires','PasswordNotRequired','PrimaryGroup','primaryGroupID','PrincipalsAllowedToDelegateToAccount','ProtectedFromAccidentalDeletion','pwdLastSet','SamAccountName','sAMAccountType','sDRightsEffective','ServiceAccount','servicePrincipalName','ServicePrincipalNames','SID','SIDHistory','TrustedForDelegation','TrustedToAuthForDelegation','UseDESKeyOnly','userAccountControl','userCertificate','UserPrincipalName','uSNChanged','uSNCreated','whenChanged','whenCreated'
     ) | Sort-Object)
 
     # 'AuthenticationPolicy','AuthenticationPolicySilo','BadLogonCount','CompoundIdentitySupported','dSCorePropagationData',
 
-    
+
     $Properties = @(@($Properties;$CustomProperty) | Sort-Object -Unique)
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
@@ -54,7 +54,7 @@
     $gADComputerParams = @{}
     $gADComputerParams.Add('Server',$Domain)
 
-    $ADComputers = Get-ADComputer -Properties $Properties -filter * @gADComputerParams -Server $Domain  #| Sort-Object -Property $Properties -Descending
+    $ADComputers = Get-ADComputer -Properties $Properties -filter * @gADComputerParams  #| Sort-Object -Property $Properties -Descending
 
     $ADComputers | Export-Clixml -Path $outputFilePath
 

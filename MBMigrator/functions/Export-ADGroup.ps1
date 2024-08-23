@@ -57,7 +57,7 @@
         'GroupType'
         'HomePage'
         'InstanceType'
-        'Modified'       
+        'Modified'
         'ModifyTimeStamp'
         'Name'
         'ObjectCategory'
@@ -80,7 +80,7 @@
     switch ($Exchange) {
         $true {
             $Properties = @(@($Properties;@(
-                'ProxyAddresses'  
+                'ProxyAddresses'
                 'MailNickName'
                 'LegacyExchangeDN'
                 'msExchRoleGroupType'
@@ -103,7 +103,7 @@
     $gADGroupParams = @{}
     $gADGroupParams.Add('Server',$($Domain))
 
-    $ADGroups = Get-ADGroup -Properties $Properties -filter * @gADGroupParams -Server $Domain  #| Sort-Object -Property $Properties -Descending
+    $ADGroups = Get-ADGroup -Properties $Properties -filter * @gADGroupParams  #| Sort-Object -Property $Properties -Descending
 
     $ADGroups | Export-Clixml -Path $outputFilePath
 
