@@ -61,7 +61,7 @@
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $gADUserParams = @{}
-    $gADUserParams.Add('Server',$($Domain))
+    $gADUserParams.Add('Server',$($Domain + ':3268'))
 
     $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams  #| Sort-Object -Property $Properties -Descending
 
