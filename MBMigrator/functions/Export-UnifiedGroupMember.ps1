@@ -35,12 +35,13 @@
                 Get-MgGroupMemberAsUser -GroupID $Group.ID -Property ID,DisplayName,Mail,UserPrincipalName,UserType |
                 Select-Object -ExcludeProperty 'ID' -Property @{n='GroupID';e={$Group.ID}},
                     @{n='GroupDisplayName';e={$Group.displayName}},
+                    @{n='Role';e={'Member'}}
                     @{n='GroupMail';e={$Group.mail}},
-                    @{n='MemberID';e={$_.ID}},
-                    @{n='MemberDisplayName';e={$_.DisplayName}},
-                    @{n='MemberMail';e={$_.Mail}},
-                    @{n='MemberUserPrincipalName';e={$_.UserPrincipalName}},
-                    @{n='MemberUserType';e={$_.UserType}},
+                    @{n='UserID';e={$_.ID}},
+                    @{n='UserDisplayName';e={$_.DisplayName}},
+                    @{n='UserMail';e={$_.Mail}},
+                    @{n='UserPrincipalName';e={$_.UserPrincipalName}},
+                    @{n='UserType';e={$_.UserType}},
                     @{n='TenantDomain'; e={$TenantDomain}}
             }))
 
