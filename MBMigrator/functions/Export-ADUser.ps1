@@ -61,9 +61,9 @@
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
     $gADUserParams = @{}
-    $gADUserParams.Add('Server',$($Domain + ':3268'))
+    $gADUserParams.Add('Server',$($Domain))
 
-    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams  #| Sort-Object -Property $Properties -Descending
+    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams #| Sort-Object -Property $Properties -Descending
 
     $ADUsers | Export-Clixml -Path $outputFilePath
 
