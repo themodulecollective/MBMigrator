@@ -95,7 +95,7 @@
         'Export-ExchangeRetentionPolicy'
         'Export-MoveRequest'
         'Export-UnifiedGroupDrive'
-        'Export-UnifiedGroupRole'
+        'Export-UnifiedGroupRoleHolder'
         'Export-MBMReport'
         'Get-DistributionGroupMessageTrace'
         'Get-MBMMigrationList'

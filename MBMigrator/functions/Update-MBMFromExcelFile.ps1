@@ -15,7 +15,7 @@ function Update-MBMFromExcelFile
     param(
         #
         [parameter(Mandatory)]
-        [validateset('UserDrive','UserDriveDetail','IntuneDevice','UnifiedGroupDrive')]
+        [validateset('UserDrive','UserDriveDetail','IntuneDevice','UnifiedGroupDrive','UnifiedGroupRoleHolder')]
         $Operation
         ,
         #
@@ -102,9 +102,9 @@ function Update-MBMFromExcelFile
             $customProperty = @(
             )
         }
-        'UnifiedGroupRole'
+        'UnifiedGroupRoleHolder'
         {
-            $dTParams.Table = 'stagingUGRole'
+            $dTParams.Table = 'stagingUGRoleHolder'
             $property = @(
                 'GroupDisplayName'
                 'GroupID'

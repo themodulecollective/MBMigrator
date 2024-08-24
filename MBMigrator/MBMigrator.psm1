@@ -45,7 +45,7 @@ $Script:ModuleFiles = @(
   $(Join-Path -Path $functions -ChildPath Export-ExchangeRetentionPolicy.ps1)
   $(Join-Path -Path $functions -ChildPath Export-MoveRequest.ps1)
   $(Join-Path -Path $functions -ChildPath Export-UnifiedGroupDrive.ps1)
-  $(Join-Path -Path $functions -ChildPath Export-UnifiedGroupRole.ps1)
+  $(Join-Path -Path $functions -ChildPath Export-UnifiedGroupRoleHolder.ps1)
   $(Join-Path -Path $functions -ChildPath Get-MBMMigrationList.ps1)
   $(Join-Path -Path $functions -ChildPath Get-MBMWaveMember.ps1)
   $(Join-Path -Path $functions -ChildPath Get-MBMWaveMissingMoveRequest.ps1)

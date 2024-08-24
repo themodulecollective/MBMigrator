@@ -1,13 +1,13 @@
-﻿function Export-UnifiedGroupMember
+﻿function Export-UnifiedGroupRoleHolder
 {
     <#
     .SYNOPSIS
-        Get all Azure Active Directory Unified Groups and export their Drive Info to Excel
+        Get all Unified Group Members and Owners
     .DESCRIPTION
-        Get all Azure Active Directory Unified Groups and export their Drive Info to Excel including DriveName, DriveURL, DriveID, driveType, SiteURL, createdDateTime, lastModifiedDateTime, and quota information
+        Get all EntraID Unified Group members and owners and export the records to Excel including GroupDisplayName,GroupID,GroupMail,Role,TenantDomain,UserDisplayName,UserID,UserMail,UserPrincipalName,UserType
     .EXAMPLE
-        Export-AzureADGroupDrive -OutputFolderPath "C:\Users\UserName\Documents"
-        All Unified Groups in the connected tenant (via Graph) Drive Info  will be exported to an Excel file in Documents
+        Export-UnifiedGroupRole -OutputFolderPath "C:\Users\UserName\Documents"
+        All Unified Group Onwers and Members in the connected tenant (via Graph)  will be exported to an Excel file in Documents
     #>
 
     [cmdletbinding()]
@@ -22,13 +22,13 @@
     #$TenantID = (Get-MgContext).TenantID
     $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID.split('.')[0]
 
-    $OutputFileName = $TenantDomain + '-UnifiedGroupMembers' + 'AsOf' + $DateString
+    $OutputFileName = $TenantDomain + '-UnifiedGroupRoleHolders' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
 
     Write-Information -MessageData 'Getting All Entra Unified Groups'
     $Groups = Get-OGGroup -UnifiedAll
 
-    Write-Information -MessageData 'getting the Group Members'
+    Write-Information -MessageData 'getting the Group Role Holders'
 
     $UnifiedGroupMembers = @($Groups.foreach({
                 $Group = $_
