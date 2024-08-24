@@ -49,5 +49,24 @@
                 })
             }))
 
-    $UnifiedGroupMembers | Export-Excel -Path $OutputFilePath -WorksheetName UnifiedGroupMembers -TableName UnifiedGroupMembers -TableStyle Medium4
+    $UnifiedGroupOwners = @($Groups.foreach({
+        $Group = $_
+        $members = Get-MgGroupOwnerAsUser -GroupID $Group.ID -Property ID,DisplayName,Mail,UserPrincipalName,UserType
+        $members.foreach({
+            [PSCustomObject]@{
+                GroupID = $Group.Id
+                GroupDisplayName = $group.displayName
+                GroupMail = $group.mail
+                Role = 'Owner'
+                UserID = $_.Id
+                UserDisplayName = $_.DisplayName
+                UserMail = $_.Mail
+                UserPrincipalName = $_.UserPrincipalName
+                UserType = $_.UserType
+                TenantDomain = $TenantDomain
+            }
+        })
+    }))
+
+    @($UnifiedGroupMembers;$UnifiedGroupOwners) | Export-Excel -Path $OutputFilePath -WorksheetName UnifiedGroupMembers -TableName UnifiedGroupMembers -TableStyle Medium4
 }
