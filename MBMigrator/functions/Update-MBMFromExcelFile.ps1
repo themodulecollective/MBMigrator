@@ -15,7 +15,7 @@ function Update-MBMFromExcelFile
     param(
         #
         [parameter(Mandatory)]
-        [validateset('UserDrive','UserDriveDetail','IntuneDevice')]
+        [validateset('UserDrive','UserDriveDetail','IntuneDevice','UnifiedGroupDrive')]
         $Operation
         ,
         #
@@ -69,6 +69,53 @@ function Update-MBMFromExcelFile
                 'lastModifiedBy'
                 'owner'
                 'quota'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+            )
+        }
+        'UnifiedGroupDrive'
+        {
+            $dTParams.Table = 'stagingUGDrive'
+            $property = @(
+                'GroupID'
+                'displayName'
+                'mail'
+                'mailNickname'
+                'DriveID'
+                'DriveName'
+                'driveType'
+                'DriveURL'
+                'SiteURL'
+                'createdDateTime'
+                'lastModifiedDateTime'
+                'quotaDeleted'
+                'quotaRemaining'
+                'quotaState'
+                'quotaTotal'
+                'quotaUsed'
+                'TenantDomain'
+            )
+            $excludeProperty = @(
+            )
+            $customProperty = @(
+            )
+        }
+        'UnifiedGroupRole'
+        {
+            $dTParams.Table = 'stagingUGRole'
+            $property = @(
+                'GroupDisplayName'
+                'GroupID'
+                'GroupMail'
+                'Role'
+                'TenantDomain'
+                'UserDisplayName'
+                'UserID'
+                'UserMail'
+                'UserPrincipalName'
+                'UserType'
             )
             $excludeProperty = @(
             )

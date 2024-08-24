@@ -30,7 +30,13 @@
 
     Write-Information -MessageData 'Filtering Entra Groups for Unified Groups, then getting the Group Drive'
     $UnifiedGroupDrives = @($Groups.foreach({
-                Get-OGGroupDrive -GroupID $_.ID | Select-Object -Property *, @{n='TenantDomain'; e={$TenantDomain}}
+                $g = $_
+                Get-OGGroupDrive -GroupID $g.ID |
+                Select-Object -Property *,
+                    @{n='displayName';e={$g.DisplayName}},
+                    @{n='mail';e={$g.mail}},
+                    @{n='mailnickname';e={$g.mailNickname}},
+                    @{n='TenantDomain'; e={$TenantDomain}}
             }))
 
     $UnifiedGroupDrives | Export-Excel -Path $OutputFilePath -WorksheetName UnifiedGroupDrives -TableName UnifiedGroupDrives -TableStyle Medium4
