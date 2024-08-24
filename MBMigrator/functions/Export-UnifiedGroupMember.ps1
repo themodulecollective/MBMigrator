@@ -32,17 +32,21 @@
 
     $UnifiedGroupMembers = @($Groups.foreach({
                 $Group = $_
-                Get-MgGroupMemberAsUser -GroupID $Group.ID -Property ID,DisplayName,Mail,UserPrincipalName,UserType |
-                Select-Object -ExcludeProperty 'ID' -Property @{n='GroupID';e={$Group.ID}},
-                    @{n='GroupDisplayName';e={$Group.displayName}},
-                    @{n='Role';e={'Member'}}
-                    @{n='GroupMail';e={$Group.mail}},
-                    @{n='UserID';e={$_.ID}},
-                    @{n='UserDisplayName';e={$_.DisplayName}},
-                    @{n='UserMail';e={$_.Mail}},
-                    @{n='UserPrincipalName';e={$_.UserPrincipalName}},
-                    @{n='UserType';e={$_.UserType}},
-                    @{n='TenantDomain'; e={$TenantDomain}}
+                $members = Get-MgGroupMemberAsUser -GroupID $Group.ID -Property ID,DisplayName,Mail,UserPrincipalName,UserType
+                $members.foreach({
+                    [PSCustomObject]@{
+                     GroupID = $Group.Id
+                     GroupDisplayName = $group.displayName
+                     GroupMail = $group.mail
+                     Role = 'Member'
+                     UserID = $_.Id
+                     UserDisplayName = $_.DisplayName
+                     UserMail = $_.Mail
+                     UserPrincipalName = $_.UserPrincipalName
+                     UserType = $_.UserType
+                     TenantDomain = $TenantDomain
+                    }
+                })
             }))
 
     $UnifiedGroupMembers | Export-Excel -Path $OutputFilePath -WorksheetName UnifiedGroupMembers -TableName UnifiedGroupMembers -TableStyle Medium4
