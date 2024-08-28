@@ -121,7 +121,7 @@ function Update-MBMRecipientData
                 @{n = 'BCCBlocked'; e = { [bool]$_.BCCBlocked } }
                 @{n = 'IsAuxMailbox'; e = { [bool]$_.IsAuxMailbox } }
                 @{n = 'SKUAssigned'; e = { [bool]$_.SKUAssigned } }
-                @{n = 'TargetAddress'; e = { $_.EmailAddresses.where({ $_ -like '*.mail.onmicrosoft.com' })[0] } }
+                @{n = 'TargetAddress'; e = { $_.EmailAddresses.where({ $_ -like '*.mail.onmicrosoft.com' -or $_ -like '*.onmicrosoft.com' })[0] } }
             )
             $Mailboxes = @($SourceData.Mailbox; $SourceData.RemoteMailbox)
             $Data = $MailBoxes |
@@ -200,7 +200,7 @@ function Update-MBMRecipientData
                 @{n = 'ExtensionCustomAttribute3'; e = { $_.ExtensionCustomAttribute3 -join ';' } }
                 @{n = 'ExtensionCustomAttribute4'; e = { $_.ExtensionCustomAttribute4 -join ';' } }
                 @{n = 'ExtensionCustomAttribute5'; e = { $_.ExtensionCustomAttribute5 -join ';' } }
-                @{n = 'TargetAddress'; e = { $_.EmailAddresses.where({ $_ -like '*.mail.onmicrosoft.com' })[0] } }
+                @{n = 'TargetAddress'; e = { $_.EmailAddresses.where({ $_ -like '*.mail.onmicrosoft.com' -or $_ -like '*.onmicrosoft.com' })[0] } }
             )
             $Recipients = @($SourceData.Recipient)
             $Data = $Recipients | Select-Object -ExcludeProperty $excludeProperty -Property @($property; $customProperty)
