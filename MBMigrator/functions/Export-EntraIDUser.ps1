@@ -74,7 +74,7 @@
     $OutputFileName = $TenantDomain + '-EntraIDUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $Users = get-oguser -Property $Properties | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}})
+    $Users = get-oguser -All -Property $Properties | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}})
 
     $Users | Export-Clixml -Path $outputFilePath
 
