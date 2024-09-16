@@ -35,7 +35,7 @@ $dbiParams = @{
     Database = $MBMConfiguration.Database
 }
 
-#Invoke-DbaQuery @dbiParams -File E:\MBMigration\sql\UpdateHistoryMailboxMigrationList.sql
+#Invoke-DbaQuery @dbiParams -File E:\MBMigration\sql\UpdateHistoryMigrationList.sql
 Invoke-DbaQuery @dbiParams -Query 'TRUNCATE TABLE dbo.stagingDistributionGroupOwnership'
 
 foreach ($f in $newDataFiles)

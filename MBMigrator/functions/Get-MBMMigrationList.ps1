@@ -26,7 +26,7 @@ Function Get-MBMMigrationList {
     )
 
     $GetDataParams = @{}
-    if ($Global) { $GetDataParams.OutVariable = 'Global:MailboxMigrationList' }
+    if ($Global) { $GetDataParams.OutVariable = 'Global:MigrationList' }
     $CurrentList = @(
         switch ($PSCmdlet.ParameterSetName) {
             'SQL' {

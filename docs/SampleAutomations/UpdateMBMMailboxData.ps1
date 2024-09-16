@@ -33,7 +33,7 @@ $Jobs = @(
 		Import-Module ExchangeOnlineManagement
 		Connect-ExchangeOnline -Organization $using:Organization -AppID $using:AppID -CertificateThumbprint $using:CertificateThumbprint
         Export-ExchangeRecipient -InformationAction Continue -Operation Mailbox,CASMailbox,MailboxStatistics -OutputFolderPath $using:OutputFolderPath
-    } 
+    }
 )
 
 Wait-Job -Job $Jobs
@@ -46,7 +46,7 @@ $dbiParams = @{
     Database = $MBMConfiguration.Database
 }
 
-#Invoke-DbaQuery @dbiParams -File E:\MBMigration\sql\UpdateHistoryMailboxMigrationList.sql
+#Invoke-DbaQuery @dbiParams -File E:\MBMigration\sql\UpdateHistoryMigrationList.sql
 Invoke-DbaQuery @dbiParams -Query 'TRUNCATE TABLE dbo.stagingMailbox; TRUNCATE TABLE dbo.stagingMailboxStats; TRUNCATE TABLE dbo.stagingCASMailbox'
 
 foreach ($f in $newDataFiles)

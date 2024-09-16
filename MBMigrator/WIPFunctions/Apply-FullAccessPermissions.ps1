@@ -15,10 +15,10 @@ WHERE
     AssignmentType = 'Direct'
     AND  (
         TrusteeExchangeGUID IN
-        (Select ExchangeGUID FROM dbo.MailboxMigrationListStatic where AssignedWave IN ('1.1', '1.2', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '5.1', '5.2', '6.1', '6.2', '7.1', '7.2', '8.1', '8.2', '9.1','9.2'))
+        (Select ExchangeGUID FROM dbo.MigrationListStatic where AssignedWave IN ('1.1', '1.2', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '5.1', '5.2', '6.1', '6.2', '7.1', '7.2', '8.1', '8.2', '9.1','9.2'))
         OR
         TargetObjectExchangeGUID IN
-        (Select ExchangeGUID FROM dbo.MailboxMigrationListStatic where AssignedWave IN ('1.1', '1.2', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '5.1', '5.2', '6.1', '6.2', '7.1', '7.2', '8.1', '8.2', '9.1','9.2'))
+        (Select ExchangeGUID FROM dbo.MigrationListStatic where AssignedWave IN ('1.1', '1.2', '2.1', '2.2', '3.1', '3.2', '4.1', '4.2', '5.1', '5.2', '6.1', '6.2', '7.1', '7.2', '8.1', '8.2', '9.1','9.2'))
       )
     AND TargetObjectExchangeGUID <> TrusteeExchangeGUID" -As PSObject)
 

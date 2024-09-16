@@ -11,6 +11,6 @@ SELECT
   , SUM(CONVERT(bigint, [ItemCount])) TotalItemCount
   , SUM(CONVERT(bigint, [DeletedItemCount])) TotalDeletedItemCount
 FROM
-    [dbo].[viewMailboxMigrationList]
+    [dbo].[viewMigrationList]
 GROUP BY
     AssignedWave

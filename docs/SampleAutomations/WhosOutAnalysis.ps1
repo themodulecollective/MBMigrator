@@ -7,14 +7,14 @@ $dbiParams = @{
     Database = $Configuration.Database
 }
 
-$MailboxesToReviewQuery = 'SELECT DISTINCT Name,PrimarySMTPAddress,ExchangeGUID,AssignedWave FROM [dbo].[viewMailboxMigrationList]'
+$MailboxesToReviewQuery = 'SELECT DISTINCT Name,PrimarySMTPAddress,ExchangeGUID,AssignedWave FROM [dbo].[viewMigrationList]'
 $MailboxesToReview = Invoke-DbaQuery @dbiParams -Query $MailboxesToReviewQuery -As PSObject
-$AssignedWavesQuery = 
+$AssignedWavesQuery =
 @'
 SELECT
 AssignedWave
 FROM
-[dbo].[viewMailboxMigrationList]
+[dbo].[viewMigrationList]
 GROUP BY
 AssignedWave
 ORDER BY AssignedWave

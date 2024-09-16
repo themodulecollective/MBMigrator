@@ -1,5 +1,5 @@
 
-#NOTE: this function is being deprecated - functionality is moving to other more specific functions like Update-MBMPermissionData, Update-MBMRecipientData, Update-MBMWavePlanning, etc. 
+#NOTE: this function is being deprecated - functionality is moving to other more specific functions like Update-MBMPermissionData, Update-MBMRecipientData, Update-MBMWavePlanning, etc.
 function Update-MBMDatabaseData {
     <#
     .SYNOPSIS
@@ -10,7 +10,7 @@ function Update-MBMDatabaseData {
         Test-MyTestFunction -Verbose
         Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
     #>
-    
+
     [cmdletbinding()]
     param(
         #
@@ -192,13 +192,13 @@ function Update-MBMDatabaseData {
         'MMLStatic' {
             Write-Information -MessageData 'Processing Updating MML Static'
             $sql = Connect-DbaInstance -SqlInstance 127.0.0.1 -SqlCredential $sqlcredential -Database Migration -SqlConnectionOnly
-            Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query $(Get-Content -Path ..\SQL\DropAndRecreateMailboxMigrationListStatic.sql -Raw) -As PSObject
+            Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query $(Get-Content -Path ..\SQL\DropAndRecreateMigrationListStatic.sql -Raw) -As PSObject
         }
         'MMLExport' {
             $sql = Connect-DbaInstance -SqlInstance 127.0.0.1 -SqlCredential $sqlcredential -Database Migration -SqlConnectionOnly
-            $MailboxMigrationList = Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query 'select * from dbo.MailboxMigrationList' -As PsObject
+            $MigrationList = Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query 'select * from dbo.MigrationList' -As PsObject
 
-            $Path = Join-Path -Path $OutputFolderPath -ChildPath 'MailboxMigrationList.xlsx'
+            $Path = Join-Path -Path $OutputFolderPath -ChildPath 'MigrationList.xlsx'
 
             Remove-Item -Path $Path -Force -Confirm:$False
 
@@ -226,7 +226,7 @@ function Update-MBMDatabaseData {
                 SourceWorksheet = 'MailboxWaveAssignments'
             }
 
-            $MMLExcel = $MailboxMigrationList | Export-Excel @ExportExcelParams
+            $MMLExcel = $MigrationList | Export-Excel @ExportExcelParams
             Add-PivotTable @Pivot1Params -ExcelPackage $MMLExcel
             Add-PivotTable @Pivot2Params -ExcelPackage $MMLExcel
             Close-ExcelPackage -ExcelPackage $MMLExcel

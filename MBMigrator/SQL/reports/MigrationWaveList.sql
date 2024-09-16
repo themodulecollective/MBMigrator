@@ -49,7 +49,7 @@ SELECT
       ,[ArchiveQuotaInGB]
       ,[ArchiveWarningQuotaInGB]
       ,[CalendarLoggingQuotaInGB]
-  FROM [MBMigrator].[dbo].[viewMailboxMigrationList]
+  FROM [MBMigrator].[dbo].[viewMigrationList]
   WHERE AssignedWave = @AssignedWave
 ORDER BY
   DisplayName

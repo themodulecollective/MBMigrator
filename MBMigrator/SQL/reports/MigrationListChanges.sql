@@ -13,4 +13,4 @@ SELECT
       ,[OrganizationalUnit]
       ,[WhenCreatedUTC]
 
-  FROM [dbo].[viewMostRecentMailboxMigrationListChanges]
+  FROM [dbo].[viewMostRecentMigrationListChanges]

@@ -27,6 +27,6 @@ SELECT TOP (1000) N.[AzureADSync]
       ,N.[DIV_CODE]
       ,N.[RecipientTypeDetails]
 
-  FROM [Migration].[dbo].[MailboxMigrationList] N
+  FROM [Migration].[dbo].[MigrationList] N
 
   WHERE N.AssignedWave = '3.2'

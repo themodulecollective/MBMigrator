@@ -6,8 +6,8 @@ SELECT
     NW.AssignedWave NewWave,
     OW.AssignedWave OldWave
 FROM
-    dbo.MailboxMigrationList NW
-    JOIN dbo.MailboxMigrationListStatic OW ON NW.ExchangeGUID = OW.ExchangeGUID
+    dbo.MigrationList NW
+    JOIN dbo.MigrationListStatic OW ON NW.ExchangeGUID = OW.ExchangeGUID
 WHERE
     NW.AssignedWave <> OW.AssignedWave
 ORDER BY NW.ExchangeGUID

@@ -10,7 +10,7 @@ FROM
     , L.AssignedWave
     FROM
       dbo.viewPermissionsForAnalysis AS P
-      INNER JOIN dbo.viewWOAMailboxMigrationList AS L ON P.TrusteeExchangeGUID = L.ExchangeGuid
+      INNER JOIN dbo.viewWOAMigrationList AS L ON P.TrusteeExchangeGUID = L.ExchangeGuid
     WHERE
       (P.PermissionType <> 'SendAS')
     UNION
@@ -20,7 +20,7 @@ FROM
     , L.AssignedWave
     FROM
       dbo.viewPermissionsForAnalysis AS P
-      INNER JOIN dbo.viewWOAMailboxMigrationList AS L ON P.TargetObjectExchangeGUID = L.ExchangeGuid
+      INNER JOIN dbo.viewWOAMigrationList AS L ON P.TargetObjectExchangeGUID = L.ExchangeGuid
     WHERE
       (P.PermissionType <> 'SendAS')
   ) AS TheSum

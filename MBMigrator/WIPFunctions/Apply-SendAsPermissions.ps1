@@ -49,9 +49,9 @@ WHERE
 #>
 <#
     AND  (
-        TrusteeExchangeGUID IN (Select ExchangeGUID FROM dbo.MailboxMigrationListStatic where AssignedWave = '8.2')
+        TrusteeExchangeGUID IN (Select ExchangeGUID FROM dbo.MigrationListStatic where AssignedWave = '8.2')
       OR
-      TargetObjectExchangeGUID IN (Select ExchangeGUID FROM dbo.MailboxMigrationListStatic where AssignedWave = '8.2')
+      TargetObjectExchangeGUID IN (Select ExchangeGUID FROM dbo.MigrationListStatic where AssignedWave = '8.2')
     )
 
 #>

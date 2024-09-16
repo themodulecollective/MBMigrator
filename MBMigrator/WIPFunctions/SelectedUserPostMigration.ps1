@@ -5,7 +5,7 @@ param(
 )#PrimarySMTPAddress)
 
 $InformationPreference = 'Continue'
-$UsersToProcess = $MailboxMigrationList.where( { $_.primarysmtpaddress -in $Users })
+$UsersToProcess = $MigrationList.where( { $_.primarysmtpaddress -in $Users })
 Do
 {
 

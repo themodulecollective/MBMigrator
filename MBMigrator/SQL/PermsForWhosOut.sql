@@ -14,7 +14,7 @@ FROM
         SELECT
             PrimarySMTPAddress
         FROM
-            MailboxMigrationList
+            MigrationList
         WHERE
             AssignedWave = '1.2'
     ) M ON P.TargetPrimarySMTPAddress = M.PrimarySmtpAddress
@@ -22,7 +22,7 @@ FROM
         SELECT
             PrimarySMTPAddress
         FROM
-            MailboxMigrationList
+            MigrationList
         WHERE
             AssignedWave <> '1.2'
             AND RecipientTypeDetails <> 'RemoteUserMailbox'

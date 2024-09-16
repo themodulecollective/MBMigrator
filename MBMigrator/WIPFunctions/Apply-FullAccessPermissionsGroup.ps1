@@ -13,7 +13,7 @@ WHERE
     PermissionType = 'FullAccess'
     AND AssignmentType = 'GroupMembership'
     AND ParentPermissionIdentity IS NULL
-    AND TargetObjectExchangeGUID IN (Select ExchangeGUID FROM dbo.MailboxMigrationList where AssignedWave = '9.2')
+    AND TargetObjectExchangeGUID IN (Select ExchangeGUID FROM dbo.MigrationList where AssignedWave = '9.2')
     AND TargetObjectExchangeGUID <> TrusteeExchangeGUID
     AND TrusteeIdentity NOT IN (
     )

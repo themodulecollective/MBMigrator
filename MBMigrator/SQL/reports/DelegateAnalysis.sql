@@ -6,5 +6,5 @@ SELECT
    , Department
    , City
 FROM
-    dbo.WOA W LEFT JOIN dbo.viewMailboxMigrationList L
+    dbo.WOA W LEFT JOIN dbo.viewMigrationList L
       ON W.ExchangeGUID = L.ExchangeGUID
