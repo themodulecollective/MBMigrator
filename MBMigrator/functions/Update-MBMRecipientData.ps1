@@ -139,24 +139,24 @@ function Update-MBMRecipientData
             $dTParams.ColumnMap = $ColumnMap
             $excludeProperty = @(
                 'MailboxGuid'
-                , 'OwnerADGuid'
-                , 'ExternalDirectoryOrganizationID'
+                #, 'OwnerADGuid'
+                #, 'ExternalDirectoryOrganizationID'
                 , 'TotalItemSizeInGB'
                 , 'TotalDeletedItemSizeInGB'
-                , 'MessageTableTotalSizeInGB'
-                , 'AttachmentTableTotalSizeInGB'
+                #, 'MessageTableTotalSizeInGB'
+                #, 'AttachmentTableTotalSizeInGB'
                 , 'SourceOrganization'
             )
             $property = @($property.where({ $_ -notin $excludeProperty }))
             $customProperty = @(
                 @{n = 'SourceOrganization'; e = { $SourceOrganization } }
                 @{n = 'MailboxGuid'; e = { $_.MailboxGuid.guid } }
-                @{n = 'OwnerADGuid'; e = { $_.OwnerADGuid.guid } }
-                @{n = 'ExternalDirectoryOrganizationID'; e = { $_.ExternalDirectoryOrganizationID.guid } }
+                #@{n = 'OwnerADGuid'; e = { $_.OwnerADGuid.guid } }
+                #@{n = 'ExternalDirectoryOrganizationID'; e = { $_.ExternalDirectoryOrganizationID.guid } }
                 @{n = 'TotalItemSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.TotalItemSize) } }
                 @{n = 'TotalDeletedItemSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.TotalDeletedItemSize) } }
-                @{n = 'MessageTableTotalSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.MessageTableTotalSize) } }
-                @{n = 'AttachmentTableTotalSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.AttachmentTableTotalSize) } }
+                #@{n = 'MessageTableTotalSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.MessageTableTotalSize) } }
+                #@{n = 'AttachmentTableTotalSizeInGB'; e = { [string]$(Get-SortableSizeValue -Scale GB -Value $_.AttachmentTableTotalSize) } }
             )
             $MailboxStats = @($SourceData.MailboxStatistics; )
             $Data = $MailboxStats |
