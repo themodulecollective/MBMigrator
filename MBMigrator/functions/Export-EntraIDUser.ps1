@@ -29,6 +29,7 @@
 
     #$TenantID = (Get-MGContext).TenantID
     $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID.split('.')[0]
+    Write-Information -MessageData "Tenant Domain is $TenantDomain"
 
     $Properties = @(
 
@@ -70,9 +71,11 @@
     $Properties = @(@($Properties;$CustomProperty) | Sort-Object -Unique)
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
+    Write-Information -MessageData "DateString is $DateString"
 
     $OutputFileName = $TenantDomain + '-EntraIDUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
+    Write-Information -MessageData "OutputFilePath is $OutputFilePath"
 
     $Users = get-oguser -All -Property $Properties | Select-Object -Property @($Properties;@{n='TenantDomain';e={$TenantDomain}})
 
