@@ -179,7 +179,7 @@ function Export-ExchangeRecipient
             {
                 $true
                 {
-                    $mailboxes = Get-EXOMailbox @GetRParams
+                    $mailboxes = Get-EXOMailbox @GetRParams -Properties ExchangeGUID
                     $AMParams.Value = @($Mailboxes | ForEach-Object { Get-EXOMailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
                 }
                 $false
