@@ -66,6 +66,7 @@
      'usageLocation'
      'userPrincipalName'
      'userType'
+     'signinactivity'
     )
 
     $Properties = @(@($Properties;$CustomProperty) | Sort-Object -Unique)
