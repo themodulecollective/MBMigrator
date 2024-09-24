@@ -402,6 +402,7 @@ function Update-MBMActiveDirectoryData
             $customProperty = @(
                 @{n = 'assignedLicenses'; e = { $_.assignedLicenses.skuid -join ';' } }
                 @{n = 'ConsistencyGUID'; e={Get-GUIDFromImmutableID -ImmutableID $_.onPremisesImmutableId}}
+                @{n = 'lastSignInDateTime'; e={$_.signInActivity.lastSignInDateTime}}
             )
 
             $ColumnMap = [ordered]@{}
