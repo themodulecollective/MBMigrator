@@ -31,7 +31,7 @@ function Export-EntraIDUserLicensing {
     #$TenantID = (Get-MGContext).TenantID
 
     $ReadableHash = @{}
-    $skusReadable = Get-OGReadableSku
+    $skusReadable = Get-OGReadableSku -StoreCSV
     foreach ($sR in $skusReadable)
     {
         $ReadableHash[$sR.GUID] = $sR.Product_Display_Name
