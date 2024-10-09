@@ -23,6 +23,10 @@ function Export-EntraIDUserLicensing {
         [string[]]$ServicePlan
         ,
         [string]$Delimiter = ';'
+        ,
+        [parameter()]
+        [ValidateScript({Test-Path -Path $_ -PathType Leaf -Filter *.xml})]
+        [string]$skuReadableFilePath
     )
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
@@ -31,7 +35,14 @@ function Export-EntraIDUserLicensing {
     #$TenantID = (Get-MGContext).TenantID
 
     $ReadableHash = @{}
-    $skusReadable = Get-OGReadableSku -StoreCSV
+    switch (string]::IsNullOrWhiteSpace($skuReadableFilePath))
+    {
+        $true
+        {$skusReadable = Get-OGReadableSku -StoreCSV}
+        $false
+        {$skusReadable = Import-Clixml -Path $skuReadableFilePath}
+    }
+
     foreach ($sR in $skusReadable)
     {
         $ReadableHash[$sR.GUID] = $sR.Product_Display_Name
