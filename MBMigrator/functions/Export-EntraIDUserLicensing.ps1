@@ -35,7 +35,7 @@ function Export-EntraIDUserLicensing {
     #$TenantID = (Get-MGContext).TenantID
 
     $ReadableHash = @{}
-    switch (string]::IsNullOrWhiteSpace($skuReadableFilePath))
+    switch ([string]::IsNullOrWhiteSpace($skuReadableFilePath))
     {
         $true
         {$skusReadable = Get-OGReadableSku -StoreCSV}
