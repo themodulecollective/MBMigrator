@@ -27,14 +27,15 @@ function Update-MBMDelegateAnalysis {
         Copy-DbaDbTableData @dbiParams -Table WaveExceptions -DestinationTable WOAWaveExceptions -Truncate
     }
 
-    $MailboxesToReviewQuery = 'SELECT DISTINCT Name,PrimarySMTPAddress,ExchangeGUID,RecipientTypeDetails,AssignedWave FROM [dbo].[viewWOAMigrationList]'
+    #$MailboxesToReviewQuery = 'SELECT DISTINCT Name,PrimarySMTPAddress,ExchangeGUID,RecipientTypeDetails,AssignedWave FROM [dbo].[viewWOAMigrationList]'
+    $MailboxesToReviewQuery = 'SELECT DISTINCT SourceDisplayName,SourceMail,SourceEntraID,SourceRecipientType,AssignedWave FROM staticMigrationList'
     $MailboxesToReview = Invoke-DbaQuery @dbiParams -Query $MailboxesToReviewQuery -As PSObject
     $AssignedWavesQuery =
     @'
 SELECT
 AssignedWave
 FROM
-[dbo].[viewWOAMigrationList]
+staticMigrationListv
 GROUP BY
 AssignedWave
 ORDER BY AssignedWave
