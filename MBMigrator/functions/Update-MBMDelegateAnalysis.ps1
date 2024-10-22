@@ -15,7 +15,10 @@ function Update-MBMDelegateAnalysis {
         [string]$Optimization
         ,
         [switch]$Reset #resets back to production Wave Exceptions
-
+        ,
+        [parameter()]
+        [validateset('SharedMailbox','RoomMailbox','EqupmentMailbox','UserMailbox')]
+        [string[]]$RecipientType
     )
 
     Write-Information -MessageData 'Getting MBM Configuration'
@@ -54,6 +57,12 @@ SELECT [Recipient]
 
     $Connections = Invoke-DbaQuery @dbiParams -Query $ConnectionsQuery -As PSObject
     $ConnectionsHash = $Connections | Group-Object -Property Recipient -AsHashTable
+
+    switch ([string]::IsNullOrEmpty($RecipientType))
+    {
+        $false
+        {$MailboxesToReview = @($MailboxesToReview.where({$_.SourceRecipientType -in $RecipientType}))}
+    }
 
     $woa = @(
         foreach ($m in $MailboxesToReview) {
