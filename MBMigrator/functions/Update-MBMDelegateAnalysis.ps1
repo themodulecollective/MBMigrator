@@ -72,23 +72,24 @@ SELECT [Recipient]
             $MConnections = @($ConnectionsHash.$($m.SourceEntraID))
             #$MConnections = @($Connections.where({$_.Recipient -eq $M.ExchangeGUID}))
             $MConnections.foreach( {
+                $c = $_
                 #-gt will yield the first (earliest), -ge will yield the last (latest) wave
                 switch ($Optimization)
                 {
                     'PreferFirstWave'
                     {
-                        if ($_.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($_.AssignedWave)) {
+                        if ($c.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($c.AssignedWave)) {
 
-                            $RWave = $_.AssignedWave
-                            $Max = $_.ConnectionCount
+                            $RWave = $c.AssignedWave
+                            $Max = $c.ConnectionCount
                         }
                     }
                     'PreferLastWave'
                     {
-                        if ($_.ConnectionCount -ge $Max -and -not [string]::isnullorwhitespace($_.AssignedWave)) {
+                        if ($_.ConnectionCount -ge $Max -and -not [string]::isnulvlorwhitespace($c.AssignedWave)) {
 
-                            $RWave = $_.AssignedWave
-                            $Max = $_.ConnectionCount
+                            $RWave = $c.AssignedWave
+                            $Max = $c.ConnectionCount
                         }
                     }
                 }
