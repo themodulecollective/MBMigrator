@@ -10,7 +10,7 @@ function Update-MBMDelegateAnalysis {
     #>
     [cmdletbinding()]
     param(
-        [parameter()]
+        [parameter(Mandatory)]
         [validateset('PreferFirstWave','PreferLastWave')]
         [string]$Optimization
         ,
@@ -38,7 +38,7 @@ function Update-MBMDelegateAnalysis {
 SELECT
 AssignedWave
 FROM
-staticMigrationListv
+staticMigrationList
 GROUP BY
 AssignedWave
 ORDER BY AssignedWave
