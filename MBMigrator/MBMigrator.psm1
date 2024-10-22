@@ -18,7 +18,6 @@ $Script:SQLFiles = @(
   $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'MissingRecipient.sql')
   $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'MigrationListChanges.sql')
   $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'MigrationListSummary.sql')
-  $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'DoubleMailbox.sql')
   $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'DelegateAnalysis.sql')
   $(Join-Path -Path $(Join-Path -Path $SQLFolder -ChildPath 'reports') -ChildPath 'DelegateReport.sql')
 )
