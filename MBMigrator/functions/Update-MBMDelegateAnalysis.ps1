@@ -86,10 +86,10 @@ SELECT [Recipient]
                 })
 
             $Report = [ordered]@{
-                Name               = $m.Name
-                PrimarySMTPAddress = $m.PrimarySMTPAddress
-                ExchangeGUID       = $m.ExchangeGUID
-                RecipientTypeDetails = $m.RecipientTypeDetails
+                Name               = $m.SourceDisplayName
+                PrimarySMTPAddress = $m.SourceMail
+                EntraID       = $m.SourceEntraID
+                RecipientTypeDetails = $m.SourceRecipientType
                 ChangeWave = $null
                 CurrentWave        = $m.AssignedWave
                 RecommendedWave    = $RWave
