@@ -10,9 +10,12 @@ function Update-MBMDelegateAnalysis {
     #>
     [cmdletbinding()]
     param(
-        [string[]]$exemptWaves
+        [parameter()]
+        [validateset('PreferFirstWave','PreferLastWave')]
+        [string]$Optimization
         ,
         [switch]$Reset #resets back to production Wave Exceptions
+
     )
 
     Write-Information -MessageData 'Getting MBM Configuration'
@@ -54,17 +57,32 @@ SELECT [Recipient]
 
     $woa = @(
         foreach ($m in $MailboxesToReview) {
-            Write-Information -MessageData "Processing $($m.Name) $($m.ExchangeGUID)"
+            Write-Information -MessageData "Processing $($m.SourceMail) $($m.SourceEntraID)"
             $Max = 0
             $RWave = $m.AssignedWave
-            $MConnections = @($ConnectionsHash.$($m.ExchangeGUID))
+            $MConnections = @($ConnectionsHash.$($m.SourceEntraID))
             #$MConnections = @($Connections.where({$_.Recipient -eq $M.ExchangeGUID}))
             $MConnections.foreach( {
-                    if ($_.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($_.AssignedWave)) {
-                        #-gt will yield the first (earliest), -ge will yield the last (latest) wave
-                        $RWave = $_.AssignedWave
-                        $Max = $_.ConnectionCount
+                #-gt will yield the first (earliest), -ge will yield the last (latest) wave
+                switch ($Optimization)
+                {
+                    'PreferFirstWave'
+                    {
+                        if ($_.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($_.AssignedWave)) {
+
+                            $RWave = $_.AssignedWave
+                            $Max = $_.ConnectionCount
+                        }
                     }
+                    'PreferLastWave'
+                    {
+                        if ($_.ConnectionCount -ge $Max -and -not [string]::isnullorwhitespace($_.AssignedWave)) {
+
+                            $RWave = $_.AssignedWave
+                            $Max = $_.ConnectionCount
+                        }
+                    }
+                }
                 })
 
             $Report = [ordered]@{
