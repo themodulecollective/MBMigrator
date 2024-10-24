@@ -80,7 +80,7 @@ SELECT [Recipient]
             $MConnections.foreach( {
                     $c = $_
                     #-gt will yield the first (earliest), -ge will yield the last (latest) wave
-                    switch ($c.AssignedWave -in $ExcludeWaveFromRecommended)
+                    switch ([string]$($c.AssignedWave) -in $ExcludeWaveFromRecommended)
                     {
                         $true
                         {}
