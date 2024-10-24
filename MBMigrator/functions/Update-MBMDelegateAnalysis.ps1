@@ -1,4 +1,5 @@
-function Update-MBMDelegateAnalysis {
+function Update-MBMDelegateAnalysis
+{
     <#
     .SYNOPSIS
         Recommends best wave for mailboxes based on delegate access
@@ -11,14 +12,17 @@ function Update-MBMDelegateAnalysis {
     [cmdletbinding()]
     param(
         [parameter(Mandatory)]
-        [validateset('PreferFirstWave','PreferLastWave')]
+        [validateset('PreferFirstWave', 'PreferLastWave')]
         [string]$Optimization
         ,
         [switch]$Reset #resets back to production Wave Exceptions
         ,
         [parameter()]
-        [validateset('SharedMailbox','RoomMailbox','EqupmentMailbox','UserMailbox')]
+        [validateset('SharedMailbox', 'RoomMailbox', 'EqupmentMailbox', 'UserMailbox')]
         [string[]]$RecipientType
+        ,
+        [parameter()]
+        [string[]]$ExcludeWaveFromRecommended
     )
 
     Write-Information -MessageData 'Getting MBM Configuration'
@@ -28,7 +32,8 @@ function Update-MBMDelegateAnalysis {
         Database    = $Configuration.Database
     }
 
-    if ($Reset) {
+    if ($Reset)
+    {
         Write-Information -MessageData 'Reset specified. Truncating and updated WOAWaveExceptions'
         Copy-DbaDbTableData @dbiParams -Table WaveExceptions -DestinationTable WOAWaveExceptions -Truncate
     }
@@ -61,55 +66,68 @@ SELECT [Recipient]
     switch ([string]::IsNullOrEmpty($RecipientType))
     {
         $false
-        {$MailboxesToReview = @($MailboxesToReview.where({$_.SourceRecipientType -in $RecipientType}))}
+        { $MailboxesToReview = @($MailboxesToReview.where({ $_.SourceRecipientType -in $RecipientType })) }
     }
 
     $woa = @(
-        foreach ($m in $MailboxesToReview) {
+        foreach ($m in $MailboxesToReview)
+        {
             Write-Information -MessageData "Processing $($m.SourceMail) $($m.SourceEntraID)"
             $Max = 0
             $RWave = $m.AssignedWave
             $MConnections = @($ConnectionsHash.$($m.SourceEntraID))
             #$MConnections = @($Connections.where({$_.Recipient -eq $M.ExchangeGUID}))
             $MConnections.foreach( {
-                $c = $_
-                #-gt will yield the first (earliest), -ge will yield the last (latest) wave
-                switch ($Optimization)
-                {
-                    'PreferFirstWave'
+                    $c = $_
+                    #-gt will yield the first (earliest), -ge will yield the last (latest) wave
+                    switch ($c.AssignedWave -in $ExcludeWaveFromRecommended)
                     {
-                        if ($c.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($c.AssignedWave)) {
-
-                            $RWave = $c.AssignedWave
-                            $Max = $c.ConnectionCount
+                        $true
+                        {}
+                        $false
+                        {
+                            switch ($Optimization)
+                            {
+                                'PreferFirstWave'
+                                {
+                                    if ($c.ConnectionCount -gt $Max -and -not [string]::isnullorwhitespace($c.AssignedWave))
+                                    {
+                                        $RWave = $c.AssignedWave
+                                        $Max = $c.ConnectionCount
+                                    }
+                                }
+                                'PreferLastWave'
+                                {
+                                    if ($_.ConnectionCount -ge $Max -and -not [string]::isnullorwhitespace($c.AssignedWave))
+                                    {
+                                        $RWave = $c.AssignedWave
+                                        $Max = $c.ConnectionCount
+                                    }
+                                }
+                            }
                         }
                     }
-                    'PreferLastWave'
-                    {
-                        if ($_.ConnectionCount -ge $Max -and -not [string]::isnulvlorwhitespace($c.AssignedWave)) {
-
-                            $RWave = $c.AssignedWave
-                            $Max = $c.ConnectionCount
-                        }
-                    }
-                }
                 })
 
             $Report = [ordered]@{
-                Name               = $m.SourceDisplayName
-                PrimarySMTPAddress = $m.SourceMail
-                EntraID       = $m.SourceEntraID
+                Name                 = $m.SourceDisplayName
+                PrimarySMTPAddress   = $m.SourceMail
+                EntraID              = $m.SourceEntraID
                 RecipientTypeDetails = $m.SourceRecipientType
-                ChangeWave = $null
-                CurrentWave        = $m.AssignedWave
-                RecommendedWave    = $RWave
+                ChangeWave           = $null
+                CurrentWave          = $m.AssignedWave
+                RecommendedWave      = $RWave
             }
-            foreach ($w in $AssignedWaves.AssignedWave) {
-                switch ($null -eq $w) {
-                    $true {
+            foreach ($w in $AssignedWaves.AssignedWave)
+            {
+                switch ($null -eq $w)
+                {
+                    $true
+                    {
                         $Report.'NotAssigned' = $($MConnections.where( { $null -eq $_.AssignedWave }).ConnectionCount)
                     }
-                    $false {
+                    $false
+                    {
                         $Report.$w = $($MConnections.where( { $_.AssignedWave -eq $w }).ConnectionCount)
                     }
                 }
@@ -121,7 +139,8 @@ SELECT [Recipient]
 
     $WOATable = Get-DbaDbTable @dbiParams -Table 'WOA' -ErrorAction Continue
 
-    if ($WOATable) {
+    if ($WOATable)
+    {
         Invoke-DbaQuery @dbiParams -Query 'DROP TABLE WOA'
     }
 
