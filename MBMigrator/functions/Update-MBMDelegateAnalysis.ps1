@@ -98,7 +98,7 @@ SELECT [Recipient]
                                 }
                                 'PreferLastWave'
                                 {
-                                    if ($_.ConnectionCount -ge $Max -and -not [string]::isnullorwhitespace($c.AssignedWave))
+                                    if ($c.ConnectionCount -ge $Max -and -not [string]::isnullorwhitespace($c.AssignedWave))
                                     {
                                         $RWave = $c.AssignedWave
                                         $Max = $c.ConnectionCount
