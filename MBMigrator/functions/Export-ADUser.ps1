@@ -45,7 +45,7 @@
         Import-Module ActiveDirectory -ErrorAction Stop
     }
 
-    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'CountryCode','Company', 'Department','Division','Description','BusinessCategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'PhysicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'EmployeeType','Manager','Enabled','LastLogonDate') | Sort-Object)
+    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'CountryCode','Company', 'Department','Division','Description','BusinessCategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'PhysicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'EmployeeType','Manager','Enabled','LastLogonDate','PasswordExpired','PasswordLastSet','PasswordNeverExpires') | Sort-Object)
 
     switch ($Exchange) {
         $true {

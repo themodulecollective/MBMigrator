@@ -101,6 +101,9 @@ function Update-MBMActiveDirectoryData
                 $((1..15).foreach({"ExtensionAttribute$_"}))
                 $((16..45).foreach({"msExchExtensionAttribute$_"}))
                 'LastLogonDate'
+                'PasswordExpired'
+                'PasswordLastSet'
+                'PasswordNeverExpires'
             )
             $excludeProperty = @()
             $customProperty = @(
