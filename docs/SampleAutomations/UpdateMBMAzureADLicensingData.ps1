@@ -13,7 +13,7 @@ $CertificateThumbprint = $MBMConfiguration.CertificateThumbprint
 
 Connect-Graph -TenantID $TenantID -ClientID $AppID -CertificateThumbprint $CertificateThumbprint
 
-Export-AzureADUserLicensing -Sku '1c27243e-fb4d-42b1-ae8c-fe25c9616588','05e9a617-0261-4cee-bb44-138d3ef5d965' -ServicePlan '9974d6cf-cd24-4ba2-921c-e2aa687da846','efb87545-963c-4e0d-99df-69c6916d9eb0','c1ec4a95-1f05-45b3-a911-aa3fa01094f5','57ff2da0-773e-42df-b2af-ffb7a2317929' -OutputFolderPath F:\LicensingData
+Export-AzureADUserLicensing -Sku 'skus' -OutputFolderPath F:\LicensingData
 
 $newDataFiles = @(Get-ChildItem -Path $OutputFolderPath -Filter *UserLicensingAsOf*.xlsx)
 

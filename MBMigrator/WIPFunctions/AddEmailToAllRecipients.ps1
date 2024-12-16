@@ -4,7 +4,7 @@ $recipients.foreach({
 
     $r = $_
 
-    $newaddress = 'smtp:' + $r.primarysmtpaddress.split('@')[0] + '@mks.com'
+    $newaddress = 'smtp:' + $r.primarysmtpaddress.split('@')[0] + '@targetdomain.com'
 
     $cmdlet = Get-RecipientCmdlet -Recipient $r -verb set
 

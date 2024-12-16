@@ -1,7 +1,29 @@
 [cmdletbinding()]
 param(
 [parameter()]
-[ValidateSet('RecipientData','MailboxData','ADUserData','ExchangeMobileDeviceData','AzureADUserData','PermissionData','MoveRequestData','AzureADUserLicensingData','DistributionGroupOwnershipData','DollarGroupMembershipData')]
+[ValidateSet(
+	'RecipientData'
+	,'MailboxData'
+	,'MailboxStatsData'
+	,'ADUserData'
+	,'ADGroupData'
+	,'ADComputerData'
+	,'EXOMobileDeviceData'
+	,'EntraIDUserData'
+	,'EntraIDGroupData'
+	,'EntraIDUserDriveData'
+	,'EXOPermissionData'
+	,'EntraIDUserLicensingData'
+	,'EntraIDGroupLicensingData'
+	,'WorkdayData'
+	,'UserDriveDetailsData'
+	,'IntuneDeviceData'
+	,'UnifiedGroupDriveData'
+	,'UnifiedGroupRoleData'
+	,'MigrationGroupMembershipData'
+	,'EntraUserRegistrationData'
+	,'FlyUserProjectMappingData'
+	)]
 [string]$Operation
 ,
 [int]$AgeInDays
@@ -12,43 +34,87 @@ Switch ($Operation)
 {
 	'RecipientData'
 	{
-		$Folder = $MBMConfiguration.RecipientDataExportFolder
+		$Folder = $MBMConfiguration.RecipientDataFolder
 	}
 	'MailboxData'
 	{
-		$Folder = $MBMConfiguration.MailboxDataExportFolder
+		$Folder = $MBMConfiguration.MailboxDataFolder
+	}
+	'MailboxStatsData'
+	{
+		$Folder = $MBMConfiguration.MailboxStatsDataFolder
 	}
 	'ADUserData'
 	{
-		$Folder = $MBMConfiguration.ADUserDataExportFolder
+		$Folder = $MBMConfiguration.ADUserDataFolder
 	}
-	'ExchangeMobileDeviceData'
+	'ADGroupData'
 	{
-		$Folder = $MBMConfiguration.ExchangeMobileDeviceDataFolder
+		$Folder = $MBMConfiguration.ADGroupDataFolder
+	}
+	'ADComputerData'
+	{
+		$Folder = $MBMConfiguration.ADComputerDataFolder
+	}
+	'EXOMobileDeviceData'
+	{
+		$Folder = $MBMConfiguration.EXOMobileDeviceDataFolder
 	}	
-	'AzureADUserData'
+	'EntraIDUserData'
 	{
-		$Folder = $MBMConfiguration.AzureADUserDataExportFolder
+		$Folder = $MBMConfiguration.EntraIDUserDataFolder
 	}
-	'PermissionData'
+	'EntraIDUserDriveData'
 	{
-		$Folder = $MBMConfiguration.ExchangePermissionDataFolder
+		$Folder = $MBMConfiguration.EntraIDUserDriveDataFolder
+	}
+	'EntraIDGroupData'
+	{
+		$Folder = $MBMConfiguration.EntraIDGroupDataFolder
+	}
+	'EXOPermissionData'
+	{
+		$Folder = $MBMConfiguration.EXOPermissionDataFolder
 	}	
-	'MoveRequestData'
+	'EntraIDUserLicensingData'
 	{
-		$Folder = $MBMConfiguration.MoveRequestDataExportFolder
-	}	
-	'AzureADUserLicensingData'
-	{
-		$Folder = $MBMConfiguration.AzureADUserLicensingDataFolder
+		$Folder = $MBMConfiguration.EntraIDUserLicensingDataFolder
 	}
-	'DistributionGroupOwnershipData'
+	'EntraIDGroupLicensingData'
 	{
-		$Folder = $MBMConfiguration.DistributionGroupOwnershipDataFolder
+		$Folder = $MBMConfiguration.EntraIDGroupLicensingDataFolder
 	}
-	'DollarGroupMembershipData'
+	'WorkdayData'
 	{
-		$Folder = $MBMConfiguration.DollarGroupMembershipDataFolder
+		$Folder = $MBMConfiguration.WorkdayDataFolder
+	}
+	'UserDriveDetailsData'
+	{
+		$Folder = $MBMConfiguration.UserDriveDetailsDataFolder
+	}
+	'IntuneDeviceData'
+	{
+		$Folder = $MBMConfiguration.IntuneDeviceDataFolder
+	}
+	'UnifiedGroupDriveData'
+	{
+		$Folder = $MBMConfiguration.UnifiedGroupDriveDataFolder
+	}
+	'UnifiedGroupRoleData'
+	{
+		$Folder = $MBMConfiguration.UnifiedGroupRoleDataFolder
+	}
+	'MigrationGroupMembershipData'
+	{
+		$Folder = $MBMConfiguration.MigrationGroupMembershipDataFolder
+	}
+	'EntraUserRegistrationData'
+	{
+		$Folder = $MBMConfiguration.EntraUserRegistrationDataFolder
+	}
+	'FlyUserProjectMappingData'
+	{
+		$folder = $MBMConfiguration.FlyUserProjectMappingDataFolder
 	}
 }
 # archive the old data
@@ -62,6 +128,6 @@ Get-ChildItem -Path $Folder -file  | Move-Item -Destination $ArchiveFolder -Conf
 $today = get-date
 $olderthandate = $today.AddDays(-$AgeInDays)
 
-Get-ChildItem -Path $ArchiveFolder | 
+Get-ChildItem -Path $ArchiveFolder -File | 
     Where-Object -FilterScript {$_.CreationTime -lt $olderthandate} |
     Remove-Item -Confirm:$false
