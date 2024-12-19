@@ -1,7 +1,7 @@
 [cmdletbinding()]
 param(
     [parameter()]
-    [validateset('Full', 'WaveRelated', 'VolatileFields', 'NonVolatileFields', 'CustomFields', 'MigrationStatus')]
+    [validateset('Full', 'WaveRelated', 'VolatileFields', 'CustomFields')] #'MigrationStatus'
     [string]$FieldSet
     ,
     [parameter()]
@@ -80,8 +80,8 @@ param(
         'SourceDC',
         'TargetDC',
         'MatchScenario',
-        'AssignedWave',
-        'AssignmentType',
+        #'AssignedWave',
+        #'AssignmentType',
         'TargetDate',
         'ManagerEmail',
         'SourceMailboxGB',
@@ -98,6 +98,13 @@ param(
     [string[]]$CustomFields
     ,
     [string]$DatabaseListUpdateQueryFile = 'MigrationListDraft.sql'
+    ,
+    [string]$Wave
+    ,
+    [string]$WavePlanListID
+    ,
+    [string]$SpecialHandlingListID
+
 )
 
 # Sort Operation for proper order
@@ -129,7 +136,7 @@ $SQLStableFields = @(
     'TargetDisplayName'
     'SourceMail'
     'TargetMail'
-    'TargetRewriteAddress'
+    'TargetMKSCOM'
     'SourceRecipientType'
     'TargetRecipientType'
     'SourceTargetAddress'
@@ -211,27 +218,110 @@ $FieldsToProcessForSPO = @(switch ($FieldSet)
     {
         'Full'
         {
-            $NonIDFields
+            'SourceEntraID'
+            'TargetEntraID'
+            'SourceADID'
+            'TargetADID'
+            'SourceConsistency'
+            'TargetConsistency'
+            'WDEmployeeID'
+            'SourceEntraIDEnabled'
+            'TargetEntraIDEnabled'
+            'SourceADEnabled'
+            'TargetADEnabled'
+            'LeaveStatus'
+            'SourceCanonicalName'
+            'TargetCanonicalName'
+            'SourceFirstName'
+            'TargetFirstName'
+            'SourceLastName'
+            'TargetLastName'
+            'SourceDisplayName'
+            'TargetDisplayName'
+            'SourceMail'
+            'TargetMail'
+            'TargetMKSCOM'
+            'SourceRecipientType'
+            'TargetRecipientType'
+            'SourceTargetAddress'
+            'TargetTargetAddress'
+            'SourceForwardingSMTPAddress'
+            'TargetForwardingSMTPAddress'
+            'SourceAlias'
+            'TargetAlias'
+            'SourceSAM'
+            'TargetSAM'
+            'SourceADUPN'
+            'TargetADUPN'
+            'SourceEntraUPN'
+            'TargetEntraUPN'
+            'TargetGuestUPN'
+            'SpecialHandlingNotes'
+            'SourceLitigationHoldEnabled'
+            'TargetLitigationHoldEnabled'
+            'SourceDriveURL'
+            'TargetDriveURL'
+            'WorkFolders'
+            'usageLocation'
+            'Country'
+            'Location'
+            'LocationCountry'
+            'Region'
+            'SourceLicensing'
+            'TargetLicensing'
+            'SourceMobileDevices'
+            'msExchExtensionAttribute16'
+            'msExchExtensionAttribute17'
+            'msExchExtensionAttribute18'
+            'msExchExtensionAttribute20'
+            'msExchExtensionAttribute21'
+            'msExchExtensionAttribute22'
+            'SourceEntraType'
+            'TargetEntraType'
+            'SourceADDomain'
+            'TargetADDomain'
+            'SourceDC'
+            'TargetDC'
+            'MatchScenario'
+            #'AssignedWave'
+            #'AssignmentType'
+            'TargetDate'
+            'ManagerEmail'
+            'SourceMFARegistered'
+            'TargetMFARegistered'
+            'FlyOneDrive'
+            'FlyTeamsChat'
+            'FlyExchange'
+            #'MigrationStatus'
+            'SourceMailboxGB'
+            'SourceMailboxDeletedGB'
+            'SourceMailboxItemCount'
+            'SourceDriveGB'
+            'SourceDriveCount'
+            'SourceEntraLastSyncTime'
+            'TargetEntraLastSyncTime'
+            'SourceEntraLastSigninTime'
+            'TargetEntraLastSigninTime'
+            'SourcePasswordLastSet'
+            'TargetPasswordLastSet'
         }
         'WaveRelated'
         {
-            'AssignedWave', 'AssignmentType', 'SpecialHandlingNotes', 'TargetDate', 'FlyOneDrive', 'FlyTeamsChat', 'FlyExchange'
+            #'AssignedWave'
+            #, 'AssignmentType'
+            , 'SpecialHandlingNotes'
+            , 'TargetDate'
+            , 'FlyOneDrive'
+            , 'FlyTeamsChat'
+            , 'FlyExchange'
         }
         'VolatileFields'
         {
             $SQLVolStatsFields; $SQLVolDatesFields
         }
-        'NonVolatileFields'
-        {
-            $SQLStableFields
-        }
         'CustomFields'
         {
             $CustomFields
-        }
-        'MigrationStatus'
-        {
-            'MigrationStatus'
         }
     })
 $FieldsToProcessForSPO = @($($FieldsToProcessForSPO; 'SourceEntraID', 'SourceADID', 'ID') | Sort-Object -Unique | Select-Object -Unique)
@@ -241,10 +331,8 @@ $SiteListParams = @{
     SiteId = $MBMConfiguration.WavePlanningSiteID
     ListID = $MBMConfiguration.UserMigrationListID
 }
-
 # get the Special Handling entries from SPO List and update SQL
 Write-Log -Level INFO -Message "Running: Getting SharePoint Special Handling Entries and Updating Database"
-$SpecialHandlingListID = '652ebd84-a5ab-46a7-b611-65e58b9f20ad'
 #$SpecialHandling = Get-OGSiteListItem -SiteId $SiteListParams.SiteId -ListId $SpecialHandlingListID -Column EmailAddress,WDEmployeeID,Note
 $SpecialHandlingRawSPO = Get-PnPListItem -List $SpecialHandlingListID -Fields 'EmailAddress', 'EmailAddress_x003a__x0020_WDEmpl', 'LinkTitle'
 $SpecialHandlingRawObjects = @($SpecialHandlingRawSPO.foreach({ [pscustomobject][hashtable]$($_.FieldValues) }))
@@ -257,7 +345,7 @@ Write-Log -Level INFO -Message "Completed: Getting SharePoint Special Handling E
 
 # get the wave plan from the SPO List and update SQL
 Write-Log -Level INFO -Message "Running: Getting SharePoint Wave Plan and Updating Database"
-$WavePlanListID = '74befe9a-4850-4e3f-90bf-01e1b80b8155'
+
 #$wavePlan = Get-OGSiteListItem -SiteId $SiteListParams.SiteId -ListId $WavePlanListID -Column Title,Description,TargetDate,T1
 $wavePlanpnp = Get-PnPListItem -List $WavePlanListID -Fields Title, TargetDate, T1, FlyOneDrive, FlyTeamsChat, FlyExchange, Description
 $waveplanObjects = $wavePlanpnp.foreach({ [PSCustomObject][hashtable]$($_.FieldValues) })
@@ -413,6 +501,7 @@ switch ($SharePointOperation)
         # setup to find diffs for the spo list updates
         $spoListItemsHash = @{}
         $SPOListItems.foreach({ $spoListItemsHash.add($_.id, $_) })
+
         if ($FieldSet -eq 'MigrationStatus')
         {
             $MigrationStatuses = Invoke-DbaQuery @idbParams -Query 'SELECT spoitemid,MigrationStatus FROM vMigrationStatusPerUser' -as PSObject -ErrorAction Stop
@@ -483,7 +572,9 @@ switch ($SharePointOperation)
             }
             Default
             {
-                $MigrationList.where({ -not [string]::IsNullOrEmpty($_.spoitemid) }).foreach({
+                $MigrationList.where({
+                     -not [string]::IsNullOrEmpty($_.spoitemid) -and ([string]::IsNullOrWhiteSpace($Wave) -or $_.AssignedWave -eq $Wave)
+                }).foreach({
                         $item = $_
                         $spoItem = $spoListItemsHash.$($item.spoitemid)
                         $itemID = $item.spoitemid
@@ -565,12 +656,3 @@ switch ($SharePointOperation)
         }
     }
 }
-
-
-
-
-
-
-
-
-
