@@ -1,0 +1,2 @@
+SELECT msExchExtensionAttribute23 from vADUsers_SOURCE
+WHERE msExchExtensionAttribute23 IS NOT NULL

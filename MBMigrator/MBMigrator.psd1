@@ -12,7 +12,7 @@
     RootModule           = '.\MBMigrator.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '0.0.0.30'
+    ModuleVersion        = '0.0.0.40'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')
@@ -27,7 +27,7 @@
     CompanyName          = 'themodulecollective'
 
     # Copyright statement for this module
-    Copyright            = '2022'
+    Copyright            = '2024'
 
     # Description of the functionality provided by this module
     Description          = 'a PowerShell Module for managing Mailbox Migrations to Exchange Online using Move Requests'
@@ -78,15 +78,24 @@
         'Complete-MBMWave'
         'Convert-CSExportXMLToCSV'
         'Export-ADUser'
-        'Export-AzureADLicensing'
-        'Export-AzureADUserLicensing'
-        'Export-AzureADUser'
+        'Export-ADComputer'
+        'Export-ADGroup'
+        'Export-EntraIDLicensing'
+        'Export-EntraIDUserLicensing'
+        'Export-EntraIDUserDrive'
+        'Export-PNPUserDriveDetail'
+        'Export-EntraIDUser'
+        'Export-EntraIDGroup'
+        'Export-IntuneDevice'
         'Export-ExchangeConfiguration'
+        'Export-ExchangeOnlineProtection'
         'Export-ExchangeRecipient'
         'Export-ExchangeOPDLOwnership'
         'Export-ComplianceRetentionPolicy'
         'Export-ExchangeRetentionPolicy'
         'Export-MoveRequest'
+        'Export-UnifiedGroupDrive'
+        'Export-UnifiedGroupRoleHolder'
         'Export-MBMReport'
         'Get-DistributionGroupMessageTrace'
         'Get-MBMMigrationList'
@@ -124,6 +133,7 @@
         'Sync-MBMWaveMoveRequest'
         'Update-MBMRecipientData'
         'Update-MBMPermissionData'
+        'Update-MBMFromExcelFile'
         'Get-MBMConfiguration'
         'Get-MBMColumnMap'
         'Set-MBMConfiguration'

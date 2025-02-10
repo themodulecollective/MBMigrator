@@ -1,7 +1,7 @@
 Function Get-MBMMigrationList {
     <#
 .SYNOPSIS
-    Gets the Mailbox Migration List  
+    Gets the Mailbox Migration List
 .DESCRIPTION
     Gets the Mailbox Migration List from a specified Excel spreadsheet or by querying the database
 .EXAMPLE
@@ -20,10 +20,13 @@ Function Get-MBMMigrationList {
         [parameter(Mandatory, ParameterSetName = 'ExcelFile')]
         [ValidateScript( { Test-Path -Path $_ -PathType Leaf -Filter *.xlsx })]
         [string]$FilePath
+        ,
+        [parameter(Mandatory, ParameterSetName = 'SPO')]
+        [switch]$SPOList
     )
 
     $GetDataParams = @{}
-    if ($Global) { $GetDataParams.OutVariable = 'Global:MailboxMigrationList' }
+    if ($Global) { $GetDataParams.OutVariable = 'Global:MigrationList' }
     $CurrentList = @(
         switch ($PSCmdlet.ParameterSetName) {
             'SQL' {
@@ -33,13 +36,17 @@ Function Get-MBMMigrationList {
                     Database    = $configuration.Database
                 }
                 $iQParams = @{
-                    Query = 'select * from dbo.viewMailboxMigrationList'
+                    Query = 'select * from dbo.staticMigrationList'
                     AS    = 'PSObject'
                 }
                 Invoke-DbaQuery @dbiParams @iQParams @GetDataParams
             }
             'ExcelFile' {
                 Import-Excel -Path $FilePath @GetDataParams
+            }
+            'SPO'
+            {
+
             }
         }
     )

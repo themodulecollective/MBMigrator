@@ -2,7 +2,7 @@
 SELECT
   AssignedWave
 FROM
-  viewMailboxMigrationList
+  viewMigrationList
 WHERE
   AssignedWave IS NOT NULL
 GROUP BY
@@ -11,7 +11,7 @@ GROUP BY
 SELECT
   AssignedWave
 FROM
-  viewMailboxMigrationList
+  viewMigrationList
 GROUP BY
   AssignedWave
 

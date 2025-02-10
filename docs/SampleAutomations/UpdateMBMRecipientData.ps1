@@ -1,46 +1,45 @@
 ﻿# Import MBM Module and Configuration
-. "E:\Automations\MBMConfiguration.ps1"
+. "C:\Migration\Scripts\MBMConfiguration.ps1"
 
-#Connect & Prepare the Sessions
-. "E:\Automations\ConnectSessions.ps1"
+#Archive Old User Data
+. "C:\Migration\Scripts\ArchiveData.ps1" -Operation RecipientData -AgeInDays 30
 
-#Archive Old Recipient Data
-. "E:\Automations\ArchiveData.ps1" -Operation RecipientData -AgeInDays 15
 
-#Get the Sessions
-$RequiredSessions = @('PremisesExchange')
-switch ($RequiredSessions)
-{
-    'PremisesExchange'
-    {
-        $OnPremExchange = Get-PSSession -Name $_
-    }
-}
-
-$OutputFolderPath = $MBMConfiguration.RecipientDataExportFolder
+$OutputFolderPath = $MBMConfiguration.RecipientDataFolder
 $MBMModulePath = $MBMConfiguration.MBMModulePath
-$Organization = $MBMConfiguration.TenantDomain
-$AppID = $MBMConfiguration.ReportingAppID
 $CertificateThumbprint = $MBMConfiguration.CertificateThumbprint
 
+$tenants = @(
+    @{
+        TenantDomain = $MBMConfiguration.SourceTenantDomain
+        TenantID = $MBMConfiguration.SourceTenantID
+        AppID = $MBMConfiguration.SourceTenantReportingAppID
+    }
+    @{
+        TenantDomain = $MBMConfiguration.TargetTenantDomain
+        TenantID = $MBMConfiguration.TargetTenantID
+        AppID = $MBMConfiguration.TargetTenantReportingAppID
+    }
+)
+
 $Jobs = @(
-     Invoke-Command -Session $OnPremExchange -AsJob -JobName ExportOnPremisesRecipientsData -ScriptBlock {
-        Export-ExchangeRecipient -informationaction continue -operation Recipient -OutputFolderPath $using:OutputFolderPath
-        } 
-	 Start-ThreadJob -Name ExportOnlineRecipientsData -ScriptBlock {
+foreach ($t in $tenants) {
+	$Organization = $t.TenantDomain
+	$AppID = $t.AppID
+	Start-ThreadJob -Name ExportOnlineMailboxData -ScriptBlock {
         Import-Module $Using:MBMModulePath
 		Import-Module ExchangeOnlineManagement
 		Connect-ExchangeOnline -Organization $using:Organization -AppID $using:AppID -CertificateThumbprint $using:CertificateThumbprint
-        Export-ExchangeRecipient -InformationAction Continue -Operation Recipient -OutputFolderPath $using:OutputFolderPath
-    } 
+        Export-ExchangeRecipient -InformationAction Continue -Operation Recipient -OutputFolderPath $using:OutputFolderPath # ,MailboxStatistics,CASMailbox
+    }
+}
 )
 
 Wait-Job -Job $Jobs
 
-
 $newDataFiles = @(Get-ChildItem -Path $OutputFolderPath -Filter *ExchangeRecipientsAsOf*.xml)
 
-#Truncate the Table Data
+
 $dbiParams = @{
     SQLInstance = $MBMConfiguration.SQLInstance
     Database = $MBMConfiguration.Database

@@ -49,7 +49,7 @@ Function New-MBMWaveMoveRequest
         [ValidateRange(2, 10)]
         [int]$MultiThread
     )
-    if ($null -eq $MailboxMigrationList -or $MailboxMigrationList.count -lt 1)
+    if ($null -eq $MigrationList -or $MigrationList.count -lt 1)
     { throw('You must run Get-MBMMigrationList before running this command.') }
 
     if ($PSBoundParameters.ContainsKey('MultiThread') -and $true -eq $WhatIfPreference)

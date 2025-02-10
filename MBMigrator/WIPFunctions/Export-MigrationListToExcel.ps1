@@ -1,7 +1,7 @@
 $sql = Connect-DbaInstance -SqlInstance 127.0.0.1 -SqlCredential $sqlcredential -Database Migration -SqlConnectionOnly
-$MailboxMigrationList = Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query 'select * from dbo.MailboxMigrationList' -As PsObject
+$MigrationList = Invoke-DbaQuery -SqlInstance $sql -Database Migration -Query 'select * from dbo.MigrationList' -As PsObject
 
-$Path = 'C:\Users\MikeCampbell\GitRepos\MigrationTracking\MailboxMigrationList.xlsx'
+$Path = 'C:\Users\MikeCampbell\GitRepos\MigrationTracking\MigrationList.xlsx'
 
 Remove-Item -Path $Path -Force -Confirm:$False
 
@@ -29,7 +29,7 @@ $Pivot2Params = @{
     SourceWorksheet = 'MailboxWaveAssignments'
 }
 
-$MMLExcel = $MailboxMigrationList | Export-Excel @ExportExcelParams
+$MMLExcel = $MigrationList | Export-Excel @ExportExcelParams
 Add-PivotTable @Pivot1Params -ExcelPackage $MMLExcel
 Add-PivotTable @Pivot2Params -ExcelPackage $MMLExcel
 Close-ExcelPackage -ExcelPackage $MMLExcel

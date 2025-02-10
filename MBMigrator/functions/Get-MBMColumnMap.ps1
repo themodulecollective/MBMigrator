@@ -668,7 +668,10 @@ function Get-MBMColumnMap
         'MailboxStats'
         {
             @(
-                $(@('MailboxGuid', 'OwnerADGuid', 'ExternalDirectoryOrganizationID').foreach(
+                $(@('MailboxGuid'
+                    #, 'OwnerADGuid'
+                    #, 'ExternalDirectoryOrganizationID'
+                    ).foreach(
                         {
                             @{
                                 Name      = $_
@@ -681,8 +684,8 @@ function Get-MBMColumnMap
                 $(@(
                         'TotalItemSizeInGB'
                         , 'TotalDeletedItemSizeInGB'
-                        , 'MessageTableTotalSizeInGB'
-                        , 'AttachmentTableTotalSizeInGB'
+                        #, 'MessageTableTotalSizeInGB'
+                        #, 'AttachmentTableTotalSizeInGB'
                     ).foreach(
                         {
                             @{
@@ -695,7 +698,7 @@ function Get-MBMColumnMap
                 $(@(
                         'ItemCount'
                         , 'DeletedItemCount'
-                        , 'AssociatedItemCount'
+                        #, 'AssociatedItemCount'
                     ).foreach(
                         {
                             @{
@@ -705,8 +708,8 @@ function Get-MBMColumnMap
                             }
                         }))
                 $(@(
-                        'LastLoggoffTime'
-                        , 'LastLogonTime'
+                        #'LastLoggoffTime'
+                        #, 'LastLogonTime'
                     ).foreach(
                         {
                             @{

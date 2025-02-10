@@ -40,10 +40,10 @@ function Export-ExchangeRecipient
             'DistributionGroup',
             'DistributionGroupMember',
             'DistributionGroupManagedBy',
-            'DistributionGroupModeratedBy',            
+            'DistributionGroupModeratedBy',
             'DistributionGroupAcceptMessagesOnlyFrom',
             'DistributionGroupBypassModeration',
-            'DistributionGroupGrantSendOnBehalfTo',           
+            'DistributionGroupGrantSendOnBehalfTo',
             'DistributionGroupRejectMessagesFrom',
             'MobileDevice',
             'MobileDeviceStatistics',
@@ -54,6 +54,8 @@ function Export-ExchangeRecipient
         ,
         [parameter()]
         [switch]$CompressOutput
+        ,
+        [switch]$UseEXOCmdlet
     )
 
     $DGDependentOperations = @(
@@ -173,7 +175,21 @@ function Export-ExchangeRecipient
             $AMParams.Name = $_
             $OpCount++
             Write-Progress -Activity 'Exporting Exchange Recipients' -CurrentOperation $AMParams.Name -Status "Operation $OpCount of $OpTotalCount" -Id 0
-            $AMParams.Value = @(Get-Mailbox @GetRParams | ForEach-Object { Get-MailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
+            switch ($UseEXOCmdlet)
+            {
+                $true
+                {
+                    $mailboxes = Get-EXOMailbox @GetRParams -Properties ExchangeGUID
+                    $AMParams.Value = @($Mailboxes | ForEach-Object { Get-EXOMailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
+                }
+                $false
+                {
+                    $Mailboxes = Get-Mailbox @GetRParams
+                    $AMParams.Value = @($Mailboxes | ForEach-Object { Get-MailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
+                }
+            }
+
+
             $ExchangeRecipients | Add-Member @AMParams
         }
         'MailboxFolderStatistics'

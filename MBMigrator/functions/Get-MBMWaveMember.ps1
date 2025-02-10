@@ -17,11 +17,11 @@ Function Get-MBMWaveMember {
         [parameter()]
         [switch]$Global
     )
-    switch ($null -ne $MailboxMigrationList -and $MailboxMigrationList.count -ge 1)
+    switch ($null -ne $MigrationList -and $MigrationList.count -ge 1)
     {
         $true
         {
-            $WaveData = @($MailboxMigrationList.Where( { $_.AssignedWave -eq $Wave }))
+            $WaveData = @($MigrationList.Where( { $_.AssignedWave -eq $Wave }))
             switch ($Global) {
                 $true
                 {

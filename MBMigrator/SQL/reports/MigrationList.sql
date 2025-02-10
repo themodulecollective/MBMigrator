@@ -57,6 +57,6 @@ SELECT
       ,[EmailAddresses]
       ,[Trustees]
       ,[Targets]
-  FROM [MBMigrator].[dbo].[viewMailboxMigrationList]
+  FROM [MBMigrator].[dbo].[viewMigrationList]
 ORDER BY
   DisplayName

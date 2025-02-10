@@ -5,22 +5,22 @@ SELECT
 FROM
   (
     SELECT DISTINCT
-      P.TargetObjectExchangeGUID AS Recipient
-    , P.TrusteeExchangeGUID AS CONNECTION
+      P.TargetObjectGUID AS Recipient
+    , P.TrusteeObjectGUID AS CONNECTION
     , L.AssignedWave
     FROM
       dbo.viewPermissionsForAnalysis AS P
-      INNER JOIN dbo.viewWOAMailboxMigrationList AS L ON P.TrusteeExchangeGUID = L.ExchangeGuid
+      INNER JOIN staticMigrationList AS L ON P.TrusteeObjectGUID = L.SourceEntraID
     WHERE
       (P.PermissionType <> 'SendAS')
     UNION
     SELECT DISTINCT
-      P.TrusteeExchangeGUID AS Recipient
-    , P.TargetObjectExchangeGUID AS CONNECTION
+      P.TrusteeObjectGUID AS Recipient
+    , P.TargetObjectGUID AS CONNECTION
     , L.AssignedWave
     FROM
       dbo.viewPermissionsForAnalysis AS P
-      INNER JOIN dbo.viewWOAMailboxMigrationList AS L ON P.TargetObjectExchangeGUID = L.ExchangeGuid
+      INNER JOIN staticMigrationList AS L ON P.TargetObjectGUID = L.SourceEntraID
     WHERE
       (P.PermissionType <> 'SendAS')
   ) AS TheSum

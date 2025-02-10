@@ -22,7 +22,7 @@
         [ValidateScript( { Test-Path -type Container -Path $_ })]
         [string]$OutputFolderPath
         ,
-        # Users Domain. Used when naming export file
+        # Users Domain. Used when naming export file and as the "server" parameter for Get-ADUser
         [parameter(Mandatory)]
         [string]$Domain
         ,
@@ -45,11 +45,11 @@
         Import-Module ActiveDirectory -ErrorAction Stop
     }
 
-    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'countryCode','Company', 'Department','Division','Description','businesscategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'physicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'employeeType','Manager','Enabled','LastLogonDate') | Sort-Object)
+    $Properties = @(@('DisplayName','GivenName','Surname','Mail','Initials', 'proxyAddresses', 'SamAccountName', 'UserPrincipalName','City', 'Country', 'CountryCode','Company', 'Department','Division','Description','BusinessCategory', 'SID', 'DistinguishedName','CanonicalName','ObjectGUID', 'mS-DS-ConsistencyGUID', 'PhysicalDeliveryOfficeName', 'EmployeeID', 'EmployeeNumber', 'EmployeeType','Manager','Enabled','LastLogonDate','PasswordExpired','PasswordLastSet','PasswordNeverExpires') | Sort-Object)
 
     switch ($Exchange) {
         $true {
-            $Properties = @(@($Properties;@('msExchMasterAccountSid', 'mailnickname', 'msExchMailboxGuid');@($((1..15).foreach({"ExtensionAttribute$_"}));$((16..45).foreach({"msExchExtensionAttribute$_"}));$((1..5).foreach({"msExchExtensionCustomAttribute$_"})))) | Sort-Object)
+            $Properties = @(@($Properties;@('msExchUsageLocation','msExchMasterAccountSid', 'MailNickName', 'msExchMailboxGuid');@($((1..15).foreach({"ExtensionAttribute$_"}));$((16..45).foreach({"msExchExtensionAttribute$_"}));$((1..5).foreach({"msExchExtensionCustomAttribute$_"})))) | Sort-Object)
         }
     }
 
@@ -57,10 +57,13 @@
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
-    $OutputFileName = $Domain + 'ADUsers' + 'AsOf' + $DateString
+    $OutputFileName = $Domain + '-ADUsers' + 'AsOf' + $DateString
     $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xml')
 
-    $ADUsers = Get-ADUser -Properties $Properties -filter * #| Sort-Object -Property $Properties -Descending
+    $gADUserParams = @{}
+    $gADUserParams.Add('Server',$($Domain))
+
+    $ADUsers = Get-ADUser -Properties $Properties -filter * @gADUserParams | Select-Object -Property $Properties -ExcludeProperty Item, PropertyNames, *Properties, PropertyCount
 
     $ADUsers | Export-Clixml -Path $outputFilePath
 

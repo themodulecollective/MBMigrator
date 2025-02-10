@@ -1,9 +1,9 @@
-function Export-AzureADUserLicensing {
+function Export-EntraIDUserLicensing {
     <#
     .SYNOPSIS
-        Get all Azure AD User Licensing details user and export them to an excel file
+        Get all relevant (per specified skus and serviceplans) EntraID User Licensing details user and export them to an excel file
     .DESCRIPTION
-        Get all Azure AD User Licensing details user and export them to an excel file
+        Get all relevant (per specified skus and serviceplans) EntraID User Licensing details user and export them to an excel file
     .EXAMPLE
         -SKUs '1c27243e-fb4d-42b1-ae8c-fe25c9616588','05e9a617-0261-4cee-bb44-138d3ef5d965'
         -ServicePlan '9974d6cf-cd24-4ba2-921c-e2aa687da846','efb87545-963c-4e0d-99df-69c6916d9eb0','c1ec4a95-1f05-45b3-a911-aa3fa01094f5','57ff2da0-773e-42df-b2af-ffb7a2317929'
@@ -17,20 +17,32 @@ function Export-AzureADUserLicensing {
         [string]$OutputFolderPath
         ,
         [parameter(Mandatory)]
-        [string[]]$Sku
+        [string[]]$Sku #SKUIDs for relevant skus.  Recommend using Get-OGSKU -includeDisplayName from Ograph module to get the SKUIDs
         ,
         [parameter(Mandatory)]
         [string[]]$ServicePlan
         ,
         [string]$Delimiter = ';'
+        ,
+        [parameter()]
+        [ValidateScript({Test-Path -Path $_ -PathType Leaf -Filter *.xml})]
+        [string]$skuReadableFilePath
     )
 
     $DateString = Get-Date -Format yyyyMMddhhmmss
 
-    $Tenant = (Get-MGContext).TenantID
+    $TenantDomain = (Get-MGDomain -All).where({$_.IsDefault}).ID.split('.')[0]
+    #$TenantID = (Get-MGContext).TenantID
 
     $ReadableHash = @{}
-    $skusReadable = Get-OGReadableSku
+    switch ([string]::IsNullOrWhiteSpace($skuReadableFilePath))
+    {
+        $true
+        {$skusReadable = Get-OGReadableSku -StoreCSV}
+        $false
+        {$skusReadable = Import-Clixml -Path $skuReadableFilePath}
+    }
+
     foreach ($sR in $skusReadable)
     {
         $ReadableHash[$sR.GUID] = $sR.Product_Display_Name
@@ -80,9 +92,17 @@ function Export-AzureADUserLicensing {
         }
         $false
         {
-            $OutputFileName = $Tenant + 'UserLicensing' + 'AsOf' + $DateString
+            $OutputFileName = $TenantDomain + '-EntraIDUserLicensing' + 'AsOf' + $DateString
             $OutputFilePath = Join-Path -Path $OutputFolderPath -ChildPath $($OutputFileName + '.xlsx')
-            $Results | Export-Excel -path $OutputFilePath
+            $ExportExcelParams = @{
+                path = $OutputFilePath
+                Autosize = $true
+                WorksheetName = 'UserLicensing'
+                TableName = 'UserLicensing'
+                TableStyle = 'Medium5'
+                FreezeTopRow = $true
+            }
+            $Results | Export-Excel @ExportExcelParams
         }
     }
 

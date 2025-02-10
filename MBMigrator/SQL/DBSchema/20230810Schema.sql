@@ -3,9 +3,9 @@ GO
 /****** Object:  Database [MBMigrator]    Script Date: 8/10/2023 11:31:26 AM ******/
 CREATE DATABASE [MBMigrator]
  CONTAINMENT = NONE
- ON  PRIMARY 
+ ON  PRIMARY
 ( NAME = N'MBMigrator', FILENAME = N'F:\Database\MBMigrator.mdf' , SIZE = 598016KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
- LOG ON 
+ LOG ON
 ( NAME = N'MBMigrator_log', FILENAME = N'F:\Database\MBMigrator.ldf' , SIZE = 598016KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
 GO
 ALTER DATABASE [MBMigrator] SET COMPATIBILITY_LEVEL = 140
@@ -15,63 +15,63 @@ begin
 EXEC [MBMigrator].[dbo].[sp_fulltext_database] @action = 'enable'
 end
 GO
-ALTER DATABASE [MBMigrator] SET ANSI_NULL_DEFAULT OFF 
+ALTER DATABASE [MBMigrator] SET ANSI_NULL_DEFAULT OFF
 GO
-ALTER DATABASE [MBMigrator] SET ANSI_NULLS OFF 
+ALTER DATABASE [MBMigrator] SET ANSI_NULLS OFF
 GO
-ALTER DATABASE [MBMigrator] SET ANSI_PADDING OFF 
+ALTER DATABASE [MBMigrator] SET ANSI_PADDING OFF
 GO
-ALTER DATABASE [MBMigrator] SET ANSI_WARNINGS OFF 
+ALTER DATABASE [MBMigrator] SET ANSI_WARNINGS OFF
 GO
-ALTER DATABASE [MBMigrator] SET ARITHABORT OFF 
+ALTER DATABASE [MBMigrator] SET ARITHABORT OFF
 GO
-ALTER DATABASE [MBMigrator] SET AUTO_CLOSE OFF 
+ALTER DATABASE [MBMigrator] SET AUTO_CLOSE OFF
 GO
-ALTER DATABASE [MBMigrator] SET AUTO_SHRINK OFF 
+ALTER DATABASE [MBMigrator] SET AUTO_SHRINK OFF
 GO
-ALTER DATABASE [MBMigrator] SET AUTO_UPDATE_STATISTICS ON 
+ALTER DATABASE [MBMigrator] SET AUTO_UPDATE_STATISTICS ON
 GO
-ALTER DATABASE [MBMigrator] SET CURSOR_CLOSE_ON_COMMIT OFF 
+ALTER DATABASE [MBMigrator] SET CURSOR_CLOSE_ON_COMMIT OFF
 GO
-ALTER DATABASE [MBMigrator] SET CURSOR_DEFAULT  GLOBAL 
+ALTER DATABASE [MBMigrator] SET CURSOR_DEFAULT  GLOBAL
 GO
-ALTER DATABASE [MBMigrator] SET CONCAT_NULL_YIELDS_NULL OFF 
+ALTER DATABASE [MBMigrator] SET CONCAT_NULL_YIELDS_NULL OFF
 GO
-ALTER DATABASE [MBMigrator] SET NUMERIC_ROUNDABORT OFF 
+ALTER DATABASE [MBMigrator] SET NUMERIC_ROUNDABORT OFF
 GO
-ALTER DATABASE [MBMigrator] SET QUOTED_IDENTIFIER OFF 
+ALTER DATABASE [MBMigrator] SET QUOTED_IDENTIFIER OFF
 GO
-ALTER DATABASE [MBMigrator] SET RECURSIVE_TRIGGERS OFF 
+ALTER DATABASE [MBMigrator] SET RECURSIVE_TRIGGERS OFF
 GO
-ALTER DATABASE [MBMigrator] SET  DISABLE_BROKER 
+ALTER DATABASE [MBMigrator] SET  DISABLE_BROKER
 GO
-ALTER DATABASE [MBMigrator] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+ALTER DATABASE [MBMigrator] SET AUTO_UPDATE_STATISTICS_ASYNC OFF
 GO
-ALTER DATABASE [MBMigrator] SET DATE_CORRELATION_OPTIMIZATION OFF 
+ALTER DATABASE [MBMigrator] SET DATE_CORRELATION_OPTIMIZATION OFF
 GO
-ALTER DATABASE [MBMigrator] SET TRUSTWORTHY OFF 
+ALTER DATABASE [MBMigrator] SET TRUSTWORTHY OFF
 GO
-ALTER DATABASE [MBMigrator] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+ALTER DATABASE [MBMigrator] SET ALLOW_SNAPSHOT_ISOLATION OFF
 GO
-ALTER DATABASE [MBMigrator] SET PARAMETERIZATION SIMPLE 
+ALTER DATABASE [MBMigrator] SET PARAMETERIZATION SIMPLE
 GO
-ALTER DATABASE [MBMigrator] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [MBMigrator] SET READ_COMMITTED_SNAPSHOT OFF
 GO
-ALTER DATABASE [MBMigrator] SET HONOR_BROKER_PRIORITY OFF 
+ALTER DATABASE [MBMigrator] SET HONOR_BROKER_PRIORITY OFF
 GO
-ALTER DATABASE [MBMigrator] SET RECOVERY SIMPLE 
+ALTER DATABASE [MBMigrator] SET RECOVERY SIMPLE
 GO
-ALTER DATABASE [MBMigrator] SET  MULTI_USER 
+ALTER DATABASE [MBMigrator] SET  MULTI_USER
 GO
-ALTER DATABASE [MBMigrator] SET PAGE_VERIFY CHECKSUM  
+ALTER DATABASE [MBMigrator] SET PAGE_VERIFY CHECKSUM
 GO
-ALTER DATABASE [MBMigrator] SET DB_CHAINING OFF 
+ALTER DATABASE [MBMigrator] SET DB_CHAINING OFF
 GO
-ALTER DATABASE [MBMigrator] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+ALTER DATABASE [MBMigrator] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF )
 GO
-ALTER DATABASE [MBMigrator] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+ALTER DATABASE [MBMigrator] SET TARGET_RECOVERY_TIME = 60 SECONDS
 GO
-ALTER DATABASE [MBMigrator] SET DELAYED_DURABILITY = DISABLED 
+ALTER DATABASE [MBMigrator] SET DELAYED_DURABILITY = DISABLED
 GO
 ALTER DATABASE [MBMigrator] SET QUERY_STORE = OFF
 GO
@@ -141,8 +141,8 @@ GO
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE VIEW [dbo].[viewOnPremisesAutoMappings]
 AS
-SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType, 
-                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, 
+SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType,
+                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID,
                   TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID, TrusteeExchangeGUID, IsInherited, IsAutoMapped
 FROM     dbo.stagingPermissions
 WHERE  (SourceExchangeOrganization =
@@ -157,8 +157,8 @@ GO
 /****** Script for SelectTopNRows command from SSMS  ******/
 CREATE VIEW [dbo].[viewOnlineAutoMappings]
 AS
-SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType, 
-                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, 
+SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType,
+                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID,
                   TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID, TrusteeExchangeGUID, IsInherited, IsAutoMapped
 FROM     dbo.stagingPermissions
 WHERE  (SourceExchangeOrganization =
@@ -172,10 +172,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewRelatedAutoMappings]
 AS
-SELECT dbo.viewOnlineAutoMappings.TrusteeExchangeGUID AS OnlineTrustee, dbo.viewOnlineAutoMappings.TargetExchangeGUID AS OnlineTarget, dbo.viewOnPremisesAutoMappings.TrusteeExchangeGUID AS OnPremTrustee, 
+SELECT dbo.viewOnlineAutoMappings.TrusteeExchangeGUID AS OnlineTrustee, dbo.viewOnlineAutoMappings.TargetExchangeGUID AS OnlineTarget, dbo.viewOnPremisesAutoMappings.TrusteeExchangeGUID AS OnPremTrustee,
                   dbo.viewOnPremisesAutoMappings.TargetExchangeGUID AS OnPremTarget
 FROM     dbo.viewOnlineAutoMappings FULL OUTER JOIN
-                  dbo.viewOnPremisesAutoMappings ON dbo.viewOnlineAutoMappings.TrusteeExchangeGUID = dbo.viewOnPremisesAutoMappings.TrusteeExchangeGUID AND 
+                  dbo.viewOnPremisesAutoMappings ON dbo.viewOnlineAutoMappings.TrusteeExchangeGUID = dbo.viewOnPremisesAutoMappings.TrusteeExchangeGUID AND
                   dbo.viewOnlineAutoMappings.TargetExchangeGUID = dbo.viewOnPremisesAutoMappings.TargetExchangeGUID
 GO
 /****** Object:  View [dbo].[viewOnlineFullAccess]    Script Date: 8/10/2023 11:31:26 AM ******/
@@ -185,8 +185,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewOnlineFullAccess]
 AS
-SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType, 
-                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, 
+SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType,
+                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID,
                   TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID, TrusteeExchangeGUID, IsInherited, IsAutoMapped
 FROM     dbo.stagingPermissions
 WHERE  (SourceExchangeOrganization =
@@ -200,8 +200,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewOnPremisesFullAccess]
 AS
-SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType, 
-                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, 
+SELECT PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType,
+                  TargetPrimarySMTPAddress, TargetAlias, TrusteePrimarySMTPAddress, TrusteeAlias, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID,
                   TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID, TrusteeExchangeGUID, IsInherited, IsAutoMapped
 FROM     dbo.stagingPermissions
 WHERE  (SourceExchangeOrganization =
@@ -729,15 +729,15 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[stagingMailboxOL]
 AS
-SELECT SourceOrganization, ExchangeGuid, ExchangeObjectId, ExternalDirectoryObjectID, ArchiveGuid, Guid, Alias, SamAccountName, DisplayName, Name, PrimarySmtpAddress, UserPrincipalName, RemoteRoutingAddress, TargetAddress, 
-                  ForwardingAddress, ForwardingSmtpAddress, LegacyExchangeDN, RecipientType, RecipientTypeDetails, RemoteRecipientType, LinkedMasterAccount, CustomAttribute1, CustomAttribute2, CustomAttribute3, CustomAttribute4, 
-                  CustomAttribute5, CustomAttribute6, CustomAttribute7, CustomAttribute8, CustomAttribute9, CustomAttribute10, CustomAttribute11, CustomAttribute12, CustomAttribute13, CustomAttribute14, CustomAttribute15, 
-                  ExtensionCustomAttribute1, ExtensionCustomAttribute2, ExtensionCustomAttribute3, ExtensionCustomAttribute4, ExtensionCustomAttribute5, Department, Office, OrganizationalUnit, [Database], ArchiveName, ArchiveDomain, 
-                  ArchiveStatus, ArchiveState, RetentionPolicy, RetainDeletedItemsFor, ManagedFolderMailboxPolicy, AddressBookPolicy, RoleAssignmentPolicy, SharingPolicy, DefaultPublicFolderMailbox, RecipientLimits, ResourceCapacity, 
-                  DistinguishedName, WhenCreatedUTC, WhenChangedUTC, EmailAddresses, UseDatabaseRetentionDefaults, UseDatabaseQuotaDefaults, LitigationHoldEnabled, SingleItemRecoveryEnabled, RetentionHoldEnabled, BccBlocked, 
-                  AutoExpandingArchiveEnabled, HiddenFromAddressListsEnabled, EmailAddressPolicyEnabled, MessageCopyForSentAsEnabled, MessageCopyForSendOnBehalfEnabled, DeliverToMailboxAndForward, 
-                  MessageTrackingReadStatusEnabled, DowngradeHighPriorityMessagesEnabled, UMEnabled, IsAuxMailbox, CalendarVersionStoreDisabled, SKUAssigned, AuditEnabled, ArchiveQuotaInGB, ArchiveWarningQuotaInGB, 
-                  CalendarLoggingQuotaInGB, IssueWarningQuotaInGB, ProhibitSendQuotaInGB, ProhibitSendReceiveQuotaInGB, RecoverableItemsQuotaInGB, RecoverableItemsWarningQuotaInGB, RulesQuotaInKB, MaxSendSizeInMB, 
+SELECT SourceOrganization, ExchangeGuid, ExchangeObjectId, ExternalDirectoryObjectID, ArchiveGuid, Guid, Alias, SamAccountName, DisplayName, Name, PrimarySmtpAddress, UserPrincipalName, RemoteRoutingAddress, TargetAddress,
+                  ForwardingAddress, ForwardingSmtpAddress, LegacyExchangeDN, RecipientType, RecipientTypeDetails, RemoteRecipientType, LinkedMasterAccount, CustomAttribute1, CustomAttribute2, CustomAttribute3, CustomAttribute4,
+                  CustomAttribute5, CustomAttribute6, CustomAttribute7, CustomAttribute8, CustomAttribute9, CustomAttribute10, CustomAttribute11, CustomAttribute12, CustomAttribute13, CustomAttribute14, CustomAttribute15,
+                  ExtensionCustomAttribute1, ExtensionCustomAttribute2, ExtensionCustomAttribute3, ExtensionCustomAttribute4, ExtensionCustomAttribute5, Department, Office, OrganizationalUnit, [Database], ArchiveName, ArchiveDomain,
+                  ArchiveStatus, ArchiveState, RetentionPolicy, RetainDeletedItemsFor, ManagedFolderMailboxPolicy, AddressBookPolicy, RoleAssignmentPolicy, SharingPolicy, DefaultPublicFolderMailbox, RecipientLimits, ResourceCapacity,
+                  DistinguishedName, WhenCreatedUTC, WhenChangedUTC, EmailAddresses, UseDatabaseRetentionDefaults, UseDatabaseQuotaDefaults, LitigationHoldEnabled, SingleItemRecoveryEnabled, RetentionHoldEnabled, BccBlocked,
+                  AutoExpandingArchiveEnabled, HiddenFromAddressListsEnabled, EmailAddressPolicyEnabled, MessageCopyForSentAsEnabled, MessageCopyForSendOnBehalfEnabled, DeliverToMailboxAndForward,
+                  MessageTrackingReadStatusEnabled, DowngradeHighPriorityMessagesEnabled, UMEnabled, IsAuxMailbox, CalendarVersionStoreDisabled, SKUAssigned, AuditEnabled, ArchiveQuotaInGB, ArchiveWarningQuotaInGB,
+                  CalendarLoggingQuotaInGB, IssueWarningQuotaInGB, ProhibitSendQuotaInGB, ProhibitSendReceiveQuotaInGB, RecoverableItemsQuotaInGB, RecoverableItemsWarningQuotaInGB, RulesQuotaInKB, MaxSendSizeInMB,
                   MaxReceiveSizeInMB
 FROM     dbo.stagingMailbox
 WHERE  (SourceOrganization = N'OL')
@@ -809,8 +809,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[stagingRecipientOP]
 AS
-SELECT   SourceOrganization, ExchangeGuid, ExchangeObjectId, ExternalDirectoryObjectID, ArchiveGuid, Guid, Alias, DisplayName, PrimarySmtpAddress, ExternalEmailAddress, RecipientType, RecipientTypeDetails, CustomAttribute1, CustomAttribute2, CustomAttribute3, CustomAttribute4, CustomAttribute5, CustomAttribute6, 
-             CustomAttribute7, CustomAttribute8, CustomAttribute9, CustomAttribute10, CustomAttribute11, CustomAttribute12, CustomAttribute13, CustomAttribute14, CustomAttribute15, ExtensionCustomAttribute1, ExtensionCustomAttribute2, ExtensionCustomAttribute3, ExtensionCustomAttribute4, ExtensionCustomAttribute5, Department, 
+SELECT   SourceOrganization, ExchangeGuid, ExchangeObjectId, ExternalDirectoryObjectID, ArchiveGuid, Guid, Alias, DisplayName, PrimarySmtpAddress, ExternalEmailAddress, RecipientType, RecipientTypeDetails, CustomAttribute1, CustomAttribute2, CustomAttribute3, CustomAttribute4, CustomAttribute5, CustomAttribute6,
+             CustomAttribute7, CustomAttribute8, CustomAttribute9, CustomAttribute10, CustomAttribute11, CustomAttribute12, CustomAttribute13, CustomAttribute14, CustomAttribute15, ExtensionCustomAttribute1, ExtensionCustomAttribute2, ExtensionCustomAttribute3, ExtensionCustomAttribute4, ExtensionCustomAttribute5, Department,
              Company, Office, City, DistinguishedName, Manager, WhenCreatedUTC, WhenChangedUTC, EmailAddresses, ArchiveStatus, ArchiveState
 FROM     dbo.stagingRecipient
 WHERE   (SourceOrganization = N'OP')
@@ -823,30 +823,30 @@ GO
 /*AND dbo.stagingMailbox.RecipientTypeDetails = 'RemoteUserMailbox'*/
 CREATE VIEW [dbo].[viewMailboxList]
 AS
-SELECT     dbo.stagingMailbox.Alias, dbo.stagingMailboxStats.TotalItemSizeInGB, dbo.stagingMailboxStats.TotalDeletedItemSizeInGB, dbo.stagingMailboxStats.MessageTableTotalSizeInGB, dbo.stagingMailboxStats.AttachmentTableTotalSizeInGB, 
-                  dbo.stagingMailboxStats.ItemCount, dbo.stagingMailboxStats.DeletedItemCount, dbo.stagingMailbox.ExchangeGuid, dbo.stagingMailbox.Name, dbo.stagingMailbox.DisplayName, dbo.stagingMailbox.PrimarySmtpAddress, dbo.stagingMailbox.UserPrincipalName, 
-                  dbo.stagingMailbox.TargetAddress, dbo.stagingMailbox.RemoteRoutingAddress, dbo.stagingMailbox.RecipientTypeDetails, dbo.stagingMailbox.RemoteRecipientType, dbo.stagingMailbox.WhenCreatedUTC, dbo.stagingMailbox.EmailAddresses, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveName ELSE dbo.stagingMailbox.ArchiveName END AS ArchiveName, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveDomain ELSE dbo.stagingMailbox.ArchiveDomain END AS ArchiveDomain, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveStatus ELSE dbo.stagingMailbox.ArchiveStatus END AS ArchiveStatus, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveState ELSE dbo.stagingMailbox.ArchiveState END AS ArchiveState, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RetentionPolicy ELSE dbo.stagingMailbox.RetentionPolicy END AS RetentionPolicy, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RetainDeletedItemsFor ELSE dbo.stagingMailbox.RetainDeletedItemsFor END AS RetainDeletedItemsFor, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.LitigationHoldEnabled ELSE dbo.stagingMailbox.LitigationHoldEnabled END AS LitigationHoldEnabled, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.SingleItemRecoveryEnabled ELSE dbo.stagingMailbox.SingleItemRecoveryEnabled END AS SingleItemRecoveryEnabled, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveQuotaInGB ELSE dbo.stagingMailbox.ArchiveQuotaInGB END AS ArchiveQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveWarningQuotaInGB ELSE dbo.stagingMailbox.ArchiveWarningQuotaInGB END AS ArchiveWarningQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.IssueWarningQuotaInGB ELSE dbo.stagingMailbox.IssueWarningQuotaInGB END AS IssueWarningQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.CalendarLoggingQuotaInGB ELSE dbo.stagingMailbox.CalendarLoggingQuotaInGB END AS CalendarLoggingQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ProhibitSendQuotaInGB ELSE dbo.stagingMailbox.ProhibitSendQuotaInGB END AS ProhibitSendQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ProhibitSendReceiveQuotaInGB ELSE dbo.stagingMailbox.ProhibitSendReceiveQuotaInGB END AS ProhibitSendReceiveQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RecoverableItemsWarningQuotaInGB ELSE dbo.stagingMailbox.RecoverableItemsWarningQuotaInGB END AS RecoverableItemsWarningQuotaInGB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RulesQuotaInKB ELSE dbo.stagingMailbox.RulesQuotaInKB END AS RulesQuotaInKB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.MaxReceiveSizeInMB ELSE dbo.stagingMailbox.MaxReceiveSizeInMB END AS MaxReceiveSizeInMB, 
-                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.MaxSendSizeInMB ELSE dbo.stagingMailbox.MaxSendSizeInMB END AS MaxSendSizeInMB, dbo.stagingMailbox.OrganizationalUnit, dbo.stagingMailbox.DistinguishedName, 
-                  dbo.viewWaveGroupMembershipsAssigned.GroupName, dbo.stagingRecipientOP.Department, dbo.stagingADUser.Division, dbo.stagingRecipientOP.Company, dbo.stagingRecipientOP.Office, dbo.stagingRecipientOP.City, dbo.stagingADUser.countryCode, 
-                  dbo.stagingADUser.Country, dbo.stagingRecipientOP.Manager, dbo.stagingADUser.employeeID, dbo.stagingADUser.employeeType, dbo.stagingADUser.Enabled, dbo.stagingUserLicensing.LicenseNames, dbo.stagingUserLicensing.ServicePlanNames, 
-                  dbo.stagingADUser.LastLogonDate, dbo.stagingUserMobileDevice.DeviceType AS MobileDeviceType, dbo.stagingUserMobileDevice.DeviceOS AS MobileDeviceOS, dbo.stagingUserMobileDevice.LastSuccessSync AS MobileLastSuccessSync, 
+SELECT     dbo.stagingMailbox.Alias, dbo.stagingMailboxStats.TotalItemSizeInGB, dbo.stagingMailboxStats.TotalDeletedItemSizeInGB, dbo.stagingMailboxStats.MessageTableTotalSizeInGB, dbo.stagingMailboxStats.AttachmentTableTotalSizeInGB,
+                  dbo.stagingMailboxStats.ItemCount, dbo.stagingMailboxStats.DeletedItemCount, dbo.stagingMailbox.ExchangeGuid, dbo.stagingMailbox.Name, dbo.stagingMailbox.DisplayName, dbo.stagingMailbox.PrimarySmtpAddress, dbo.stagingMailbox.UserPrincipalName,
+                  dbo.stagingMailbox.TargetAddress, dbo.stagingMailbox.RemoteRoutingAddress, dbo.stagingMailbox.RecipientTypeDetails, dbo.stagingMailbox.RemoteRecipientType, dbo.stagingMailbox.WhenCreatedUTC, dbo.stagingMailbox.EmailAddresses,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveName ELSE dbo.stagingMailbox.ArchiveName END AS ArchiveName,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveDomain ELSE dbo.stagingMailbox.ArchiveDomain END AS ArchiveDomain,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveStatus ELSE dbo.stagingMailbox.ArchiveStatus END AS ArchiveStatus,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveState ELSE dbo.stagingMailbox.ArchiveState END AS ArchiveState,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RetentionPolicy ELSE dbo.stagingMailbox.RetentionPolicy END AS RetentionPolicy,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RetainDeletedItemsFor ELSE dbo.stagingMailbox.RetainDeletedItemsFor END AS RetainDeletedItemsFor,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.LitigationHoldEnabled ELSE dbo.stagingMailbox.LitigationHoldEnabled END AS LitigationHoldEnabled,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.SingleItemRecoveryEnabled ELSE dbo.stagingMailbox.SingleItemRecoveryEnabled END AS SingleItemRecoveryEnabled,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveQuotaInGB ELSE dbo.stagingMailbox.ArchiveQuotaInGB END AS ArchiveQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ArchiveWarningQuotaInGB ELSE dbo.stagingMailbox.ArchiveWarningQuotaInGB END AS ArchiveWarningQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.IssueWarningQuotaInGB ELSE dbo.stagingMailbox.IssueWarningQuotaInGB END AS IssueWarningQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.CalendarLoggingQuotaInGB ELSE dbo.stagingMailbox.CalendarLoggingQuotaInGB END AS CalendarLoggingQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ProhibitSendQuotaInGB ELSE dbo.stagingMailbox.ProhibitSendQuotaInGB END AS ProhibitSendQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.ProhibitSendReceiveQuotaInGB ELSE dbo.stagingMailbox.ProhibitSendReceiveQuotaInGB END AS ProhibitSendReceiveQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RecoverableItemsWarningQuotaInGB ELSE dbo.stagingMailbox.RecoverableItemsWarningQuotaInGB END AS RecoverableItemsWarningQuotaInGB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.RulesQuotaInKB ELSE dbo.stagingMailbox.RulesQuotaInKB END AS RulesQuotaInKB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.MaxReceiveSizeInMB ELSE dbo.stagingMailbox.MaxReceiveSizeInMB END AS MaxReceiveSizeInMB,
+                  CASE dbo.stagingMailbox.RecipientType WHEN 'MailUser' THEN dbo.stagingMailboxOL.MaxSendSizeInMB ELSE dbo.stagingMailbox.MaxSendSizeInMB END AS MaxSendSizeInMB, dbo.stagingMailbox.OrganizationalUnit, dbo.stagingMailbox.DistinguishedName,
+                  dbo.viewWaveGroupMembershipsAssigned.GroupName, dbo.stagingRecipientOP.Department, dbo.stagingADUser.Division, dbo.stagingRecipientOP.Company, dbo.stagingRecipientOP.Office, dbo.stagingRecipientOP.City, dbo.stagingADUser.countryCode,
+                  dbo.stagingADUser.Country, dbo.stagingRecipientOP.Manager, dbo.stagingADUser.employeeID, dbo.stagingADUser.employeeType, dbo.stagingADUser.Enabled, dbo.stagingUserLicensing.LicenseNames, dbo.stagingUserLicensing.ServicePlanNames,
+                  dbo.stagingADUser.LastLogonDate, dbo.stagingUserMobileDevice.DeviceType AS MobileDeviceType, dbo.stagingUserMobileDevice.DeviceOS AS MobileDeviceOS, dbo.stagingUserMobileDevice.LastSuccessSync AS MobileLastSuccessSync,
                   dbo.stagingUserMobileDevice.DeviceAccessState AS MobileDeviceAccessState, dbo.stagingCASMailbox.ActiveSyncEnabled, dbo.stagingDistributionGroupOwnership.GroupCount AS DLsManaged
 FROM        dbo.stagingMailbox INNER JOIN
                   dbo.stagingADUser ON dbo.stagingMailbox.ExchangeGuid = dbo.stagingADUser.msExchMailboxGUID LEFT OUTER JOIN
@@ -867,13 +867,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewPermissionsForAnalysis]
 AS
-SELECT DISTINCT 
-                  SourceOrganization, PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType, 
-                  TargetPrimarySMTPAddress, TrusteePrimarySMTPAddress, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID, 
+SELECT DISTINCT
+                  SourceOrganization, PermissionIdentity, ParentPermissionIdentity, SourceExchangeOrganization, TargetRecipientType, TargetRecipientTypeDetails, TrusteeRecipientType, TrusteeRecipientTypeDetails, TargetFolderType, PermissionType, AssignmentType,
+                  TargetPrimarySMTPAddress, TrusteePrimarySMTPAddress, TrusteeIdentity, TargetDistinguishedName, TrusteeDistinguishedName, TargetFolderPath, FolderAccessRights, TargetObjectGUID, TargetExchangeGUID, TrusteeGroupObjectGUID, TrusteeObjectGUID,
                   TrusteeExchangeGUID, IsInherited
 FROM        dbo.stagingPermissions
 WHERE     (PermissionType <> 'Folder') AND (NOT (TrusteeIdentity IN (N'CCHCS\PPS_TR_EXCH.svc', N'NT AUTHORITY\SYSTEM', N'S-1-5-32-548', N'CCHCS\Domain Admins', N'CN=PPS_TR_Quarantine,OU=Service Accounts,OU=CCHCS,DC=CCHCS,DC=LDAP'))) OR
-                  (PermissionType = 'Folder') AND (TargetFolderType = 'Calendar') AND (NOT (TrusteeIdentity IN (N'CCHCS\PPS_TR_EXCH.svc', N'NT AUTHORITY\SYSTEM', N'S-1-5-32-548', N'CCHCS\Domain Admins', 
+                  (PermissionType = 'Folder') AND (TargetFolderType = 'Calendar') AND (NOT (TrusteeIdentity IN (N'CCHCS\PPS_TR_EXCH.svc', N'NT AUTHORITY\SYSTEM', N'S-1-5-32-548', N'CCHCS\Domain Admins',
                   N'CN=PPS_TR_Quarantine,OU=Service Accounts,OU=CCHCS,DC=CCHCS,DC=LDAP')))
 GO
 /****** Object:  View [dbo].[viewPermissionsReport]    Script Date: 8/10/2023 11:31:26 AM ******/
@@ -883,8 +883,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewPermissionsReport]
 AS
-SELECT DISTINCT 
-                  P.TargetRecipientTypeDetails, P.TargetPrimarySMTPAddress, P.TrusteeRecipientTypeDetails, P.TrusteePrimarySMTPAddress, P.PermissionType, P.TargetFolderType, P.TrusteeIdentity, P.TargetDistinguishedName, P.TrusteeDistinguishedName, 
+SELECT DISTINCT
+                  P.TargetRecipientTypeDetails, P.TargetPrimarySMTPAddress, P.TrusteeRecipientTypeDetails, P.TrusteePrimarySMTPAddress, P.PermissionType, P.TargetFolderType, P.TrusteeIdentity, P.TargetDistinguishedName, P.TrusteeDistinguishedName,
                   P.FolderAccessRights, P.TrusteeExchangeGUID, P.TargetExchangeGUID, TEM.Alias AS TrusteeAlias, TAM.Alias AS TargetAlias
 FROM        dbo.viewPermissionsForAnalysis AS P LEFT OUTER JOIN
                   dbo.viewMailboxList AS TEM ON P.TrusteeExchangeGUID = TEM.ExchangeGuid LEFT OUTER JOIN
@@ -912,8 +912,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE VIEW [dbo].[viewMailboxWaveAssignments]
 AS
-SELECT DISTINCT 
-                  L.Alias, L.Name, L.DisplayName, L.PrimarySmtpAddress, L.ExchangeGuid, CASE WHEN E.AssignedWave IS NULL THEN A.AssignedWave ELSE E.AssignedWave END AS AssignedWave, CASE WHEN E.AssignedWave IS NULL 
+SELECT DISTINCT
+                  L.Alias, L.Name, L.DisplayName, L.PrimarySmtpAddress, L.ExchangeGuid, CASE WHEN E.AssignedWave IS NULL THEN A.AssignedWave ELSE E.AssignedWave END AS AssignedWave, CASE WHEN E.AssignedWave IS NULL
                   THEN 'WaveAssignments' ELSE 'WaveExceptions' END AS WaveAssignmentSource, L.RecipientTypeDetails, L.LitigationHoldEnabled, L.TargetAddress, L.OrganizationalUnit, L.WhenCreatedUTC, L.GroupName
 FROM        dbo.viewMailboxList AS L INNER JOIN
                   dbo.WaveAssignments AS A ON L.GroupName = A.Name LEFT OUTER JOIN
@@ -1028,12 +1028,12 @@ SELECT     PrimarySMTPAddress, STRING_AGG(Description, '|') AS Description
 FROM        dbo.SpecialHandling
 GROUP BY PrimarySMTPAddress
 GO
-/****** Object:  View [dbo].[viewMailboxMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
+/****** Object:  View [dbo].[viewMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE VIEW [dbo].[viewMailboxMigrationList]
+CREATE VIEW [dbo].[viewMigrationList]
 AS
 SELECT     L.Name, L.DisplayName, L.PrimarySmtpAddress, L.UserPrincipalName, L.ExchangeGuid, CASE WHEN E.AssignedWave IS NULL THEN A.AssignedWave ELSE E.AssignedWave END AS AssignedWave, CASE WHEN E.AssignedWave IS NULL 
                   THEN 'WaveAssignments' ELSE 'WaveExceptions' END AS WaveAssignmentSource, 
@@ -1050,12 +1050,12 @@ FROM        dbo.viewMailboxList AS L LEFT OUTER JOIN
                   dbo.WaveExceptions AS E ON L.PrimarySmtpAddress = E.PrimarySMTPAddress LEFT OUTER JOIN
                   dbo.WaveAssignments AS A ON L.GroupName = A.Name
 GO
-/****** Object:  Table [dbo].[historyMailboxMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
+/****** Object:  Table [dbo].[historyMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[historyMailboxMigrationList](
+CREATE TABLE [dbo].[historyMigrationList](
 	[Alias] [nvarchar](64) NULL,
 	[Name] [nvarchar](256) NULL,
 	[DisplayName] [nvarchar](256) NULL,
@@ -1098,33 +1098,33 @@ CREATE TABLE [dbo].[historyMailboxMigrationList](
 	[Reviewer3] [nvarchar](64) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[viewMostRecentMailboxMigrationListChanges]    Script Date: 8/10/2023 11:31:26 AM ******/
+/****** Object:  View [dbo].[viewMostRecentMigrationListChanges]    Script Date: 8/10/2023 11:31:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE VIEW [dbo].[viewMostRecentMailboxMigrationListChanges]
+CREATE VIEW [dbo].[viewMostRecentMigrationListChanges]
 AS
 SELECT   Alias, Name, DisplayName, PrimarySmtpAddress, ExchangeGuid, AssignedWave, WaveAssignmentSource, RecipientTypeDetails, TargetAddress, OrganizationalUnit, WhenCreatedUTC, Change, WhenListChangedUTC
 FROM     (SELECT   L.Alias, L.Name, L.DisplayName, L.PrimarySmtpAddress, L.ExchangeGuid, L.AssignedWave, L.WaveAssignmentSource, L.RecipientTypeDetails, L.TargetAddress, L.OrganizationalUnit, L.WhenCreatedUTC, CASE WHEN H.ExchangeGuid IS NULL THEN 'Added to Organization' END AS Change, getutcdate() 
                            AS WhenListChangedUTC
-             FROM      dbo.viewMailboxMigrationList AS L LEFT OUTER JOIN
-                           dbo.historyMailboxMigrationList AS H ON L.ExchangeGuid = H.ExchangeGuid
+             FROM      dbo.viewMigrationList AS L LEFT OUTER JOIN
+                           dbo.historyMigrationList AS H ON L.ExchangeGuid = H.ExchangeGuid
              UNION
              SELECT   L.Alias, L.Name, L.DisplayName, L.PrimarySmtpAddress, L.ExchangeGuid, L.AssignedWave, L.WaveAssignmentSource, L.RecipientTypeDetails, L.TargetAddress, L.OrganizationalUnit, L.WhenCreatedUTC, CASE WHEN H.AssignedWave <> L.AssignedWave THEN 'Assigned Wave' END AS Change, getutcdate() 
                           AS WhenListChangedUTC
-             FROM     dbo.viewMailboxMigrationList AS L INNER JOIN
-                          dbo.historyMailboxMigrationList AS H ON L.ExchangeGuid = H.ExchangeGuid
+             FROM     dbo.viewMigrationList AS L INNER JOIN
+                          dbo.historyMigrationList AS H ON L.ExchangeGuid = H.ExchangeGuid
              UNION
              SELECT   H.Alias, H.Name, H.DisplayName, H.PrimarySmtpAddress, H.ExchangeGuid, H.AssignedWave, 'N/A' AS WaveAssignmentSource, H.RecipientTypeDetails, H.TargetAddress, 'N/A' AS OrganizationalUnit, H.WhenCreatedUTC, CASE WHEN H.Alias IS NOT NULL AND L.Alias IS NULL 
                           THEN 'PersonDetails Missing' END AS Change, getutcdate() AS WhenListChangedUTC
-             FROM     dbo.historyMailboxMigrationList AS H INNER JOIN
-                          dbo.viewMailboxMigrationList AS L ON L.ExchangeGuid = H.ExchangeGuid
+             FROM     dbo.historyMigrationList AS H INNER JOIN
+                          dbo.viewMigrationList AS L ON L.ExchangeGuid = H.ExchangeGuid
              UNION
              SELECT   H.Alias, H.Name, H.DisplayName, H.PrimarySmtpAddress, H.ExchangeGuid, H.AssignedWave, 'N/A' AS WaveAssignmentSource, H.RecipientTypeDetails, H.TargetAddress, 'N/A' AS OrganizationalUnit, H.WhenCreatedUTC, CASE WHEN L.ExchangeGuid IS NULL THEN 'Removed from Organization' END AS Change, 
                           getutcdate() AS WhenListChangedUTC
-             FROM     dbo.historyMailboxMigrationList AS H LEFT OUTER JOIN
-                          dbo.viewMailboxMigrationList AS L ON L.ExchangeGuid = H.ExchangeGuid
+             FROM     dbo.historyMigrationList AS H LEFT OUTER JOIN
+                          dbo.viewMigrationList AS L ON L.ExchangeGuid = H.ExchangeGuid
              WHERE   (L.ExchangeGuid IS NULL)) AS C
 WHERE   (Change IS NOT NULL)
 GO
@@ -1163,12 +1163,12 @@ CREATE TABLE [dbo].[WOAWaveExceptions](
 	[DateModified] [datetime2](7) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[viewWOAMailboxMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
+/****** Object:  View [dbo].[viewWOAMigrationList]    Script Date: 8/10/2023 11:31:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE VIEW [dbo].[viewWOAMailboxMigrationList]
+CREATE VIEW [dbo].[viewWOAMigrationList]
 AS
 SELECT     L.Name, L.DisplayName, L.PrimarySmtpAddress, L.UserPrincipalName, L.ExchangeGuid, CASE WHEN E.AssignedWave IS NULL THEN A.AssignedWave ELSE E.AssignedWave END AS AssignedWave, CASE WHEN E.AssignedWave IS NULL 
                   THEN 'WaveAssignments' ELSE 'WaveExceptions' END AS WaveAssignmentSource, CASE WHEN L.RecipientTypeDetails LIKE 'Remote%' THEN 'Migrated' ELSE 'Non-Migrated' END AS MigrationState, L.TotalItemSizeInGB, L.TotalDeletedItemSizeInGB, L.ItemCount, 
@@ -1206,12 +1206,12 @@ AS
 SELECT TOP (100) PERCENT Recipient, AssignedWave, COUNT(CONNECTION) AS ConnectionCount
 FROM     (SELECT DISTINCT P.TargetExchangeGUID AS Recipient, P.TrusteeExchangeGUID AS CONNECTION, L.AssignedWave
                   FROM      dbo.viewPermissionsForAnalysis AS P INNER JOIN
-                                    dbo.viewWOAMailboxMigrationList AS L ON P.TrusteeExchangeGUID = L.ExchangeGuid
+                                    dbo.viewWOAMigrationList AS L ON P.TrusteeExchangeGUID = L.ExchangeGuid
                   WHERE   (P.PermissionType <> 'SendAS')
                   UNION
                   SELECT DISTINCT P.TrusteeExchangeGUID AS Recipient, P.TargetExchangeGUID AS CONNECTION, L.AssignedWave
                   FROM     dbo.viewPermissionsForAnalysis AS P INNER JOIN
-                                    dbo.viewWOAMailboxMigrationList AS L ON P.TargetExchangeGUID = L.ExchangeGuid
+                                    dbo.viewWOAMigrationList AS L ON P.TargetExchangeGUID = L.ExchangeGuid
                   WHERE  (P.PermissionType <> 'SendAS')) AS TheSum
 WHERE  (Recipient IS NOT NULL)
 GROUP BY Recipient, AssignedWave

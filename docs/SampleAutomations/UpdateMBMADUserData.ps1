@@ -1,30 +1,12 @@
 ﻿# Import MBM Module and Configuration
-. "E:\Automations\MBMConfiguration.ps1"
+. "C:\Migration\Scripts\MBMConfiguration.ps1"
+$ThisTask = Split-Path -Path $PSCommandPath -Leaf
+Write-Log -Level INFO -Message "Task $ThisTask Imported Migration Manager Module and Configuration"
 
-#Archive Old Recipient Data
-. "E:\Automations\ArchiveData.ps1" -Operation ADUserData -AgeInDays 15
-
-Import-Module ActiveDirectory
-
-$OutputFolderPath = $MBMConfiguration.ADUserDataExportFolder
-$MBMModulePath = $MBMConfiguration.MBMModulePath
-$Organization = $MBMConfiguration.TenantDomain
-$AppID = $MBMConfiguration.ReportingAppID
-$CertificateThumbprint = $MBMConfiguration.CertificateThumbprint
-
-Export-ADUser -OutputFolderPath $OutputFolderPath -Domain $MBMConfiguration.ADUserDomain -Exchange:$true
-
+$OutputFolderPath = $MBMConfiguration.ADUserDataFolder
+Write-Log -Level INFO -Message "Task $ThisTask Getting Newly Exported Files from $OutputFolderPath"
 $newDataFiles = @(Get-ChildItem -Path $OutputFolderPath -Filter *ADUsersAsOf*.xml)
-
-#Truncate the Table Data
-$dbiParams = @{
-    SQLInstance = $MBMConfiguration.SQLInstance
-    Database = $MBMConfiguration.Database
-}
-
-Invoke-DbaQuery @dbiParams -Query 'TRUNCATE TABLE dbo.stagingADUser'
-
-foreach ($f in $newDataFiles)
-{
-    Update-MBMActiveDirectoryData -Operation ADUser -FilePath $f.fullname -InformationAction Continue
-}
+Write-Log -Message "Task $ThisTask Running: Update Database with AD Users from $($newDataFiles.fullname -join ';')" -Level INFO
+Update-MBMActiveDirectoryData -Operation ADUser -FilePath $newDataFiles -InformationAction Continue -Truncate
+Write-Log -Level INFO -Message "Task $ThisTask Completed: Update Database with AD Users from $($newDataFiles.fullname -join ';')"
+Wait-Logging
