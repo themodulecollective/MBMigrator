@@ -4,3 +4,5 @@ artifacts/InstallManager.psm1
 artifacts/LICENSE
 TestResults/Test-Pester.XML
 artifacts/ReleaseNotes.md
+.claude/settings.local.json
+CLAUDE.local.md
