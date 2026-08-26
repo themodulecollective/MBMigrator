@@ -8,12 +8,14 @@ function Set-MBMConfiguration {
         Set-MBMConfiguration -Attribute Key -Value Value
         Adds Key: Value to the MBM Configuration file
     #>
-    
+    [cmdletbinding()]
     param(
         #
+        [parameter(Mandatory)]
         [string]$Attribute
         ,
         #
+        [parameter()]
         [psobject]$Value
     )
 

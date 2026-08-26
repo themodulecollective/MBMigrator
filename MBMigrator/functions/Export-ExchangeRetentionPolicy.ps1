@@ -15,12 +15,16 @@ function Export-ExchangeRetentionPolicy
         # Folder path for the XML or Zip export
         [parameter(Mandatory)]
         [ValidateScript( { Test-Path -type Container -Path $_ })]
-        [string]$OutputFolderPath      
+        [string]$OutputFolderPath
         ,
         # Specify a delimiter, 1 character in length.  Default is '|'.
         [parameter()]
         [ValidateLength(1,1)]
         [string]$Delimiter = '|'
+        ,
+        [parameter(Mandatory)]
+        [ValidateSet('Excel','CSV','XML')]
+        [string]$OutputType
     )
 
     $PolicyProperties = @(
@@ -109,7 +113,23 @@ function Export-ExchangeRetentionPolicy
     $Policies = Get-RetentionPolicy | Select-Object -property $PolicyProperties
     $Tags = Get-RetentionPolicyTag | Select-Object -property $TagProperties
 
-    $Policies | Export-Excel -Path $OutputFilePath -WorksheetName 'Policies' -tablename 'Policies' -tablestyle Medium11
-    $Tags | Export-Excel -Path $OutputFilePath -WorksheetName 'Tags' -tablename 'Tags' -tablestyle Medium11
+    switch($OutputType)
+    {
+        'CSV'
+        {
+            $Policies | Export-Csv -Path (Join-Path -Path $OutputFolderPath -ChildPath ($OutputFileName + '_Policies.csv')) -NoTypeInformation -Delimiter $Delimiter
+            $Tags | Export-Csv -Path (Join-Path -Path $OutputFolderPath -ChildPath ($OutputFileName + '_Tags.csv')) -NoTypeInformation -Delimiter $Delimiter
+        }
+        'XML'
+        {
+            $Policies | Export-Clixml -Path (Join-Path -Path $OutputFolderPath -ChildPath ($OutputFileName + '_Policies.xml'))
+            $Tags | Export-Clixml -Path (Join-Path -Path $OutputFolderPath -ChildPath ($OutputFileName + '_Tags.xml'))
+        }
+        'Excel'
+        {
+            $Policies | Export-Excel -Path $OutputFilePath -WorksheetName 'Policies' -tablename 'Policies' -tablestyle Medium11
+            $Tags | Export-Excel -Path $OutputFilePath -WorksheetName 'Tags' -tablename 'Tags' -tablestyle Medium11
+        }
+    }
 
 }
