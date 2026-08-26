@@ -75,6 +75,7 @@ function Export-ExchangeRecipient
             throw("You must include the DistributionGroup operation when including the $o Operation")
         }
     }
+
     #Write-Verbose -Verbose -Message 'Export-ExchangeRecipient Version x.x'
 
     $ErrorActionPreference = 'Continue'
@@ -106,7 +107,7 @@ function Export-ExchangeRecipient
     $OpCount = 0
     $OpTotalCount = $Operation.Count
 
-    Switch ($Operation | Sort-Object)
+    Switch ($Operation | Sort-Object) # sort order is important for DistributionGroup operations and Mailbox / MailboxStatistics operations
     {
         'Recipient'
         {
@@ -118,12 +119,41 @@ function Export-ExchangeRecipient
         }
         'Mailbox'
         {
-
+            $defaultEXOMailboxPropertySet = @(
+                'AddressList'
+                'Archive'
+                'Audit'
+                'Custom'
+                'Hold'
+                'Policy'
+                'Quota'
+                'Resource'
+                'Retention'
+                'StatisticsSeed'
+            )
             $AMParams.Name = $_
             $OpCount++
             Write-Progress -Activity 'Exporting Exchange Recipients' -CurrentOperation $AMParams.Name -Status "Operation $OpCount of $OpTotalCount" -Id 0
-            $AMParams.Value = @(Get-Mailbox @GetRParams)
+            $AMParams.Value = @(
+
+                switch ($UseEXOCmdlet)
+                {
+                    $false
+                    {
+                        Get-Mailbox @GetRParams
+                    }
+                    $true
+                    {
+                        Get-EXOMailbox @GetRParams -PropertySets $defaultEXOMailboxPropertySet
+                    }
+                }
+
+            )
             $ExchangeRecipients | Add-Member @AMParams
+            if ($Operation -contains 'MailboxStatistics')
+            {
+                $mailboxes = $AMParams.Value
+            }
         }
         'CASMailbox'
         {
@@ -179,12 +209,18 @@ function Export-ExchangeRecipient
             {
                 $true
                 {
-                    $mailboxes = Get-EXOMailbox @GetRParams -Properties ExchangeGUID
-                    $AMParams.Value = @($Mailboxes | ForEach-Object { Get-EXOMailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
+                    if ($null -eq $mailboxes -or $mailboxes.count -lt 1)
+                    {
+                        $mailboxes = Get-EXOMailbox @GetRParams -Properties ExchangeGUID
+                    }
+                    $AMParams.Value = @($Mailboxes | ForEach-Object { Get-EXOMailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' -PropertySets Minimum})
                 }
                 $false
                 {
-                    $Mailboxes = Get-Mailbox @GetRParams
+                    if ($null -eq $mailboxes -or $mailboxes.count -lt 1)
+                    {
+                        $mailboxes = Get-Mailbox @GetRParams
+                    }
                     $AMParams.Value = @($Mailboxes | ForEach-Object { Get-MailboxStatistics -identity $_.ExchangeGUID.guid -WarningAction 'SilentlyContinue' })
                 }
             }
